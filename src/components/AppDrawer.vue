@@ -83,15 +83,14 @@ import { Prop, Emit, Watch } from "vue-property-decorator";
 @Component
 export default class AppDrawer extends Vue {
   @Prop({ required: true, type: [] }) readonly datos: [];
-  public drawer: boolean = false;
-  public group = null;
-  public links = [
-    { name: "/addProyecto", icon: "person", text: "Registrar proyecto" },
-    { name: "/tarea", icon: "book", text: "Tarea" },
-    { name: "/consultarProyecto", icon: "book", text: "Consultar Proyectos" }
-  ];
-  public title = "";
-  public items = ["Practics"];
+    public drawer: boolean = false;
+    public group = null;
+    public links = [
+          {name: '/addProyecto', icon: 'person', text: 'Registrar proyecto'},
+          {name: '/proyecto', icon: 'book', text: 'Proyecto'},
+      ];
+    public title =  '';
+    public items = ['Practics'];
 
   // @Watch('$route',{
   //     this.title = val.name;
