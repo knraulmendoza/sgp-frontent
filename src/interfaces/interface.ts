@@ -49,4 +49,5 @@ export interface Iproyecto {
     estado: number;
     numero_familias_beneficiadas: number;
     actividades: Iactividad;
+    archivo: string;
 }
