@@ -7,7 +7,7 @@
         color="green darken-2"
         dark
         class="tertiary--text font-weight-light align-self-center"
-      >Sístema gestor de proyectos > {{title}}</v-toolbar-title>
+      >Sístema gestor de proyectos {{title}}</v-toolbar-title>
 
       <div class="flex-grow-1"></div>
       <!-- <v-breadcrumbs :items="items" divider=">"></v-breadcrumbs> -->
@@ -50,7 +50,7 @@
         />
         </v-list-item-avatar>-->
 
-        <v-list-item-title class="title">Kenneth mendoza</v-list-item-title>
+        <v-list-item-title class="title">SGP</v-list-item-title>
       </v-list-item>
 
       <v-divider class="mx-3 mb-3" />
@@ -87,7 +87,7 @@ export default class AppDrawer extends Vue {
     public group = null;
     public links = [
           {name: '/addProyecto', icon: 'person', text: 'Registrar proyecto'},
-          {name: '/proyecto', icon: 'book', text: 'Proyecto'},
+          {name: '/proyecto', icon: 'book', text: 'Consultar proyecto'},
       ];
     public title =  '';
     public items = ['Practics'];
