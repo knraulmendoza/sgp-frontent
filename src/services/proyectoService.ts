@@ -1,30 +1,102 @@
-class ProyectoService {
-    dimensiones = [
-        {value: 1, text: 'Consolidación territorial del pueblo indígena kankuamo para la protección de la madre naturaleza'},
-      ];
-      componentes = [
-        {value: 1, text: 'Recuperación del Territorio Ancestral', idDimension: 1},
-        {value: 2, text: 'Desarrollo del modelo del ordenamiento territorial propio del pueblo Kankuamo en función del manejo integral y ancestral de las cuencas hidrográficas, la conservación de los bosques, la biodiversidad y el uso del suelo según su vocación ', idDimension: 1},
-      ];
-      programas = [
-        {value: 1, text: 'Saneamiento y ampliación del Resguardo Kankuamo', idComponente: 1},
-        {value: 2, text: 'Protección y Recuperación de Espacios Sagrados', idComponente: 1},
-        {value: 3, text: 'Conservación y protección ambiental del territorio kankuamo', idComponente: 2},
-      ];
-      comunidades = [
-        {value: 1, text: 'Atanquez'},
-        {value: 2, text: 'Guatapuri'},
-        {value: 3, text: 'Chemesquemena'},
-        {value: 4, text: 'Rio seco'},
-        {value: 5, text: 'la mina'},
-        {value: 6, text: 'ponton'},
-        {value: 7, text: 'las florez'}
-      ];
-      estrategias = [];
-      tiposProyectos = [];
-      constructor(){
+import axios, { AxiosResponse } from 'axios';
 
-      }
-    //metodos del CRUD
+class ProyectoService {
+
+  url = "http://localhost:53243/api/task/";
+
+
+  constructor() {
+
+  }
+  //metodos del CRUD
+  async obtenerDatos(value?: number) {
+    let urlLocal: string = this.url;
+    value == 0 ? urlLocal : urlLocal += `${value}`;
+    console.log(urlLocal);
+
+    const data = await axios
+      .get(urlLocal)
+      .then((response: AxiosResponse) => {
+
+        let dato;
+        if (Array.isArray(response.data)) {
+          dato = response.data;
+        } else {
+          dato = [response.data];
+        }
+        return dato.map((val: any) => ({
+          value: val.id,
+          text: val.surname
+        }));
+      })
+    console.log("data: " + data);
+    return data;
+  }
+
+
+  async comunidades() {
+    let urlLocal: string = this.url;
+    
+    const data = await axios
+      .get(urlLocal+='comunidades')
+      .then((response: AxiosResponse) => {
+        console.log("response: " + response);
+        const dato = [response.data];
+        return dato.map((val: any) => ({
+          value: val.codigo,
+          text: val.nombre
+        }));
+      })
+    
+    return data;
+
+  }
+
+  async cofinanciador() {
+    let urlLocal: string = this.url;
+    
+    const data = await axios
+      .get(urlLocal+='confinanciador')
+      .then((response: AxiosResponse) => {
+        console.log("response: " + response);
+        const dato = [response.data];
+        return dato.map((val: any) => ({
+          value: val.codigo,
+          text: val.nombre
+        }));
+      })
+    
+    return data;
+
+  }
+
+
+
+   async registrarPropuesta(rawData:any){
+    rawData = JSON.stringify(rawData);
+    console.log(rawData);
+    let formData = new FormData();  
+
+            formData.append('propuesta', rawData);
+            try{
+              const response=await  axios.post(this.url,
+              formData,
+              {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+              });
+              return response.data[0];
+            } catch(e){
+                console.log(e);
+            }
+         
+             
+
+  }
+
+
+
+
 }
 export const proyectoService = new ProyectoService();

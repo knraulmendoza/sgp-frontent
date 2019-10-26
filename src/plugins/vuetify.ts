@@ -3,6 +3,7 @@ import Vuetify from 'vuetify';
 import 'vuetify/dist/vuetify.min.css';
 import '@mdi/font/css/materialdesignicons.css'
 import colors from 'vuetify/lib/util/colors'
+// import '@fortawesome/fontawesome-free/css/all.css';
 Vue.use(Vuetify);
 
 export default new Vuetify({

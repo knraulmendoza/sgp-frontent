@@ -89,7 +89,7 @@ import Component from 'vue-class-component';
 import { Prop, Emit, Watch } from 'vue-property-decorator'
 @Component
 export default class AppDrawer extends Vue {
-  @Prop({ required: true, type: [] }) readonly datos: [];
+  // @Prop({ required: true, type: [] }) readonly datos: [];
     public drawer: boolean = false;
     public group = null;
     public links = [
