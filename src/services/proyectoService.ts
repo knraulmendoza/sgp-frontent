@@ -73,8 +73,9 @@ class ProyectoService {
 
 
    async registrarPropuesta(rawData:any){
-    rawData = JSON.stringify(rawData);
-    console.log(rawData);
+     rawData = JSON.stringify(rawData);
+     console.log("rawData: "+rawData);
+    
     let formData = new FormData();  
 
             formData.append('propuesta', rawData);
@@ -88,7 +89,7 @@ class ProyectoService {
               });
               return response.data[0];
             } catch(e){
-                console.log(e);
+                return null;
             }
          
              
