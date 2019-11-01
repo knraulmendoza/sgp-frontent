@@ -2,10 +2,9 @@
   <v-container grid-list-xs>
     <v-data-table
       :headers="headers"
-      :items="proyectos"
+      :items="propuestas"
       :search="search"
       :items-per-page="itemsPerPage"
-      :locale="es"
       class="elevation-1"
       no-data-text="No se encontraron proyectos"
       no-results-text="No se encontraron proyectos"
@@ -15,8 +14,7 @@
           <v-toolbar-title>Proyectos</v-toolbar-title>
           <v-divider class="mx-4" inset vertical></v-divider>
           <v-row>
-            
-            <v-col >
+            <v-col>
               <v-text-field
                 v-model="search"
                 append-icon="search"
@@ -36,7 +34,7 @@
                   <v-col cols="12" sm="6" md="5" justify="end" class="text-right">
                     <p>
                       <strong>Código:</strong>
-                      {{proyecto.codigo}}
+                      {{propuesta.codigo}}
                     </p>
                   </v-col>
                   <v-col md="1" justify="end" class="text-right">
@@ -50,8 +48,7 @@
                 <v-container>
                   <v-row style="height: 90px;">
                     <v-col cols="12" sm="12" md="12">
-                      
-                      <h1 class="text-center">{{proyecto.nombre}}</h1>
+                      <h1 class="text-center">{{propuesta.nombre}}</h1>
                     </v-col>
                   </v-row>
 
@@ -76,11 +73,10 @@
                     </v-col>
                     <v-col cols="12" sm="4">
                       <select
-                        
                         persistent-hint
                         label="Estado"
-                        :items="proyecto.estado"
-                        v-model="proyecto.estado"
+                        :items="propuesta.estado"
+                        v-model="propuesta.estado"
                         required
                       ></select>
                     </v-col>
@@ -96,13 +92,10 @@
         </v-toolbar>
       </template>
       <template v-slot:item.action="{ item }">
-        <v-icon small class="mr-2" @click="editItem(item)">edit</v-icon>
+        <v-icon class="mr-2" @click="editItem(item)">edit</v-icon>
       </template>
       <template v-slot:item.verPDF="{item}">
-        <v-icon  @click="showPDF(item)">
-        fas fa-file-alt 
-        </v-icon>
-        <span> Abir PDF</span>
+        <v-icon large @click="showPDF(item)">mdi-file-pdf-box</v-icon>
       </template>
     </v-data-table>
   </v-container>

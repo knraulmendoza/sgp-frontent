@@ -37,7 +37,15 @@ export interface Iactividad {
 }
 
 
-export interface Iproyecto {
+export interface IPropuesta {
+    id: number;
+    nombre: string;
+    presupuestoEstimado: string;
+    fechaPresentacion: Date;
+    numeroFamiliasBeneficiadas: number;
+    documento: string;
+}
+export interface IProyecto {
     id: number;
     codigo: string;
     nombre: string;
