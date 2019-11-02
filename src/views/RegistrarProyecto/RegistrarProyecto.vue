@@ -189,10 +189,12 @@
 
             <v-row justify="center">
               <v-col cols="12" md="12">
-                <v-btn outline :disabled="!valid" color="primary" @click="guardarProyecto" rounded>Postular Proyecto</v-btn>
+                <v-btn outline :disabled="!valid" color="primary"  rounded
+                 @click="validate"
+                >Postular Proyecto</v-btn>
 
                 <v-btn color="warning" @click="resetValidation" rounded>
-                Reset Validation
+                Limpiar
                 </v-btn>
               
               </v-col>

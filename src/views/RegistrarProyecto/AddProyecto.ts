@@ -17,7 +17,8 @@ export default class RegistrarProyecto extends Vue {
     // programas:any[]=[];
     // componentes:any[]=[];
     // cofinanciamiento:any[]=[];
-    valid = true;
+    valid = false;
+    lazy=false;
     proyecto={
       Nombre:'',
       NumeroDeFamilia:0,
@@ -35,19 +36,29 @@ export default class RegistrarProyecto extends Vue {
     rules = {
       proyecto: {
         Nombre: [
-          v => !!v || 'Nombre es requerido',
-          v => (v && v.length >= 5) || 'Debe tener minimo 10 caracteres',
+          (v:any) => !!v || 'Nombre es requerido',
+          (v:any) => (v && v.length >= 5) || 'Debe tener minimo 10 caracteres',
         ],
         NumeroDeFamilia: [
-          v => !!v || 'Este Campo es requerido',
-          v => (v && v.length !=0) || 'Debe indicar el número de familiar a favorcer',
+          (v:any) => !!v || 'Este Campo es requerido',
+          (v:any) => (v && v.length !=0) || 'Debe indicar el número de familiar a favorcer',
+          // v => /^[0-9]+$/!.test(v) && 'Debe indicar el número de familiar a favorcer',
         ],  
        
         presupuestoEstimado: [
-          v=>!!v || 'Este campo es requerido',
-          v => (v && v.length !=0) || 'Debe indicar el Valor presupuesto',
+          (v:any)=>!!v || 'Este campo es requerido',
+          (v:any) => (v && v.length !=0) || 'Debe indicar el Valor presupuesto',
         ],
-        Documento: [v=>!!v || 'Este campo es requerido'],
+        Documento:[
+          (v:any)=>!!v || 'Documento Requerido',  
+        ],
+      }
+    }
+
+    validate () {
+      if(this.$refs.form.validate()) {
+        this.snackbar = true;
+        this.guardarProyecto();
       }
     }
 
