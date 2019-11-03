@@ -95,6 +95,7 @@ export default class AppDrawer extends Vue {
     public links = [
           {name: '/addProyecto', icon: 'person', text: 'Registrar proyecto'},
           {name: '/proyecto', icon: 'book', text: 'Proyecto'},
+          {name: '/sgp', icon: 'book', text: 'SGP'},
       ];
     public title =  '';
     public items = ['Practics'];
@@ -105,7 +106,6 @@ export default class AppDrawer extends Vue {
     //   }
     // )
     mounted () {
-      console.log(this.datos);
             this.onResponsiveInverted()
             window.addEventListener('resize', this.onResponsiveInverted)
         }

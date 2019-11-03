@@ -32,20 +32,20 @@ export default class RegistrarProyecto extends Vue {
     rules = {
       proyecto: {
         nombre: [
-          v => !!v || 'Nombre es requerido',
-          v => v.length <= 10 || 'debe tener minimo 10 caracteres'
+          (v: any) => !!v || 'Nombre es requerido',
+          (v: any) => v.length <= 10 || 'debe tener minimo 10 caracteres'
         ],
         numFamilias: [
-          v => !!v || 'Este Campo es requerido',
-          v => v.length >= 0 || 'Debe indicar el número de familiar a favorcer'
+          (v: any) => !!v || 'Este Campo es requerido',
+          (v: any) => v.length >= 0 || 'Debe indicar el número de familiar a favorcer'
         ],
-        dimension: [v=>!!v || 'Este campo es requerido'],
-        componente: [v=>!!v || 'Este campo es requerido'],
-        estrategia: [v=>!!v || 'Este campo es requerido'],
-        programa: [v=>!!v || 'Este campo es requerido'],
-        componentes: [v=>!!v || 'Este campo es requerido'],
-        presupuestoEstimado: [v=>!!v || 'Este campo es requerido'],
-        documento: [v=>!!v || 'Este campo es requerido']
+        dimension: [(v: any)=>!!v || 'Este campo es requerido'],
+        componente: [(v: any)=>!!v || 'Este campo es requerido'],
+        estrategia: [(v: any)=>!!v || 'Este campo es requerido'],
+        programa: [(v: any)=>!!v || 'Este campo es requerido'],
+        componentes: [(v: any)=>!!v || 'Este campo es requerido'],
+        presupuestoEstimado: [(v: any)=>!!v || 'Este campo es requerido'],
+        documento: [(v: any)=>!!v || 'Este campo es requerido']
       }
     }
 
