@@ -4,6 +4,7 @@ import Router from 'vue-router';
 //paginas
 import RegistrarProyecto from "./views/RegistrarProyecto";
 import ShowProyecto from "./views/consultarProyecto";
+import RegisterGasto from './views/RegistrarGasto/index';
 
 Vue.use(Router);
 
@@ -11,6 +12,7 @@ export default new Router({
     routes: [
         {path: '/addProyecto', name:'home', component: RegistrarProyecto},
         {path: '/proyecto', name:'proyecto', component: ShowProyecto},
+        {path: '/registrarGasto', name:'registrarGasto', component: RegisterGasto},
     ],
     mode: 'history' // evita el # de la url
 });

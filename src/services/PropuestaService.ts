@@ -26,20 +26,16 @@ class PropuestaService {
     public getPDFProyecto(propuesta: IPropuesta) {
         let urlPDF: string = '';
         axios
-            .get(this.BASE_URL + '/' + propuesta.id, { responseType: 'blob' })
+            .get(this.BASE_URL + '/' + propuesta.id, { responseType: 'text' })
             .then(({ data }) => {
-                const blob = new Blob([data], { type: 'application/pdf' });
+                
                 const link = document.createElement('a');
-                urlPDF = window.URL.createObjectURL(blob);
+                urlPDF = `data:application/pdf;base64,${data.documento}`;
                 link.href = urlPDF;
-                link.setAttribute('donwload', 'file.pdf');
                 link.download = propuesta.nombre + '.pdf';
-                link.target = '_blank';
                 link.click();
-                document.body.appendChild(link);
             })
             .catch(error => console.error(error));
-        return urlPDF;
     }
 }
 
