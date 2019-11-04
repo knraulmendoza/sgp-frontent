@@ -3,12 +3,12 @@ import { IProyecto, ITransaccion } from '../interfaces/interface';
 
 class ProyectoService {
 
-  url = "api/propuesta/add";
+  public url = 'api/propuesta/add';
   constructor() {
 
   }
-  //metodos del CRUD
-  async obtenerDatos(value?: number) {
+  // metodos del CRUD
+  public async obtenerDatos(value?: number) {
     let urlLocal: string = this.url;
     value == 0 ? urlLocal : urlLocal += `${value}`;
     console.log(urlLocal);
@@ -25,69 +25,69 @@ class ProyectoService {
         }
         return dato.map((val: any) => ({
           value: val.id,
-          text: val.surname
+          text: val.surname,
         }));
-      })
-    console.log("data: " + data);
+      });
+    console.log('data: ' + data);
     return data;
   }
 
 
-  async comunidades() {
+  public async comunidades() {
     let urlLocal: string = this.url;
-    
+
     const data = await axios
-      .get(urlLocal+='comunidades')
+      .get(urlLocal += 'comunidades')
       .then((response: AxiosResponse) => {
-        console.log("response: " + response);
+        console.log('response: ' + response);
         const dato = [response.data];
         return dato.map((val: any) => ({
           value: val.codigo,
-          text: val.nombre
+          text: val.nombre,
         }));
-      })
-    
+      });
+
     return data;
 
   }
 
-  async cofinanciador() {
+  public async cofinanciador() {
     let urlLocal: string = this.url;
-    
+
     const data = await axios
-      .get(urlLocal+='confinanciador')
+      .get(urlLocal += 'confinanciador')
       .then((response: AxiosResponse) => {
-        console.log("response: " + response);
+        console.log('response: ' + response);
         const dato = [response.data];
         return dato.map((val: any) => ({
           value: val.codigo,
-          text: val.nombre
+          text: val.nombre,
         }));
-      })
-    
+      });
+
     return data;
 
   }
 
 
 
-   async registrarPropuesta(rawData:any){
+   public async registrarPropuesta(rawData: any) {
      rawData = JSON.stringify(rawData);
-     console.log("rawData: "+rawData);
-    
-    let formData = new FormData();  
+     console.log('rawData: ' + rawData);
 
-            formData.append('propuesta', rawData);
-            try{
-              const response=await  axios.post(this.url,
+     const formData = new FormData();
+
+     formData.append('propuesta', rawData);
+     try {
+              const response = await  axios.post(this.url,
               formData,
               {
                 headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
+                    'Content-Type': 'multipart/form-data',
+                },
               });
               return response.data[0];
-            } catch(e){
+            } catch (e) {
                 return null;
             }
         }
@@ -95,7 +95,7 @@ class ProyectoService {
 
 
 
-  
+
     public async GetProyectosRP() {
         let proyectosConRP: IProyecto[] = [];
         await axios.get(this.url).then((response: AxiosResponse) => {
@@ -127,7 +127,7 @@ class ProyectoService {
                         '/' +
                         new Date(val.fecha.toString()).getFullYear(),
 
-                    id: val.id
+                    id: val.id,
                 }));
             });
 

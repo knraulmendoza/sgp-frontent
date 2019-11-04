@@ -44,7 +44,7 @@ export interface IPropuesta {
     numeroFamiliasBeneficiadas: number;
     documento: string;
 }
-export interface IProyecto{
+export interface IProyecto {
     id: number;
     codigo: string;
     nombre: string;

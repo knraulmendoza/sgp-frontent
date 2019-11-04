@@ -1,2 +1,2 @@
-import ShowProyecto from "./showProyecto";
+import ShowProyecto from './showProyecto';
 export default ShowProyecto;

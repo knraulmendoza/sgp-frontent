@@ -5,7 +5,7 @@ import template from './consultarProyecto.vue';
 import { propuestaService } from '../../services/PropuestaService';
 
 @Component({
-    mixins: [template]
+    mixins: [template],
 })
 export default class ShowProyecto extends Vue {
     public propuesta: IPropuesta = {} as IPropuesta;
@@ -14,44 +14,44 @@ export default class ShowProyecto extends Vue {
             text: '',
             align: 'left',
             sortable: false,
-            value: 'num'
+            value: 'num',
         },
         { text: 'Nombre', value: 'nombre' },
         {
             text: 'Presupuesto Estimado',
             value: 'presupuestoEstimado',
-            align: 'center'
+            align: 'center',
         },
         {
             text: 'Numero de Familias Beneficiadas',
             value: 'numeroFamiliasBeneficiadas',
-            align: 'center'
+            align: 'center',
         },
         {
             text: 'Fecha de presentacion',
             value: 'fechaPresentacion',
             align: 'center',
-            color: 'green'
+            color: 'green',
         },
         {
             text: 'Editar',
             value: 'action',
             sortable: false,
             align: 'center',
-            color: 'green'
+            color: 'green',
         },
         {
             text: 'Documento',
             value: 'verPDF',
             sortable: false,
-            align: 'center'
+            align: 'center',
         },
         {
             text: 'Aprobar Propuesta',
             value: 'actionAprobarPropuesta',
             sortable: false,
-            align: 'center'
-        }
+            align: 'center',
+        },
     ];
     public propuestas: IPropuesta[] = [];
     public editedIndex = -1;
@@ -74,7 +74,7 @@ export default class ShowProyecto extends Vue {
     public abrirModalAprobarPropuesta(item: any) {
         this.dialogAprobarPropuesta = true;
     }
-    
+
     public abrirModal(item: any) {
         this.dialog = true;
         this.propuesta = item;
@@ -85,6 +85,6 @@ export default class ShowProyecto extends Vue {
     }
 
     public mounted() {
-        propuestaService.getData().then(res => (this.propuestas = res));
+        propuestaService.getData().then((res) => (this.propuestas = res));
     }
 }

@@ -18,7 +18,7 @@ class PropuestaService {
                     new Date(val.fechaPresentacion.toString()).getMonth() +
                     '/' +
                     new Date(val.fechaPresentacion.toString()).getFullYear(),
-                id: val.id
+                id: val.id,
             }));
         });
         return this.propuestas;
@@ -28,14 +28,14 @@ class PropuestaService {
         axios
             .get(this.BASE_URL + '/' + propuesta.id, { responseType: 'text' })
             .then(({ data }) => {
-                
+
                 const link = document.createElement('a');
                 urlPDF = `data:application/pdf;base64,${data.documento}`;
                 link.href = urlPDF;
                 link.download = propuesta.nombre + '.pdf';
                 link.click();
             })
-            .catch(error => console.error(error));
+            .catch((error) => console.error(error));
     }
 }
 
