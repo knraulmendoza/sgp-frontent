@@ -175,12 +175,13 @@
               <v-col cols="12" md="12" sm="8">
                  <v-file-input
                   @change="obtenerArchivo($event)"
+                  v-model="proyecto.documento"
                   hint="Ej: proyecto.pdf"
                   accept=".pdf"
                   persistent-hint
                   label="Cargar documento"
                   required
-                  :rules="rules.proyecto.Documento"
+                  :error-messages="errorDocumento"
                 ></v-file-input> 
                 
               </v-col>
@@ -189,7 +190,7 @@
 
             <v-row justify="center">
               <v-col cols="12" md="12">
-                <v-btn outline :disabled="!valid" color="primary"  rounded
+                <v-btn outline color="primary"  rounded
                  @click="validate"
                 >Postular Proyecto</v-btn>
 

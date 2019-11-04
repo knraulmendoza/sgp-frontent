@@ -52,3 +52,4 @@ export interface Iproyecto {
     actividades: Iactividad;
     archivo: string;
 }
+

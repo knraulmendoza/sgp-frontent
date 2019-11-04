@@ -2,10 +2,13 @@ import Vue from 'vue';
 import {Component} from 'vue-property-decorator';
 import template from './RegistrarProyecto.vue';
 import { proyectoService } from "../../services/proyectoService";
+import VeeValidate from 'vee-validate'
+
 
 @Component({
     name: 'RegistrarProyecto',
     mixins: [template]
+     
 })
 export default class RegistrarProyecto extends Vue {
     
@@ -50,11 +53,13 @@ export default class RegistrarProyecto extends Vue {
           (v:any) => (v && v.length !=0) || 'Debe indicar el Valor presupuesto',
         ],
         Documento:[
+          (v:any)=> console.log(v),
           (v:any)=>!!v || 'Documento Requerido',  
         ],
       }
     }
 
+  
     validate () {
       if(this.$refs.form.validate()) {
         this.snackbar = true;
@@ -106,7 +111,7 @@ export default class RegistrarProyecto extends Vue {
 
   resetValidation(){
     this.registrado="";
-    this.$refs.form.reset();
+    this.$v.$reset();
   }
 
   guardarProyecto(){

@@ -2,9 +2,7 @@ import axios, { AxiosResponse } from 'axios';
 
 class ProyectoService {
 
-  url = "http://localhost:53243/api/task/";
-
-
+  url = "api/propuesta/add";
   constructor() {
 
   }

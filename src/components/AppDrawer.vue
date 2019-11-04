@@ -95,6 +95,7 @@ export default class AppDrawer extends Vue {
     public links = [
           {name: '/addProyecto', icon: 'person', text: 'Registrar proyecto'},
           {name: '/proyecto', icon: 'book', text: 'Proyecto'},
+          {name: '/ActualizacionPresupuesto', icon: 'book', text: 'Actualizacion Presupuesto'},
       ];
     public title =  '';
     public items = ['Practics'];
