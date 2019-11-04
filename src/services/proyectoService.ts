@@ -1,4 +1,5 @@
 import axios, { AxiosResponse } from 'axios';
+import { IProyecto, ITransaccion } from '../interfaces/interface';
 
 class ProyectoService {
 
@@ -89,13 +90,48 @@ class ProyectoService {
             } catch(e){
                 return null;
             }
-         
-             
-
-  }
+        }
 
 
 
 
+  
+    public async GetProyectosRP() {
+        let proyectosConRP: IProyecto[] = [];
+        await axios.get(this.url).then((response: AxiosResponse) => {
+            proyectosConRP = response.data.map((val: IProyecto) => ({
+                codigo: val.codigo,
+                nombre: val.nombre,
+                presupuestoAprovado:
+                    '$ ' +
+                    new Intl.NumberFormat().format(val.presupuestoAprovado),
+                proyectoState: val.proyectoState,
+                id: val.id,
+            }));
+        });
+        console.log(proyectosConRP);
+
+        return proyectosConRP;
+    }
+    public async GetGastosProyecto(proyecto: IProyecto) {
+        let gastos: ITransaccion[] = [];
+        await axios
+            .get(this.url + '/' + proyecto.id)
+            .then((response: AxiosResponse) => {
+                gastos = response.data.map((val: any) => ({
+                    Monto: val.monto,
+                    Fecha:
+                        new Date(val.fecha.toString()).getDate() +
+                        '/' +
+                        new Date(val.fecha.toString()).getMonth() +
+                        '/' +
+                        new Date(val.fecha.toString()).getFullYear(),
+
+                    id: val.id
+                }));
+            });
+
+        return gastos;
+    }
 }
 export const proyectoService = new ProyectoService();

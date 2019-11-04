@@ -1,81 +1,90 @@
 import Vue from 'vue';
 import Component from 'vue-class-component';
-import { Iproyecto } from '../../interfaces/interface';
-import axios from 'axios';
-import { AxiosResponse } from 'axios';
+import { IPropuesta } from '../../interfaces/interface';
 import template from './consultarProyecto.vue';
+import { propuestaService } from '../../services/PropuestaService';
 
-const BASE_URL: string = 'https://localhost:5001/api/proyecto';
 @Component({
-    mixins: [template],
+    mixins: [template]
 })
 export default class ShowProyecto extends Vue {
-    public proyecto: Iproyecto = {} as Iproyecto;
+    public propuesta: IPropuesta = {} as IPropuesta;
     public headers = [
         {
             text: '',
             align: 'left',
             sortable: false,
-            value: 'num',
+            value: 'num'
         },
-        { text: 'Código', value: 'codigo' },
         { text: 'Nombre', value: 'nombre' },
-        { text: 'Estado', value: 'estado' },
-        { text: 'Acción', value: 'action', sortable: false },
-        { text: 'Archivo', value: 'verPDF', sortable: false },
+        {
+            text: 'Presupuesto Estimado',
+            value: 'presupuestoEstimado',
+            align: 'center'
+        },
+        {
+            text: 'Numero de Familias Beneficiadas',
+            value: 'numeroFamiliasBeneficiadas',
+            align: 'center'
+        },
+        {
+            text: 'Fecha de presentacion',
+            value: 'fechaPresentacion',
+            align: 'center',
+            color: 'green'
+        },
+        {
+            text: 'Editar',
+            value: 'action',
+            sortable: false,
+            align: 'center',
+            color: 'green'
+        },
+        {
+            text: 'Documento',
+            value: 'verPDF',
+            sortable: false,
+            align: 'center'
+        },
+        {
+            text: 'Aprobar Propuesta',
+            value: 'actionAprobarPropuesta',
+            sortable: false,
+            align: 'center'
+        }
     ];
-    public proyectos: Iproyecto[] = [];
+    public propuestas: IPropuesta[] = [];
     public editedIndex = -1;
     public editedProyecto = {};
     public dialog = false;
     public search = '';
     public itemsPerPage: number = 5;
+    public dialogAprobarPropuesta = false;
 
     public editItem(item: any) {
-        this.editedIndex = this.proyectos.indexOf(item);
+        this.editedIndex = this.propuestas.indexOf(item);
         this.editedProyecto = Object.assign({}, item);
         this.abrirModal(item);
     }
+    public aprobarPropuesta(item: any) {
+        this.editedIndex = this.propuestas.indexOf(item);
+        this.editedProyecto = Object.assign({}, item);
+        this.abrirModalAprobarPropuesta(item);
+    }
+    public abrirModalAprobarPropuesta(item: any) {
+        this.dialogAprobarPropuesta = true;
+    }
+    
     public abrirModal(item: any) {
         this.dialog = true;
-        this.proyecto = item;
+        this.propuesta = item;
     }
     public showPDF(item: any) {
-        this.proyecto = item;
-        this.getPDFProyecto(this.proyecto.id);
+        this.propuesta = item;
+        propuestaService.getPDFProyecto(this.propuesta);
     }
-    public async getData() {
-        await axios.get(BASE_URL).then((response: AxiosResponse) => {
-            this.proyectos = response.data.map((val: any) => ({
-                codigo: val.codigo,
-                nombre: val.nombre,
-                estado: val.estado,
-                id: val.id,
-            }));
-        });
-    }
-    public async getPDFProyecto(id: number) {
-        let urlPDF: string = '';
-        await axios
-            .get(BASE_URL + '/' + id, { responseType: 'blob' })
-            .then(({ data }) => {
-                const blob = new Blob([data], { type: 'application/pdf' });
-                const link = document.createElement('a');
-                console.log(blob);
-                urlPDF = window.URL.createObjectURL(blob);
-                link.href = urlPDF;
-                // link.setAttribute('download', 'file.pdf');
-                // link.download = "donwload.pdf";
-                link.target = '_blank';
-                link.click();
-                document.body.appendChild(link);
-                console.log(urlPDF);
-            })
-            // tslint:disable-next-line: no-console
-            .catch((error) => console.error(error));
-        return urlPDF;
-    }
+
     public mounted() {
-        this.getData();
+        propuestaService.getData().then(res => (this.propuestas = res));
     }
 }

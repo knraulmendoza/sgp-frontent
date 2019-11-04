@@ -36,20 +36,32 @@ export interface Iactividad {
     costo: number;
 }
 
-
-export interface Iproyecto {
+export interface IPropuesta {
+    id: number;
+    nombre: string;
+    presupuestoEstimado: string;
+    fechaPresentacion: Date;
+    numeroFamiliasBeneficiadas: number;
+    documento: string;
+}
+export interface IProyecto{
     id: number;
     codigo: string;
     nombre: string;
-    presupuesto_aprobado: number;
+    presupuestoAprovado: number;
     presupuesto_ejecutado: number;
     fecha_ejecucion: Date;
     fecha_cierre_prevista: Date;
     fecha_cierre?: Date;
     programa: Iprograma;
-    estado: number;
+    proyectoState: number;
     numero_familias_beneficiadas: number;
     actividades: Iactividad;
     archivo: string;
 }
-
+export interface ITransaccion {
+    id: number;
+    Monto: number;
+    Fecha: Date;
+    Proyecto: IProyecto;
+}

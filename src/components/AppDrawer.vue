@@ -96,6 +96,7 @@ export default class AppDrawer extends Vue {
           {name: '/addProyecto', icon: 'person', text: 'Registrar proyecto'},
           {name: '/proyecto', icon: 'book', text: 'Proyecto'},
           {name: '/ActualizacionPresupuesto', icon: 'book', text: 'Actualizacion Presupuesto'},
+          {name: '/registrarGasto', icon: 'mdi-transfer-down', text: 'Registrar Gasto'},
       ];
     public title =  '';
     public items = ['Practics'];
