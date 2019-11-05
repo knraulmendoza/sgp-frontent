@@ -8,35 +8,31 @@ class SgpService {
         {
             valor: 1000000,
             interes: 10000,
-            archivoInteres: '',
-            archivoValor: '',
+            archivoInteres: new Blob(['sdsds'], {type : 'text/html'}),
+            archivoValor: new Blob(['eso es'], {type : 'text/html'}),
             mes: 1
         },
         {
             valor: 2000000,
             interes: 20000,
-            archivoInteres: '',
-            archivoValor: '',
+            archivoInteres: new Blob(['sdsds'], {type : 'text/html'}),
+            archivoValor: new Blob(['sdsds'], {type : 'text/html'}),
             mes: 2
         },
         {
             valor: 3000000,
             interes: 30000,
-            archivoInteres: '',
-            archivoValor: '',
+            archivoInteres: new Blob(['sdsds'], {type : 'text/html'}),
+            archivoValor: new Blob(['sdsds'], {type : 'text/html'}),
             mes: 3
         },{
             valor: 4000000,
             interes: 40000,
-            archivoInteres: '',
-            archivoValor: '',
+            archivoInteres: new Blob(['sdsds'], {type : 'text/html'}),
+            archivoValor: new Blob(['sdsds'], {type : 'text/html'}),
             mes: 6
         }
     ];
-
-  constructor() {
-
-  }
   //metodos del CRUD
   consultar(){
       axios.get('').then(_=>{}).catch(_=>{});

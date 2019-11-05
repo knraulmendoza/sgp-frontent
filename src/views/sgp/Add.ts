@@ -3,24 +3,22 @@ import {Component} from 'vue-property-decorator';
 import template from './Registrar.vue';
 import { Isgp } from "@/interfaces/interface";
 import { sgpServices } from '@/services/sgpServices';
-import { validationMixin } from "vuelidate";
-import { required, maxLength, email } from 'vuelidate/lib/validators';
-
+import {ValidationProvider, extend, ValidationObserver, withValidation} from 'vee-validate';
+import { required } from 'vee-validate/dist/rules';
+  
+  extend('required', {
+    ...required,
+    message: 'Este campo es obligatorio'
+  });
 @Component({
     name: 'AddSgp',
-    mixins: [template, validationMixin],
-    validations: {
-      sgp : {
-        valor: { required,  },
-        interes: { required, },
-        archivoValor: { required },
-        archivoInteres: { required },
-        mes: {required}
-      }
-    }
+    mixins: [template],
+    components:{ValidationProvider, ValidationObserver},
+    $_veeValidate:{ validator: "new" }
 })
+
 export default class AddSgp extends Vue {
-    search=''
+    search='';
     sgps:Isgp[] = [];
     sgp:Isgp = <Isgp>{};
     valid = true;
@@ -85,47 +83,14 @@ export default class AddSgp extends Vue {
       ],
     }
     get formTitle () {
-        return this.editedIndex === -1 ? 'Nuevo SGP' : 'Editar SGP'
-    }
-
-    get archivoValorErrors () {
-      const errors:any[] = []
-      if (!this.$v.sgp.archivoValor.$dirty) return errors
-      !this.$v.sgp.archivoValor.required && errors.push('You must agree to continue!')
-      return errors;
-    }
-    get archivoInteresErrors () {
-      const errors:any[] = []
-      if (!this.$v.sgp.archivoInteres.$dirty) return errors
-      !this.$v.sgp.archivoInteres.required && errors.push('You must agree to continue!')
-      return errors;
-    }
-    get valorErrors () {
-      const errors:any[] = []
-      if (!this.$v.sgp.valor.$dirty) return errors
-      !this.$v.sgp.valor.required && errors.push('You must agree to continue!')
-      return errors;
-    }
-    get interesErrors () {
-      const errors:any[] = []
-      if (!this.$v.sgp.interes.$dirty) return errors
-      !this.$v.sgp.interes.required && errors.push('You must agree to continue!')
-      return errors;
-    }
-    get mesErrors () {
-      const errors:any[] = []
-      if (!this.$v.sgp.mes.$dirty) return errors
-      !this.$v.sgp.mes.required && errors.push('You must agree to continue!')
-      return errors;
+        return this.editedIndex === -1 ? 'Nuevo SGP' : 'Editar SGP';
     }
 
     saveSgp(){
-      alert('bien');
-      this.$v.$touch()
-        if (this.$v.$invalid) {
-          alert('Falta campos por llenar')
-        }
+      console.log((this.$refs.obs as Vue & { validate: () => boolean }).validate().valueOf());
+      console.log(this.sgp);
     }
+    
 
     editItem (sgp: Isgp) {
       this.editedIndex = this.sgps.indexOf(sgp)
@@ -138,6 +103,7 @@ export default class AddSgp extends Vue {
     }
 
     close () {
+      // (this.$refs.obs as Vue & { validate: () => boolean }).reset();
       this.dialog = false
       setTimeout(() => {
         this.editedItem = Object.assign({}, this.defaultItem)

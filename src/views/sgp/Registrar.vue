@@ -1,6 +1,7 @@
 
 <template>
-  <v-container grid-list-xs>
+<ValidationObserver ref="obs">
+  <v-container grid-list-xs slot-scope="{ invalid}"> <!-- slot-scope="{invalid}" esto es para qué el boton registrar habilitar o deshabilitar -->
     <v-data-table
         :headers="headers"
         :items="sgps"
@@ -43,68 +44,75 @@
                 <v-container>
                   <v-row>
                     <v-col cols="12" sm="12" md="12">
-                      <!-- <v-text-field v-model="sgp.archivo" label="Mes"></v-text-field> -->
+                      <validation-provider rules="required" v-slot="{ errors, valid }" name="sgp.valor">
+                        <!-- este componente es el que se encarga de la respectiva validacion -->
                       <v-select
                         :items="meses"
                         v-model="sgp.mes"
+                        :success="valid"
+                        :error-messages="errors"
                         label="mes"
-                        :error-messages="mesErrors"
                         required
-                        @input="$v.sgp.mes.$touch()"
-                        @blur="$v.sgp.mes.$touch()"
                       ></v-select>
+                      <!-- :error-messages => para mostrar el error ; :success => lo muestra en verde (esta correcto)-->
+                      </validation-provider>
                     </v-col>
                   </v-row>
                   <v-row>
                     <v-col cols="12" sm="6" md="6">
-                      <v-text-field
-                      v-model="sgp.valor"
-                      label="valor"
-                      :error-messages="valorErrors"
-                      type="number"
-                      required
-                      @input="$v.sgp.valor.$touch()"
-                      @blur="$v.sgp.valor.$touch()"
-                      ></v-text-field>
+                      <validation-provider rules="required" v-slot="{ errors, valid }" name="sgp.valor">
+                        <v-text-field
+                        v-model="sgp.valor"
+                        label="valor"
+                        type="number"
+                        :counter="10"
+                        :success="valid"
+                        :error-messages="errors"
+                        required
+                        ></v-text-field>
+                      </validation-provider>
                     </v-col>
                     <v-col cols="12" sm="6" md="6">
-                      <!-- <v-text-field v-model="sgp.archivoValor" label="archivo valor"></v-text-field> -->
-                      <v-file-input
-                      @change="obtenerArchivo($event)"
-                      v-model="sgp.archivoValor"
-                      hint="Ej: proyecto.pdf"
-                      accept=".pdf"
-                      persistent-hint
-                      label="Archivo Valor"
-                      :error-messages="archivoValorErrors"
-                      required
-                      ></v-file-input>
+                      <validation-provider rules="required" v-slot="{ errors, valid }" name="sgp.archivoValor">
+                        <v-file-input
+                        v-model="sgp.archivoValor"
+                        hint="Ej: proyecto.pdf"
+                        accept=".pdf"
+                        persistent-hint
+                        label="Archivo Valor"
+                        :valid="valid"
+                        :error-messages="errors"
+                        required
+                        ></v-file-input>
+                      </validation-provider>
                     </v-col>
                   </v-row>
                   <v-row>
                     <v-col cols="12" sm="6" md="6">
-                      <v-text-field
-                      v-model="sgp.interes"
-                      label="Interes"
-                      :error-messages="interesErrors"
-                      type="number"
-                      required
-                      @input="$v.sgp.interes.$touch()"
-                      @blur="$v.sgp.interes.$touch()"
-                      ></v-text-field>
+                      <validation-provider rules="required" v-slot="{ errors, valid }" name="sgp.interes">
+                        <v-text-field
+                        v-model="sgp.interes"
+                        label="Interes"
+                        :success="valid"
+                        :error-messages="errors"
+                        type="number"
+                        required
+                        ></v-text-field>
+                      </validation-provider>
                     </v-col>
                     <v-col cols="12" sm="6" md="6">
-                      <!-- <v-text-field v-model="sgp.archivoInteres" label="Archivo Interes"></v-text-field> -->
-                      <v-file-input
-                      @change="obtenerArchivo($event)"
-                      v-model="sgp.archivoInteres"
-                      hint="Ej: proyecto.pdf"
-                      accept=".pdf"
-                      persistent-hint
-                      label="Archivo Interes"
-                      :error-messages="archivoInteresErrors"
-                      required
-                      ></v-file-input>
+                      <validation-provider rules="required" v-slot="{ errors, valid }" name="sgp.archivoInteres">
+                        <v-file-input
+                        v-model="sgp.archivoInteres"
+                        hint="Ej: proyecto.pdf"
+                        :success="valid"
+                        :error-messages="errors"
+                        accept=".pdf"
+                        persistent-hint
+                        label="Archivo Interes"
+                        required
+                        ></v-file-input>
+                      </validation-provider>
                     </v-col>
                   </v-row>
                 </v-container>
@@ -113,7 +121,7 @@
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn color="blue darken-1" text @click="close">Cancelar</v-btn>
-              <v-btn color="blue darken-1" text @click="saveSgp" :disabled="!valid">Guardar</v-btn>
+              <v-btn color="blue darken-1" text @click="saveSgp" :disabled="invalid">Guardar</v-btn> <!-- :diabled="invalid" la varibale es la misma que esta en la Card-->
             </v-card-actions>
             </v-form>
           </v-card>
@@ -140,4 +148,5 @@
     </template>
   </v-data-table>
   </v-container>
+  </ValidationObserver>
 </template>
