@@ -104,18 +104,16 @@ class ProyectoService {
     public async GetProyectosRP() {
         let proyectosConRP: IProyecto[] = [];
         await axios.get(this.url).then((response: AxiosResponse) => {
-            proyectosConRP = response.data.map((val: IProyecto) => ({
-                codigo: val.codigo,
-                nombre: val.nombre,
-                presupuestoAprobadoString:
+            proyectosConRP = response.data.map((val: any) => ({
+                Codigo: val.codigo,
+                Nombre: val.nombre,
+                PresupuestoAprobadoString:
                     '$ ' +
-                    new Intl.NumberFormat().format(val.PresupuestoAprovado),
-                proyectoState: val.proyectoState,
+                    new Intl.NumberFormat().format(val.presupuestoAprovado),
+                ProyectoState: val.proyectoState,
                 id: val.id,
-                presupuestoAprobado: val.presupuestoAprobado,
-                presupuestoEjecutado: val.presupuestoEjecutado,
-                presupuestoRestante:
-                    val.presupuestoAprobado - val.presupuestoEjecutado,
+                PresupuestoAprobado: val.presupuestoAprobado,
+                PresupuestoEjecutado: val.presupuestoEjecutado,                
             }));
         });
         return proyectosConRP;
@@ -123,7 +121,7 @@ class ProyectoService {
     public async GetGastosProyecto(proyecto: IProyecto) {
         let gastos: ITransaccion[] = [];
         await axios
-            .get(this.url + '/' + proyecto.id)
+            .get(this.url + '/' + proyecto.Codigo)
             .then((response: AxiosResponse) => {
                 gastos = response.data.map((val: any) => ({
                     Monto: val.monto,
@@ -134,7 +132,7 @@ class ProyectoService {
                         '/' +
                         new Date(val.fecha.toString()).getFullYear(),
 
-                    id: val.id
+                    Id: val.id
                 }));
             });
 

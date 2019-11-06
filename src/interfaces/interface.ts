@@ -37,30 +37,29 @@ export interface Iactividad {
 }
 
 export interface IPropuesta {
-    id: number;
-    nombre: string;
-    presupuestoEstimado: string;
-    fechaPresentacion: Date;
-    numeroFamiliasBeneficiadas: number;
-    documento: File;
-    presupuestoEstimadoDouble:number;
+    FechaPresentacion: Date;
+    FechaAprovacion: Date;
+    Documento: File;
+    NumeroDeFamilias: number;
+    Nombre: string;
+    PresupuestoEstimado: string;
+    Id: number;
+    NumeroFamiliasBeneficiadas: number;
+    PresupuestoEstimadoDouble: number;
+    FechaRegistro: Date;
 }
 export interface IProyecto {
-    Propuesta:IPropuesta;
-    codigo: string;
+    Propuesta: IPropuesta;
+    Codigo: string;
     PresupuestoAprovado: number;
     PresupuestoEjecutado: number;
-    Comunidades:IComunidad[];
-    fecha_ejecucion: Date;
-    fecha_cierre_prevista: Date;
-    fecha_cierre?: Date;
-    programa: Iprograma;
-    proyectoState: number;
-    numero_familias_beneficiadas: number;
-    actividades: Iactividad;
-
-    
-    
+    Comunidades: IComunidad[];
+    FechaEjecucion: Date;
+    FechaDeCierrePrevista: Date;
+    FechaCierre?: Date;
+    Programa: Iprograma;
+    ProyectoState: number;
+    Actividades: Iactividad;
 }
 export interface ITransaccion {
     id: number;
@@ -68,7 +67,7 @@ export interface ITransaccion {
     Fecha: Date;
     Proyecto: IProyecto;
 }
-export interface IComunidad{
-    Codigo:number;
-    Nombre:String;
+export interface IComunidad {
+    Codigo: number;
+    Nombre: String;
 }
