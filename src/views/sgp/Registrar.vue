@@ -48,7 +48,7 @@
                         <!-- este componente es el que se encarga de la respectiva validacion -->
                       <v-select
                         :items="meses"
-                        v-model="sgp.mes"
+                        v-model="mes"
                         :success="valid"
                         :error-messages="errors"
                         label="mes"
@@ -73,9 +73,9 @@
                       </validation-provider>
                     </v-col>
                     <v-col cols="12" sm="6" md="6">
-                      <validation-provider rules="required" v-slot="{ errors, valid }" name="sgp.archivoValor">
+                      <validation-provider rules="required" v-slot="{ errors, valid }" name="archivoValor">
                         <v-file-input
-                        v-model="sgp.archivoValor"
+                        @change="obtenerArchivoValor($event)"
                         hint="Ej: proyecto.pdf"
                         accept=".pdf"
                         persistent-hint
@@ -101,9 +101,9 @@
                       </validation-provider>
                     </v-col>
                     <v-col cols="12" sm="6" md="6">
-                      <validation-provider rules="required" v-slot="{ errors, valid }" name="sgp.archivoInteres">
+                      <validation-provider rules="required" v-slot="{ errors, valid }" name="sgp.soporteInteres">
                         <v-file-input
-                        v-model="sgp.archivoInteres"
+                        @change="obtenerArchivoInteres($event)"
                         hint="Ej: proyecto.pdf"
                         :success="valid"
                         :error-messages="errors"
@@ -113,6 +113,15 @@
                         required
                         ></v-file-input>
                       </validation-provider>
+                    </v-col>
+                  </v-row>
+                  <v-row>
+                    <v-col cols="12" sm="12" md="12">
+                      <v-textarea 
+                        name="input-7-1"
+                        label="Descripción"
+                        v-model="sgp.descripcion"
+                      ></v-textarea>
                     </v-col>
                   </v-row>
                 </v-container>

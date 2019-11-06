@@ -86,7 +86,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import Component from 'vue-class-component';
-import { Prop, Emit, Watch } from 'vue-property-decorator'
+import { Prop, Emit, Watch } from 'vue-property-decorator';
 @Component
 export default class AppDrawer extends Vue {
   // @Prop({ required: true, type: [] }) readonly datos: [];
@@ -105,21 +105,21 @@ export default class AppDrawer extends Vue {
     //     this.items.push(val.name);
     //   }
     // )
-    mounted () {
-            this.onResponsiveInverted()
-            window.addEventListener('resize', this.onResponsiveInverted)
+    public mounted() {
+            this.onResponsiveInverted();
+            window.addEventListener('resize', this.onResponsiveInverted);
         }
-    beforeDestroy () :void {
-        window.removeEventListener('resize', this.onResponsiveInverted)
+    public beforeDestroy(): void {
+        window.removeEventListener('resize', this.onResponsiveInverted);
     }
-    openTarea(){
+    public openTarea() {
         // this.$router.push({name: 'tarea'})
     }
-    onResponsiveInverted ():void {
+    public onResponsiveInverted(): void {
         if (window.innerWidth < 991) {
-          if(!this.drawer){this.drawer = false}
+          if (!this.drawer) {this.drawer = false; }
         } else {
-        this.drawer = true
+        this.drawer = true;
         }
     }
 }

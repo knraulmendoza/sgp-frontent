@@ -57,7 +57,8 @@ export interface Isgp {
     id?: number;
     valor: number;
     interes: number;
-    archivoValor: Blob;
-    archivoInteres: Blob;
-    mes: number;
+    soporteValor: string;
+    soporteInteres: string;
+    descripcion?: string;
+    fecha: Date;
 }
