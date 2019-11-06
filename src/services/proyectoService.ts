@@ -2,6 +2,7 @@ import axios, { AxiosResponse } from 'axios';
 import { IProyecto, ITransaccion, Icomponente } from '../interfaces/interface';
 
 class ProyectoService {
+   
 
   public url = 'https://localhost:5001/api';
   constructor() {
@@ -78,50 +79,27 @@ class ProyectoService {
 
   }
 
-  public async cofinanciador() {
-    let urlLocal: string = this.url;
-
-    const data = await axios
-      .get(urlLocal += 'confinanciador')
-      .then((response: AxiosResponse) => {
-        console.log('response: ' + response);
-        const dato = [response.data];
-        return dato.map((val: any) => ({
-          value: val.codigo,
-          text: val.nombre,
-        }));
-      });
-
-    return data;
-
-  }
+ 
 
 
 
-   public async registrarPropuesta(rawData: any) {
-     rawData = JSON.stringify(rawData);
-     console.log('rawData: ' + rawData);
+    public async registrarPropuesta(rawData: any) {
+        rawData = JSON.stringify(rawData);
 
-     const formData = new FormData();
+        const formData = new FormData();
 
-     formData.append('propuesta', rawData);
-     try {
-              const response = await  axios.post(this.url,
-              formData,
-              {
+        formData.append('propuesta', rawData);
+        try {
+            const response = await axios.post(this.url, formData, {
                 headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
-              });
-              return response.data[0];
-            } catch (e) {
-                return null;
-            }
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+            return response.data[0];
+        } catch (e) {
+            return null;
         }
-
-
-
-
+    }
 
     public async GetProyectosRP() {
         let proyectosConRP: IProyecto[] = [];
@@ -129,15 +107,17 @@ class ProyectoService {
             proyectosConRP = response.data.map((val: IProyecto) => ({
                 codigo: val.codigo,
                 nombre: val.nombre,
-                presupuestoAprovado:
+                presupuestoAprobadoString:
                     '$ ' +
                     new Intl.NumberFormat().format(val.PresupuestoAprovado),
                 proyectoState: val.proyectoState,
                 id: val.id,
+                presupuestoAprobado: val.presupuestoAprobado,
+                presupuestoEjecutado: val.presupuestoEjecutado,
+                presupuestoRestante:
+                    val.presupuestoAprobado - val.presupuestoEjecutado,
             }));
         });
-        console.log(proyectosConRP);
-
         return proyectosConRP;
     }
     public async GetGastosProyecto(proyecto: IProyecto) {
@@ -154,11 +134,14 @@ class ProyectoService {
                         '/' +
                         new Date(val.fecha.toString()).getFullYear(),
 
-                    id: val.id,
+                    id: val.id
                 }));
             });
 
         return gastos;
+    }
+    public async RegistrarGasto(gastoProyecto: ITransaccion) {
+        await axios.post('', gastoProyecto).then(Response => {});
     }
 }
 export const proyectoService = new ProyectoService();
