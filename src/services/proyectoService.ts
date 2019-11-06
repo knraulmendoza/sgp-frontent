@@ -1,16 +1,40 @@
 import axios, { AxiosResponse } from 'axios';
-import { IProyecto, ITransaccion } from '../interfaces/interface';
+import { IProyecto, ITransaccion, Icomponente } from '../interfaces/interface';
 
 class ProyectoService {
 
-  public url = 'api/propuesta/add';
+  public url = 'https://localhost:5001/api';
   constructor() {
 
   }
+  
+  public async obtenerDimensiones(){
+    console.log("obtener DImensiones");
+    
+    const data = await axios
+      .get(this.url+"/proyecto")
+      .then((response: AxiosResponse) => {
+
+        let dato;
+        if (Array.isArray(response.data)) {
+          dato = response.data;
+        } else {
+          dato = [response.data];
+        }
+        return dato.map((val: any) => ({
+          value: val.id,
+          text: val.nombre,
+          
+        }));
+      });
+      console.log('data: ' + data);
+      return data;
+  }
+
   // metodos del CRUD
-  public async obtenerDatos(value?: number) {
-    let urlLocal: string = this.url;
-    value == 0 ? urlLocal : urlLocal += `${value}`;
+  public async obtenerDatos(value?: number, rutaContralador?:string) {
+    let urlLocal: string = this.url+"/"+rutaContralador;
+    value == 0 ? urlLocal : urlLocal+"/"+value;
     console.log(urlLocal);
 
     const data = await axios
@@ -25,7 +49,10 @@ class ProyectoService {
         }
         return dato.map((val: any) => ({
           value: val.id,
-          text: val.surname,
+          text: val.Nombre,
+          
+
+          
         }));
       });
     console.log('data: ' + data);
@@ -104,7 +131,7 @@ class ProyectoService {
                 nombre: val.nombre,
                 presupuestoAprovado:
                     '$ ' +
-                    new Intl.NumberFormat().format(val.presupuestoAprovado),
+                    new Intl.NumberFormat().format(val.PresupuestoAprovado),
                 proyectoState: val.proyectoState,
                 id: val.id,
             }));

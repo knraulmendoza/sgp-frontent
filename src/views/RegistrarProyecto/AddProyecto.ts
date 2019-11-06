@@ -20,7 +20,7 @@ export default class RegistrarProyecto extends Vue {
     // programas:any[]=[];
     // componentes:any[]=[];
     // cofinanciamiento:any[]=[];
-    public valid = false;
+    public valid = true;
     public lazy = false;
     public proyecto = {
       Nombre: '',
@@ -53,9 +53,11 @@ export default class RegistrarProyecto extends Vue {
           (v: any) => (v && v.length != 0) || 'Debe indicar el Valor presupuesto',
         ],
         Documento: [
-          (v: any) => console.log(v),
-          (v: any) => !!v || 'Documento Requerido',
-        ],
+          (v : any) => {
+            v == null || 'Este campo es obligatorio'
+            !!v || 'Este campo es obligatorio'
+          },
+      ],
       },
     };
 
@@ -76,33 +78,6 @@ export default class RegistrarProyecto extends Vue {
 
 
   }
-
-
-
-  // select(value:number, id: number){
-  //   console.log(id)
-  //   switch (value) {
-  //     case 1:
-  //       proyectoService.obtenerDatos(id).then(res=>{
-  //         console.log(res);
-  //       this.componentes=res});
-  //       break;
-  //       case 2:
-  //            proyectoService.obtenerDatos(id).then(res=>{
-  //         console.log(res);
-  //       this.estrategias=res});
-  //          break;
-  //          case 3:
-  //         proyectoService.obtenerDatos(id).then(res=>{
-  //         console.log(res);
-  //       this.programas=res});
-  //          break;
-
-  //     default:
-  //       break;
-  //   }
-  // }
-
 
   public obtenerArchivo(e: any) {
     this.proyecto.Documento = e;

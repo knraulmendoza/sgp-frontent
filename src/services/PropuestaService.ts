@@ -10,7 +10,7 @@ class PropuestaService {
                 nombre: val.nombre,
                 numeroFamiliasBeneficiadas: val.numeroFamiliasBeneficiadas,
                 presupuestoEstimado:
-                    '$ ' +
+                    '$' +
                     new Intl.NumberFormat().format(val.presupuestoEstimado),
                 fechaPresentacion:
                     new Date(val.fechaPresentacion.toString()).getDate() +
@@ -19,8 +19,11 @@ class PropuestaService {
                     '/' +
                     new Date(val.fechaPresentacion.toString()).getFullYear(),
                 id: val.id,
+                presupuestoEstimadoDouble:val.presupuestoEstimado,
             }));
         });
+       
+        
         return this.propuestas;
     }
     public getPDFProyecto(propuesta: IPropuesta) {

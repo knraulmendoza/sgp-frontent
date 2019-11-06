@@ -42,14 +42,15 @@ export interface IPropuesta {
     presupuestoEstimado: string;
     fechaPresentacion: Date;
     numeroFamiliasBeneficiadas: number;
-    documento: string;
+    documento: File;
+    presupuestoEstimadoDouble:number;
 }
 export interface IProyecto {
-    id: number;
+    Propuesta:IPropuesta;
     codigo: string;
-    nombre: string;
-    presupuestoAprovado: number;
-    presupuesto_ejecutado: number;
+    PresupuestoAprovado: number;
+    PresupuestoEjecutado: number;
+    Comunidades:IComunidad[];
     fecha_ejecucion: Date;
     fecha_cierre_prevista: Date;
     fecha_cierre?: Date;
@@ -57,11 +58,17 @@ export interface IProyecto {
     proyectoState: number;
     numero_familias_beneficiadas: number;
     actividades: Iactividad;
-    archivo: string;
+
+    
+    
 }
 export interface ITransaccion {
     id: number;
     Monto: number;
     Fecha: Date;
     Proyecto: IProyecto;
+}
+export interface IComunidad{
+    Codigo:number;
+    Nombre:String;
 }

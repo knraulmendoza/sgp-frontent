@@ -1,14 +1,18 @@
 import Vue from 'vue';
 import Component from 'vue-class-component';
-import { IPropuesta } from '../../interfaces/interface';
+import { IPropuesta, Iprograma, IProyecto } from '../../interfaces/interface';
 import template from './consultarProyecto.vue';
 import { propuestaService } from '../../services/PropuestaService';
+import { proyectoService } from '../../services/proyectoService';
+import RegistrarProyecto from '../RegistrarProyecto/AddProyecto';
 
 @Component({
     mixins: [template],
 })
 export default class ShowProyecto extends Vue {
-    public propuesta: IPropuesta = {} as IPropuesta;
+   
+    
+
     public headers = [
         {
             text: '',
@@ -34,13 +38,6 @@ export default class ShowProyecto extends Vue {
             color: 'green',
         },
         {
-            text: 'Editar',
-            value: 'action',
-            sortable: false,
-            align: 'center',
-            color: 'green',
-        },
-        {
             text: 'Documento',
             value: 'verPDF',
             sortable: false,
@@ -60,18 +57,36 @@ export default class ShowProyecto extends Vue {
     public search = '';
     public itemsPerPage: number = 5;
     public dialogAprobarPropuesta = false;
+    public presupuesto:number=0;
+    dimensiones:any[]=[];
+    comunidades:any[]=[];
+    estrategias:any[]=[];
+    programas:any[]=[];
+    componentes:any[]=[];
+    cofinanciamiento:any[]=[];
+    proyecto:IProyecto ={} as IProyecto;
+    public propuesta: IPropuesta = {} as IPropuesta;
+
+    public items=[
+        {}
+    ]
+
+    
+
 
     public editItem(item: any) {
-        this.editedIndex = this.propuestas.indexOf(item);
+       this.editedIndex = this.propuestas.indexOf(item);
         this.editedProyecto = Object.assign({}, item);
         this.abrirModal(item);
     }
-    public aprobarPropuesta(item: any) {
+    public aprobarPropuesta(item:IPropuesta) {
+        this.presupuesto=item.presupuestoEstimadoDouble;  
         this.editedIndex = this.propuestas.indexOf(item);
-        this.editedProyecto = Object.assign({}, item);
-        this.abrirModalAprobarPropuesta(item);
-    }
-    public abrirModalAprobarPropuesta(item: any) {
+        this.propuesta=this.propuestas[this.editedIndex];
+        this.abrirModalAprobarPropuesta();
+    }   
+    public abrirModalAprobarPropuesta() {
+    
         this.dialogAprobarPropuesta = true;
     }
 
@@ -84,7 +99,49 @@ export default class ShowProyecto extends Vue {
         propuestaService.getPDFProyecto(this.propuesta);
     }
 
+
     public mounted() {
         propuestaService.getData().then((res) => (this.propuestas = res));
+        proyectoService.obtenerDatos(0,"Dimensiones").then(res=>this.dimensiones = res);
+        proyectoService.obtenerDatos(0,"proyecto").then(res=>this.comunidades = res);
+            
     }
+
+    public select(value: number, id: number) {
+        console.log(id);
+        switch (value) {
+
+          case 1:
+            proyectoService.obtenerDatos(id,"Componente").then((res) => {
+              console.log(res);
+              this.componentes = res; });
+            break;
+            case 2:
+                 proyectoService.obtenerDatos(id,"Estrategias").then((res) => {
+              console.log(res);
+              this.estrategias = res; });
+                 break;
+               case 3:
+              proyectoService.obtenerDatos(id,"Programas").then((res) => {
+              console.log(res);
+              this.programas = res; });
+              break;
+    
+          default:
+            break;
+        }
+      }
+      registrarProyecto(){
+            this.proyecto.Propuesta=this.propuesta;
+            this.proyecto.PresupuestoAprovado=Number( this.presupuesto);
+
+
+
+      }
+
+
+     
+
+    
+
 }

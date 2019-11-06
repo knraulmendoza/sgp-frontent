@@ -93,8 +93,8 @@ export default class AppDrawer extends Vue {
     public drawer: boolean = false;
     public group = null;
     public links = [
-          {name: '/addProyecto', icon: 'person', text: 'Registrar proyecto'},
-          {name: '/proyecto', icon: 'book', text: 'Proyecto'},
+          {name: '/addProyecto', icon: 'person', text: 'Registro Propuesta'},
+          {name: '/proyecto', icon: 'book', text: 'Consulta Propuesta'},
           {name: '/ActualizacionPresupuesto', icon: 'book', text: 'Actualizacion Presupuesto'},
           {name: '/registrarGasto', icon: 'mdi-transfer-down', text: 'Registrar Gasto'},
       ];

@@ -69,8 +69,8 @@
                   persistent-hint
                   :items="dimensiones"
                   v-model="proyecto.dimension"
-                  label="Dimensión"
                   @change="select(1,$event)"
+                  label="Dimensión"
                   required
                   :rules="rules.proyecto.dimension"
                 ></v-select>
@@ -173,17 +173,19 @@
             </v-row> -->
             <v-row justify="center">
               <v-col cols="12" md="12" sm="8">
+
                  <v-file-input
                   @change="obtenerArchivo($event)"
                   v-model="proyecto.documento"
                   hint="Ej: proyecto.pdf"
+                  :success="valid"
                   accept=".pdf"
                   persistent-hint
                   label="Cargar documento"
                   required
                   :error-messages="errorDocumento"
                 ></v-file-input> 
-                
+               
               </v-col>
               <!-- <input type="file" @change="obtenerArchivo" class="form-control-file"> -->
             </v-row>
