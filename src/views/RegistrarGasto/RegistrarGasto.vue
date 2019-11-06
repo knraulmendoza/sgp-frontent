@@ -1,10 +1,10 @@
 <template>
-  <v-container grid-list-xs>
+  <v-container fluid>
     <v-data-table
       :headers="headersProyectosRP"
       :items="proyectosConRP"
       :search="search"
-      class="elevation-1"
+      class="elevation-1 wrap-content"
       no-data-text="No se encontraron proyectos"
       no-results-text="No se encontraron proyectos"
     >
@@ -21,14 +21,14 @@
               hide-details
             ></v-text-field>
             <v-dialog v-model="dialog" persistent scrollable max-width="900px">
-              <v-card elevation="10">
+              <v-card >
                 <v-container>
                   <v-card-title primary-title color="secondary">
                     <v-row style="height: 40px">
-                      <v-col xs="5" sm="6">
-                        <h3 class="headline mb-0">Gastos</h3>
+                      <v-col xs="4" sm="5">
+                        <h4 class="headline">Gastos</h4>
                       </v-col>
-                      <v-col xs="5" sm="5" justify="end" class="text-right">
+                      <v-col xs="6" sm="6" justify="end" class>
                         Codigo:
                         {{proyectoARegistrarGasto.codigo}}
                       </v-col>
@@ -48,7 +48,7 @@
                         <v-col cols="12" sm="4">
                           <p
                             class="text-center"
-                          >Presupuesto Aprobado: {{proyectoARegistrarGasto.presupuestoAprovado}}</p>
+                          >Presupuesto Aprobado: {{proyectoARegistrarGasto.presupuestoAprobadoString}}</p>
                         </v-col>
                       </v-row>
 
@@ -66,13 +66,23 @@
                       </v-row>
                     </v-container>
                   </v-card-text>
-                  <v-card-actions display="grow">
+                  <v-card-actions >
                     <v-text-field
-                      :rules="reglasMonto"
+                      :rules="[validarMonto]"
+                      v-model="valorGasto"
                       prepend-icon="mdi-transfer-down"
                       type="number"
+                      autofocus
+                      label="Valor de Gasto"
                     ></v-text-field>
-                    <v-btn dark align="center" color="green">Registrar Gasto</v-btn>
+                    <v-spacer></v-spacer>
+                    <v-btn
+                      :dark="!gastoPermitido"
+                      @click="registrarGasto"
+                      align="center"
+                      color="green"
+                      :disabled="gastoPermitido"
+                    >Registrar Gasto</v-btn>
                   </v-card-actions>
                 </v-container>
               </v-card>

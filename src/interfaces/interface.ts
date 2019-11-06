@@ -48,8 +48,9 @@ export interface IProyecto {
     id: number;
     codigo: string;
     nombre: string;
-    presupuestoAprovado: number;
-    presupuesto_ejecutado: number;
+    presupuestoAprobado: number;
+    presupuestoEjecutado: number;
+    presupuestoRestante: number;
     fecha_ejecucion: Date;
     fecha_cierre_prevista: Date;
     fecha_cierre?: Date;
