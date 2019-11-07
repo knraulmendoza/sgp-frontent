@@ -4,7 +4,7 @@ import { proyectoService } from '../../services/proyectoService';
 import Component from 'vue-class-component';
 import template from './RegistrarGasto.vue';
 @Component({
-    mixins: [template]
+    mixins: [template],
 })
 export default class RegisterGasto extends Vue {
     public proyectosConRP: IProyecto[] = [];
@@ -17,7 +17,7 @@ export default class RegisterGasto extends Vue {
             align: 'left',
             sortable: false,
             value: 'num',
-            width: '1%'
+            width: '1%',
         },
         { text: 'Codigo', value: 'codigo', width: '10%' },
         { text: 'Nombre', value: 'nombre', width: '44%' },
@@ -26,25 +26,25 @@ export default class RegisterGasto extends Vue {
             text: 'Presupuesto Aprobado',
             value: 'presupuestoAprobadoString',
             width: '15%',
-            align: 'center'
+            align: 'center',
         },
         {
             text: 'Realizar Gasto',
             value: 'actionDeGasto',
             width: '15%',
             sortable: false,
-            align: 'center'
-        }
+            align: 'center',
+        },
     ];
     public headersGastos = [
         {
             text: '',
             align: 'left',
             sortable: false,
-            value: 'num'
+            value: 'num',
         },
         { text: 'Gasto', value: 'Gasto' },
-        { text: 'Fecha', value: 'Fecha' }
+        { text: 'Fecha', value: 'Fecha' },
     ];
 
 
@@ -57,17 +57,17 @@ export default class RegisterGasto extends Vue {
     public gastoPermitido: boolean = false;
     public validarMonto(value: number) {
         if (!/^([0-9])*$/.test(value.toString())) {
-            console.log("entro");
-            
+            console.log('entro');
+
             this.gastoPermitido = false;
             return 'No puede tener caracteres';
         } else {
             this.gastoPermitido = true;
-            console.log("aca");
-            
+            console.log('aca');
+
         }
-        
-        if (value > this.proyectoARegistrarGasto.presupuestoRestante) {
+
+        if (value > (this.proyectoARegistrarGasto.PresupuestoAprovado-this.proyectoARegistrarGasto.PresupuestoEjecutado)) {
             this.gastoPermitido = true;
             return 'No puede sobrepasar el monto disponible';
         } else {
@@ -85,7 +85,7 @@ export default class RegisterGasto extends Vue {
         this.proyectoARegistrarGasto = this.proyectosConRP[this.editedIndex];
         proyectoService
             .GetGastosProyecto(this.proyectoARegistrarGasto)
-            .then(res => {
+            .then((res) => {
                 this.gastosProyecto = res;
             });
     }
@@ -94,12 +94,12 @@ export default class RegisterGasto extends Vue {
             Monto: this.valorGasto,
             Fecha: new Date(),
             Proyecto: this.proyectoARegistrarGasto,
-            id: this.editedIndex
+            id: this.editedIndex,
         };
         proyectoService.RegistrarGasto(this.gastoProyecto);
     }
     public mounted() {
-        proyectoService.GetProyectosRP().then(res => {
+        proyectoService.GetProyectosRP().then((res) => {
             this.proyectosConRP = res;
         });
     }

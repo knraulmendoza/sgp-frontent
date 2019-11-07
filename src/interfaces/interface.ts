@@ -71,3 +71,13 @@ export interface IComunidad {
     Codigo: number;
     Nombre: String;
 }
+
+export interface Isgp {
+    id?: number;
+    valor: number;
+    interes: number;
+    soporteValor: string;
+    soporteInteres: string;
+    descripcion?: string;
+    fecha: Date;
+}

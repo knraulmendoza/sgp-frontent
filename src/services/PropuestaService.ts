@@ -1,12 +1,12 @@
 import axios, { AxiosResponse } from 'axios';
 import { IPropuesta } from '../interfaces/interface';
+import { globalServices } from './globalService';
 class PropuestaService {
-    private BASE_URL: string = 'http://6e117652.ngrok.io/';
     private propuestas: IPropuesta[] = [];
     constructor() {}
     public async getData() {
         await axios
-            .get(this.BASE_URL + 'api/propuesta')
+            .get(globalServices.url + '/propuesta')
             .then((response: AxiosResponse) => {
                 this.propuestas = response.data.map((val: any) => ({
                     nombre: val.nombre,
@@ -18,14 +18,14 @@ class PropuestaService {
                         new Date(val.fechaDePresentacion.toString()).getDate() +
                         '/' +
                         new Date(
-                            val.fechaDePresentacion.toString()
+                            val.fechaDePresentacion.toString(),
                         ).getMonth() +
                         '/' +
                         new Date(
-                            val.fechaDePresentacion.toString()
+                            val.fechaDePresentacion.toString(),
                         ).getFullYear(),
                     id: val.id,
-                    presupuestoEstimadoDouble: val.presupuestoEstimado
+                    presupuestoEstimadoDouble: val.presupuestoEstimado,
                 }));
             });
         return this.propuestas;
@@ -33,8 +33,8 @@ class PropuestaService {
     public getPDFProyecto(propuesta: IPropuesta) {
         let urlPDF: string = '';
         axios
-            .get(this.BASE_URL + 'api/propuesta/' + propuesta.Id, {
-                responseType: 'text'
+            .get(globalServices.url + '/propuesta/' + propuesta.Id, {
+                responseType: 'text',
             })
             .then(({ data }) => {
                 const link = document.createElement('a');
@@ -43,7 +43,7 @@ class PropuestaService {
                 link.download = propuesta.Nombre + '.pdf';
                 link.click();
             })
-            .catch(error => console.error(error));
+            .catch((error) => console.error(error));
     }
 }
 

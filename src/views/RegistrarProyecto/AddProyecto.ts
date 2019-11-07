@@ -53,9 +53,9 @@ export default class RegistrarProyecto extends Vue {
           (v: any) => (v && v.length != 0) || 'Debe indicar el Valor presupuesto',
         ],
         Documento: [
-          (v : any) => {
-            v == null || 'Este campo es obligatorio'
-            !!v || 'Este campo es obligatorio'
+          (v: any) => {
+            v == null || 'Este campo es obligatorio';
+            !!v || 'Este campo es obligatorio';
           },
       ],
       },
@@ -63,10 +63,10 @@ export default class RegistrarProyecto extends Vue {
 
 
     public validate() {
-      if (this.$refs.form.validate()) {
-        this.snackbar = true;
-        this.guardarProyecto();
-      }
+      // if (this.$refs.form.validate()) {
+      //   this.snackbar = true;
+      //   this.guardarProyecto();
+      // }
     }
 
   public mounted() {
@@ -79,14 +79,16 @@ export default class RegistrarProyecto extends Vue {
 
   }
 
-  public obtenerArchivo(e: any) {
-    this.proyecto.Documento = e;
-
-  }
 
   public resetValidation() {
     this.registrado = '';
-    this.$v.$reset();
+    // this.$v.$reset();
+  }
+
+
+  public obtenerArchivo(e: any) {
+    this.proyecto.Documento = e;
+    console.log(this.proyecto.Documento);
   }
 
   public guardarProyecto() {
@@ -105,19 +107,5 @@ export default class RegistrarProyecto extends Vue {
               };
 
 
-     proyectoService.registrarPropuesta(this.proyecto).then((res) => {
-          console.log('Respuestas+ ' + res);
-          if (res == null) {
-              this.registrado = 'error';
-          } else {
-            this.registrado = 'exitoso';
-            this.codigoGenerado = res;
-          }
-         });
-
-
-                }
-
-
-
+            }
 }
