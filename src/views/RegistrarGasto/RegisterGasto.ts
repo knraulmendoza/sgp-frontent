@@ -67,7 +67,7 @@ export default class RegisterGasto extends Vue {
 
         }
 
-        if (value > (this.proyectoARegistrarGasto.PresupuestoAprovado-this.proyectoARegistrarGasto.PresupuestoEjecutado)) {
+        if (value > (this.proyectoARegistrarGasto.PresupuestoAprovado - this.proyectoARegistrarGasto.PresupuestoEjecutado)) {
             this.gastoPermitido = true;
             return 'No puede sobrepasar el monto disponible';
         } else {

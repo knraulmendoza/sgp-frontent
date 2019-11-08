@@ -35,12 +35,12 @@ export default class RegistrarProyecto extends Vue {
     public rules = {
       proyecto: {
         nombre: [
-          (v:any) => !!v || 'Nombre es requerido',
-          (v:any) => v.length <= 10 || 'debe tener minimo 10 caracteres',
+          (v: any) => !!v || 'Nombre es requerido',
+          (v: any) => v.length <= 10 || 'debe tener minimo 10 caracteres',
         ],
         numFamilias: [
-          (v:any) => !!v || 'Este Campo es requerido',
-          (v:any) => v.length >= 0 || 'Debe indicar el número de familiar a favorcer',
+          (v: any) => !!v || 'Este Campo es requerido',
+          (v: any) => v.length >= 0 || 'Debe indicar el número de familiar a favorcer',
         ],
         // dimension: [v=>!!v || 'Este campo es requerido'],
         // componente: [v=>!!v || 'Este campo es requerido'],
@@ -48,7 +48,7 @@ export default class RegistrarProyecto extends Vue {
         // programa: [v=>!!v || 'Este campo es requerido'],
         // componentes: [v=>!!v || 'Este campo es requerido'],
         // presupuestoEstimado: [v=>!!v || 'Este campo es requerido'],
-        documento: [(v:any) => !!v || 'Este campo es requerido'],
+        documento: [(v: any) => !!v || 'Este campo es requerido'],
       },
     };
 
