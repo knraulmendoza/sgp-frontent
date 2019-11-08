@@ -6,7 +6,7 @@ import router from './router';
 import { ValidationProvider } from 'vee-validate';
 import VeeValidate from 'vee-validate';
 
-// Vue.use(VeeValidate, { inject: false });
+Vue.use(VeeValidate, { inject: false });
 Vue.config.productionTip = false;
 // Vue.prototype.$axios = axios;
 // declare module 'vue/types/vue' {

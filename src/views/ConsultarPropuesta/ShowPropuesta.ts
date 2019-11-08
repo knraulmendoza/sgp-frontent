@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import Component from 'vue-class-component';
 import { IPropuesta, Iprograma, IProyecto } from '../../interfaces/interface';
-import template from './consultarProyecto.vue';
+import template from './ConsultarPropuesta.vue';
 import { propuestaService } from '../../services/PropuestaService';
 import { proyectoService } from '../../services/proyectoService';
 import RegistrarProyecto from '../RegistrarProyecto/AddProyecto';

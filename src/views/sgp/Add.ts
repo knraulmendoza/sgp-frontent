@@ -14,7 +14,7 @@ extend('required', {
     name: 'AddSgp',
     mixins: [template],
     components: {ValidationProvider, ValidationObserver},
-    $_veeValidate: { validator: 'new' },
+    
 })
 
 export default class AddSgp extends Vue {

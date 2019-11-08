@@ -1,5 +1,5 @@
 class GloablService {
-    public url = 'http://6e117652.ngrok.io/api';
+    public url = 'https://localhost:5001/api';
 }
 
 export const globalServices = new GloablService();
