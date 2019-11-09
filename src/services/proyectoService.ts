@@ -79,28 +79,6 @@ class ProyectoService {
 
   }
 
-
-
-
-
-    public async registrarPropuesta(rawData: any) {
-        rawData = JSON.stringify(rawData);
-
-        const formData = new FormData();
-
-        formData.append('propuesta', rawData);
-        try {
-            const response = await axios.post(globalServices.url, formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
-            });
-            return response.data[0];
-        } catch (e) {
-            return null;
-        }
-    }
-
     public async GetProyectosRP() {
         let proyectosConRP: IProyecto[] = [];
         await axios.get(globalServices.url).then((response: AxiosResponse) => {
