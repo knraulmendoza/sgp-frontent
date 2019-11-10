@@ -4,15 +4,11 @@ import { IPropuesta, Iprograma, IProyecto } from '../../interfaces/interface';
 import template from './ConsultarPropuesta.vue';
 import { propuestaService } from '../../services/PropuestaService';
 import { proyectoService } from '../../services/proyectoService';
-import RegistrarProyecto from '../RegistrarProyecto/AddProyecto';
 
 @Component({
     mixins: [template],
 })
 export default class ShowProyecto extends Vue {
-
-
-
     public headers = [
         {
             text: '',
@@ -67,17 +63,12 @@ export default class ShowProyecto extends Vue {
     public proyecto: IProyecto = {} as IProyecto;
     public propuesta: IPropuesta = {} as IPropuesta;
 
-    public items = [
-        {},
-    ];
-
-
-
+    public items = [{}];
 
     public editItem(item: any) {
-       this.editedIndex = this.propuestas.indexOf(item);
-       this.editedProyecto = Object.assign({}, item);
-       this.abrirModal(item);
+        this.editedIndex = this.propuestas.indexOf(item);
+        this.editedProyecto = Object.assign({}, item);
+        this.abrirModal(item);
     }
     public aprobarPropuesta(item: IPropuesta) {
         this.presupuesto = item.PresupuestoEstimadoDouble;
@@ -86,7 +77,6 @@ export default class ShowProyecto extends Vue {
         this.abrirModalAprobarPropuesta();
     }
     public abrirModalAprobarPropuesta() {
-
         this.dialogAprobarPropuesta = true;
     }
 
@@ -99,49 +89,57 @@ export default class ShowProyecto extends Vue {
         propuestaService.getPDFProyecto(this.propuesta);
     }
 
-
     public mounted() {
-        propuestaService.getData().then((res) => (this.propuestas = res));
-        proyectoService.obtenerDatos(0, 'Dimensiones').then((res) => this.dimensiones = res);
-        proyectoService.obtenerDatos(0, 'proyecto').then((res) => this.comunidades = res);
-
+        propuestaService.getData().then(
+            (res) => {
+                this.propuestas = res;
+            },
+            (error) => {
+                console.log(error);
+            },
+        );
+        proyectoService.obtenerDatos(0, 'Dimensiones').then(
+            (res) => {
+                this.dimensiones = res;
+            },
+            (error) => {
+                console.log(error);
+            },
+        );
+        proyectoService.obtenerDatos(0, 'proyecto').then(
+            (res) => {
+                this.comunidades = res;
+            },
+            (error) => {
+                console.log(error);
+            },
+        );
     }
 
     public select(value: number, id: number) {
-        console.log(id);
         switch (value) {
-
-          case 1:
-            proyectoService.obtenerDatos(id, 'Componente').then((res) => {
-              console.log(res);
-              this.componentes = res; });
-            break;
+            case 1:
+                proyectoService.obtenerDatos(id, 'Componente').then((res) => {
+                    this.componentes = res;
+                });
+                break;
             case 2:
-                 proyectoService.obtenerDatos(id, 'Estrategias').then((res) => {
-              console.log(res);
-              this.estrategias = res; });
-                 break;
-               case 3:
-              proyectoService.obtenerDatos(id, 'Programas').then((res) => {
-              console.log(res);
-              this.programas = res; });
-              break;
+                proyectoService.obtenerDatos(id, 'Estrategias').then((res) => {
+                    this.estrategias = res;
+                });
+                break;
+            case 3:
+                proyectoService.obtenerDatos(id, 'Programas').then((res) => {
+                    this.programas = res;
+                });
+                break;
 
-          default:
-            break;
+            default:
+                break;
         }
-      }
-      public registrarProyecto() {
-            this.proyecto.Propuesta = this.propuesta;
-            this.proyecto.PresupuestoAprovado = Number( this.presupuesto);
-
-
-
-      }
-
-
-
-
-
-
+    }
+    public registrarProyecto() {
+        this.proyecto.Propuesta = this.propuesta;
+        this.proyecto.PresupuestoAprovado = Number(this.presupuesto);
+    }
 }
