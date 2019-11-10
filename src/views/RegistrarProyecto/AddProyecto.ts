@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import {Component} from 'vue-property-decorator';
 import template from './RegistrarProyecto.vue';
-import { proyectoService } from '../../services/proyectoService';
+import { propuestaService } from '../../services/PropuestaService';
 
 
 
@@ -14,26 +14,15 @@ export default class RegistrarProyecto extends Vue {
 
     public codigoGenerado = 'Por Definir';
     public registrado: string = '';
-    // dimensiones:any[]=[];
-    // comunidades:any[]=[];
-    // estrategias:any[]=[];
-    // programas:any[]=[];
-    // componentes:any[]=[];
-    // cofinanciamiento:any[]=[];
+    public validarDocumento="";
     public valid = true;
     public lazy = false;
     public proyecto = {
       Nombre: '',
-      NumeroDeFamilia: 0,
+      NumeroDeFamilia: '',
       FechaDeRegistro: '',
       PropuestaState: '',
-      // dimension:0,
-      // componente:0,
-      // estrategia:0,
-      // programa:0,
-      // cofinanciador:'',
-      // valorCofinanciador:0,
-      PresupuestoEstimado: 0,
+      PresupuestoEstimado: '',
       Documento: '',
       };
     public rules = {
@@ -44,29 +33,35 @@ export default class RegistrarProyecto extends Vue {
         ],
         NumeroDeFamilia: [
           (v: any) => !!v || 'Este Campo es requerido',
-          (v: any) => (v && v.length != 0) || 'Debe indicar el número de familiar a favorcer',
+          (v: any) => (v && Number(v) == 0) && 'Debe indicar el número de familiar a favorcer',
+          (v:any) => /^[0-9]+$/.test(v)|| 'Solo Numeros',
           // v => /^[0-9]+$/!.test(v) && 'Debe indicar el número de familiar a favorcer',
         ],
 
         presupuestoEstimado: [
           (v: any) => !!v || 'Este campo es requerido',
-          (v: any) => (v && v.length != 0) || 'Debe indicar el Valor presupuesto',
+          (v: any) => (v && Number(v) == 0) && 'Indique presupuesto',
         ],
         Documento: [
-          (v: any) => {
-            v == null || 'Este campo es obligatorio';
-            !!v || 'Este campo es obligatorio';
-          },
+         
+          
+          (v: any) => v || 'Este campo es requerido',
       ],
       },
+      validarDocumento:[
+        (v: any) => v || 'Este campo es requerido',
+      ]
+      
     };
 
+  
 
     public validate() {
-      // if (this.$refs.form.validate()) {
-      //   this.snackbar = true;
-      //   this.guardarProyecto();
-      // }
+     if(this.proyecto.Documento==""|| this.proyecto.Documento==null){
+     console.log("proyecto "+this.proyecto.Documento); 
+     this.validarDocumento="Documento requerido";
+     }else
+     this.guardarProyecto();
     }
 
   public mounted() {
@@ -81,14 +76,19 @@ export default class RegistrarProyecto extends Vue {
 
 
   public resetValidation() {
-    this.registrado = '';
-    // this.$v.$reset();
+       
+     this.$refs.form.reset();
+     this.proyecto.Documento=" ";
+     this.proyecto.Nombre=" ";
+     this.proyecto.NumeroDeFamilia=" ";
+     this.proyecto.PresupuestoEstimado=" ";
   }
 
 
   public obtenerArchivo(e: any) {
     this.proyecto.Documento = e;
     console.log(this.proyecto.Documento);
+    this.validarDocumento="";
   }
 
   public guardarProyecto() {
@@ -97,14 +97,21 @@ export default class RegistrarProyecto extends Vue {
 
      const rawData = {
                 Nombre: this.proyecto.Nombre,
-                NumeroDeFamilia: this.proyecto.NumeroDeFamilia,
+                NumeroDeFamilias: this.proyecto.NumeroDeFamilia,
                 PresupuestoEstimado: this.proyecto.PresupuestoEstimado,
                 Documento: this.proyecto.Documento,
                 FechaDeRegistro: fecha,
-                PropuestaState: 'Prupuesta',
-
-
+                
               };
+            
+
+              propuestaService.registrarPropuesta(rawData).then((res) => {
+                console.log(res);
+                this.codigoGenerado = res; });
+
+             
+
+              
 
 
             }

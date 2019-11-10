@@ -5,6 +5,7 @@ import vuetify from './plugins/vuetify';
 import router from './router';
 import { ValidationProvider } from 'vee-validate';
 import VueCurrencyFilter from 'vue-currency-filter'
+
 // Vue.prototype.$axios = axios;
 // declare module 'vue/types/vue' {
 //   interface Vue {
@@ -23,6 +24,6 @@ Vue.use(VueCurrencyFilter,
 new Vue({
   vuetify,
   router,
-  components: {ValidationProvider},
+  components: {},
   render: (h) => h(App),
 }).$mount('#app');

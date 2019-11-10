@@ -2,6 +2,7 @@ import axios, { AxiosResponse } from 'axios';
 import { IPropuesta } from '../interfaces/interface';
 import { globalServices } from './globalService';
 class PropuestaService {
+
     private propuestas: IPropuesta[] = [];
     constructor() {}
     public async getData() {
@@ -45,6 +46,32 @@ class PropuestaService {
             })
             .catch((error) => console.error(error));
     }
+
+    public async registrarPropuesta(rawData: any) {
+        
+        const formData = new FormData();
+
+        formData.append('Propuesta', rawData);
+        try {
+            const response = await axios.post(globalServices.url+"/Propuesta", {
+                Nombre:rawData.Nombre,
+                NumeroDeFamilias: rawData.NumeroDeFamilia,
+                PresupuestoEstimado: rawData.PresupuestoEstimado,
+                Documento: rawData.Documento,
+                FechaDeRegistro: rawData.fecha,
+            },
+            {
+               
+
+            });
+            return response.data[0];
+        } catch (e) {
+            return null;
+        }
+    }
+
+
+
 }
 
 export const propuestaService = new PropuestaService();
