@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid>
+  <v-container>
     <v-data-table
       :headers="headersProyectosRP"
       :items="proyectosConRP"
@@ -10,8 +10,8 @@
     >
       <template v-slot:top>
         <v-toolbar dark color="green">
-          <v-toolbar-title>Proyectos con RP</v-toolbar-title>
-          <v-divider class="mx-4" inset vertical></v-divider>
+          <v-toolbar-title>Proyectos Contratados</v-toolbar-title>
+          <v-divider vertical class="mx-4"></v-divider>
           <v-row>
             <v-text-field
               v-model="search"

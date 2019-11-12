@@ -9,7 +9,7 @@ import template from './RegistrarGasto.vue';
 export default class RegisterGasto extends Vue {
     public proyectosConRP: IProyecto[] = [{ Codigo: '000-oik', Actividades: undefined, Comunidades: undefined, FechaCierre: undefined, FechaDeCierrePrevista: new Date(), FechaEjecucion: new Date(), PresupuestoAprovado: 546565, PresupuestoEjecutado: 35648, Programa: undefined, Propuesta: undefined, ProyectoState: 1 }];
     public proyectoARegistrarGasto: IProyecto = {} as IProyecto;
-    public gastosProyecto: ITransaccion[] = [];
+    public gastosProyecto: ITransaccion[] = [{ Monto: 2300, Fecha: new Date(), Tipo: 1,Proyecto:this.proyectoARegistrarGasto}];
     public gastoProyecto: ITransaccion = {} as ITransaccion;
     public headersProyectosRP = [
         {
@@ -43,7 +43,7 @@ export default class RegisterGasto extends Vue {
             sortable: false,
             value: 'num',
         },
-        { text: 'Gasto', value: 'Gasto' },
+        { text: 'Gasto', value: 'Monto' },
         { text: 'Concepto', value: 'Concepto' },
         { text: 'Fecha', value: 'Fecha' },
     ];
@@ -97,7 +97,10 @@ export default class RegisterGasto extends Vue {
     }
     public abrirModal(item: any) {
         this.dialog = true;
-        this.proyectoARegistrarGasto = this.proyectosConRP[this.editedIndex];
+        this.proyectoARegistrarGasto = this.proyectosConRP[this.editedIndex];        
+        this.GetGastoDeProyecto(this.proyectoARegistrarGasto);
+    }
+    public GetGastoDeProyecto(proyectoARegistrarGasto: IProyecto) {
         proyectoService
             .GetGastosProyecto(this.proyectoARegistrarGasto)
             .then((res) => {
@@ -126,7 +129,7 @@ export default class RegisterGasto extends Vue {
         proyectoService.GetProyectoPorId(idProyecto).then((Response) => {
             this.proyectosConRP[this.editedIndex] = Response
         }, (error) => console.log(error));
-
+        this.GetGastoDeProyecto(this.proyectoARegistrarGasto);
     }
     public mounted() {
         let estadoContratado = 4;

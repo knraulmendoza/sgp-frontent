@@ -130,10 +130,10 @@ class ProyectoService {
 
     return gastos;
   }
-  public async RegistrarGasto(gastoProyecto: ITransaccion) {
+  public RegistrarGasto(gastoProyecto: ITransaccion) {
     console.log();
 
-    await axios.post(globalServices.url + "/transaccion/", gastoProyecto).then((Response) => {
+     axios.post(globalServices.url + "/transaccion", gastoProyecto).then((Response) => {
       console.log(Response);
     });
   }
