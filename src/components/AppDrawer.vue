@@ -93,10 +93,11 @@ export default class AppDrawer extends Vue {
     public drawer: boolean = false;
     public group = null;
     public links = [
-          {name: '/addProyecto', icon: 'person', text: 'Registrar proyecto'},
-          {name: '/proyecto', icon: 'book', text: 'Proyecto'},
+          {name: '/addProyecto', icon: 'person', text: 'Registro Propuesta'},
+          {name: '/proyecto', icon: 'book', text: 'Consulta Propuesta'},
           {name: '/ActualizacionPresupuesto', icon: 'book', text: 'Actualizacion Presupuesto'},
           {name: '/registrarGasto', icon: 'mdi-transfer-down', text: 'Registrar Gasto'},
+          {name: '/sgp', icon: 'book', text: 'SGP'},
       ];
     public title =  '';
     public items = ['Practics'];
@@ -107,9 +108,8 @@ export default class AppDrawer extends Vue {
     //   }
     // )
     public mounted() {
-      console.log(this.datos);
-      this.onResponsiveInverted();
-      window.addEventListener('resize', this.onResponsiveInverted);
+            this.onResponsiveInverted();
+            window.addEventListener('resize', this.onResponsiveInverted);
         }
     public beforeDestroy(): void {
         window.removeEventListener('resize', this.onResponsiveInverted);

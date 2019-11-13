@@ -1,18 +1,40 @@
 import axios, { AxiosResponse } from 'axios';
 import { IProyecto, ITransaccion, IFondos, Iprograma, IListaTransancionCDP } from '../interfaces/interface';
+import { Icomponente } from '../interfaces/interface';
+import { globalServices } from './globalService';
 
 class ProyectoService {
 
-  public url = 'api/propuesta/add';
-  public urlProyecto = 'api/proyecto/';
+  private proyecto: IProyecto = {} as IProyecto;
+  private proyectos: IProyecto[] = [];
   constructor() {
 
   }
+
+  public async obtenerDimensiones() {
+    const data = await axios
+      .get(globalServices.url + '/proyecto')
+      .then((response: AxiosResponse) => {
+
+        let dato;
+        if (Array.isArray(response.data)) {
+          dato = response.data;
+        } else {
+          dato = [response.data];
+        }
+        return dato.map((val: any) => ({
+          value: val.id,
+          text: val.nombre,
+
+        }));
+      });
+    return data;
+  }
+
   // metodos del CRUD
-  public async obtenerDatos(value?: number) {
-    let urlLocal: string = this.url;
-    value == 0 ? urlLocal : urlLocal += `${value}`;
-    console.log(urlLocal);
+  public async obtenerDatos(value?: number, rutaContralador?: string) {
+    const urlLocal: string = globalServices.url + '/' + rutaContralador;
+    value == 0 ? urlLocal : urlLocal + '/' + value;
 
     const data = await axios
       .get(urlLocal)
@@ -26,39 +48,22 @@ class ProyectoService {
         }
         return dato.map((val: any) => ({
           value: val.id,
-          text: val.surname,
+          text: val.Nombre,
+
+
+
         }));
       });
-    console.log('data: ' + data);
     return data;
   }
 
 
   public async comunidades() {
-    let urlLocal: string = this.url;
+    let urlLocal: string = globalServices.url;
 
     const data = await axios
       .get(urlLocal += 'comunidades')
       .then((response: AxiosResponse) => {
-        console.log('response: ' + response);
-        const dato = [response.data];
-        return dato.map((val: any) => ({
-          value: val.codigo,
-          text: val.nombre,
-        }));
-      });
-
-    return data;
-
-  }
-
-  public async cofinanciador() {
-    let urlLocal: string = this.url;
-
-    const data = await axios
-      .get(urlLocal += 'confinanciador')
-      .then((response: AxiosResponse) => {
-        console.log('response: ' + response);
         const dato = [response.data];
         return dato.map((val: any) => ({
           value: val.codigo,
@@ -72,64 +77,87 @@ class ProyectoService {
 
 
 
-   public async registrarPropuesta(rawData: any) {
-     rawData = JSON.stringify(rawData);
-     console.log('rawData: ' + rawData);
-
-     const formData = new FormData();
-
-     formData.append('propuesta', rawData);
-     try {
-              const response = await  axios.post(this.url,
-              formData,
-              {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
-              });
-              return response.data[0];
-            } catch (e) {
-                return null;
-            }
-        }
 
 
+  public async registrarPropuesta(rawData: any) {
+    rawData = JSON.stringify(rawData);
 
+    const formData = new FormData();
 
-
-    public async GetProyectosRP() {
-        let proyectosConRP: IProyecto[] = [];
-        await axios.get(this.url).then((response: AxiosResponse) => {
-            proyectosConRP = response.data.map((val: IProyecto) => ({
-                codigo: val.codigo,
-                nombre: val.nombre,
-                presupuestoAprovado:
-                    '$ ' +
-                    new Intl.NumberFormat().format(val.presupuestoAprovado),
-                proyectoState: val.proyectoStates,
-                id: val.id,
-            }));
-        });
-        console.log(proyectosConRP);
-
+    formData.append('propuesta', rawData);
+    try {
+      const response = await axios.post(globalServices.url, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      return response.data[0];
+    } catch (e) {
+      return null;
     }
+  }
 
+  public async GetProyectosPorEstado(estado: number) {
+    await axios.get(globalServices.url + "/proyecto/estado/" + estado).then((response: AxiosResponse) => {
+      this.proyectos = response.data.map((val: any) => ({
+        Codigo: val.codigo,
+        Nombre: val.nombre,
+        ProyectoState: val.proyectoState,
+        Id: val.id,
+        PresupuestoAprobado: val.presupuestoAprobado,
+        PresupuestoEjecutado: val.presupuestoEjecutado,
+      }));
+    });
+    return this.proyectos;
+  }
+  public async GetGastosProyecto(proyecto: IProyecto) {
+    let gastos: ITransaccion[] = [];
+    await axios
+      .get(globalServices.url + '/proyecto/egresos/' + proyecto.Id)
+      .then((response: AxiosResponse) => {
+        gastos = response.data.map((val: any) => ({
+          Monto: val.monto,
+          Fecha:
+            new Date(val.fecha.toString()).getDate() +
+            '/' +
+            new Date(val.fecha.toString()).getMonth() +
+            '/' +
+            new Date(val.fecha.toString()).getFullYear(),
+
+          Id: val.id,
+          Concepto: val.concepto,
+        }));
+      });
+    }
     public async GetProyectosCDP(estado:number) {
       //this.urlProyecto+"EmitirCDP/listarProyectos/" 
       let proyectosEmitirCDP: IProyecto[] = [];
-      await axios.get("https://localhost:5001/api/todo/"+estado
+      const data = await axios.get(globalServices.url+'/proyecto/'+estado
         ).then((response: AxiosResponse) => {
-          proyectosEmitirCDP = response.data.map((val: IProyecto) => ({
-              codigo: val.codigo,
-              nombre: val.nombre,
-              presupuestoAprovado:
-              val.presupuestoAprovado,
-              proyectoStates: val.proyectoStates,
-              id: val.id,
-          }));
+          this.getPropuesta(response.data.propuestaId).then(p=>{
+            response.data.propuesta = p;
+            return response.data;
+          })
+          // proyectosEm`itirCDP = response.data.map((val: IProyecto) => ({
+            
+          //     codigo: val.Codigo,
+          //     nombre: val.Propuesta.Nombre,
+          //     presupuestoAprovado:
+          //     val.PresupuestoAprobado,
+          //     proyectoStates: val.ProyectoState,
+          //     id: val.Id,
+          // }));`
       });
+      console.log(data);
+      return data;
+  }
 
-      return proyectosEmitirCDP;
+  public async getPropuesta(id: number){
+      const data = await axios.get(globalServices.url+'/propuesta/'+id
+        ).then((response: AxiosResponse) => {
+          return response.data;
+        });
+        return data;
   }
 
   public async GetFondos() {
@@ -157,25 +185,27 @@ class ProyectoService {
 
   }
 
-    public async GetGastosProyecto(proyecto: IProyecto) {
-        let gastos: ITransaccion[] = [];
-        await axios
-            .get(this.url + '/' + proyecto.id)
-            .then((response: AxiosResponse) => {
-                gastos = response.data.map((val: any) => ({
-                    Monto: val.monto,
-                    Fecha:
-                        new Date(val.fecha.toString()).getDate() +
-                        '/' +
-                        new Date(val.fecha.toString()).getMonth() +
-                        '/' +
-                        new Date(val.fecha.toString()).getFullYear(),
+    
+  public RegistrarGasto(gastoProyecto: ITransaccion) {
+    console.log();
 
-                    id: val.id,
-                }));
-            });
+     axios.post(globalServices.url + "/transaccion", gastoProyecto).then((Response) => {
+      console.log(Response);
+    });
+  }
+  public async GetProyectoPorId(idProyecto: number) {
 
-        return gastos;
-    }
+    await axios.get(`${globalServices.url}/proyecto/${idProyecto}`).then((Response: AxiosResponse) => {
+      this.proyecto = Response.data.map((val: any) => ({
+        Codigo: val.codigo,
+        Nombre: val.nombre,
+        ProyectoState: val.proyectoState,
+        Id: val.id,
+        PresupuestoAprobado: val.presupuestoAprobado,
+        PresupuestoEjecutado: val.presupuestoEjecutado,
+      }))
+    });
+    return this.proyecto;
+  }
 }
 export const proyectoService = new ProyectoService();

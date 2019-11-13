@@ -26,7 +26,8 @@
         </v-row>
       </v-card-title>
       <v-card-text>
-          <v-form enctype="multipart/form-data" v-model="valid" ref="form"  lazy-validation>
+        
+          <v-form enctype="multipart/form-data" v-model="valid" ref="form" id="form"  :lazy-validation="lazy">
           <v-container>
             <v-row>
               <v-col cols="12" sm="12" md="12">
@@ -55,6 +56,7 @@
               <v-col cols="12" sm="6" md="6">
                 <v-text-field
                   hint="Ej: 1000000,43"
+                  prefix="$"
                   v-model="proyecto.PresupuestoEstimado"
                   persistent-hint
                   label="Presupuesto estimado del proyecto"
@@ -69,8 +71,8 @@
                   persistent-hint
                   :items="dimensiones"
                   v-model="proyecto.dimension"
-                  label="Dimensión"
                   @change="select(1,$event)"
+                  label="Dimensión"
                   required
                   :rules="rules.proyecto.dimension"
                 ></v-select>
@@ -173,24 +175,26 @@
             </v-row> -->
             <v-row justify="center">
               <v-col cols="12" md="12" sm="8">
+
                  <v-file-input
                   @change="obtenerArchivo($event)"
                   v-model="proyecto.documento"
-                  hint="Ej: proyecto.pdf"
+                  hint="Ej: proyecto.pdf"              
                   accept=".pdf"
                   persistent-hint
                   label="Cargar documento"
                   required
-                  :error-messages="errorDocumento"
+                  :error-messages="validarDocumento"
                 ></v-file-input> 
-                
+               
               </v-col>
               <!-- <input type="file" @change="obtenerArchivo" class="form-control-file"> -->
             </v-row>
 
             <v-row justify="center">
               <v-col cols="12" md="12">
-                <v-btn outline color="primary"  rounded
+                <v-btn outlined color="primary"  rounded
+                :disabled="!valid"
                  @click="validate"
                 >Postular Proyecto</v-btn>
 

@@ -37,32 +37,35 @@ export interface Iactividad {
 }
 
 export interface IPropuesta {
-    id: number;
-    nombre: string;
-    presupuestoEstimado: string;
-    fechaPresentacion: Date;
-    numeroFamiliasBeneficiadas: number;
-    documento: string;
+    FechaPresentacion: Date;
+    FechaAprovacion: Date;
+    Documento: File;
+    NumeroDeFamilias: number;
+    Nombre: string;
+    PresupuestoEstimado: string;
+    Id: number;
+    NumeroFamiliasBeneficiadas: number;
+    PresupuestoEstimadoDouble: number;
+    FechaRegistro: Date;
 }
 export interface IProyecto {
-    id: number;
-    codigo: string;
-    nombre: string;
-    presupuestoAprovado: number;
-    presupuesto_ejecutado: number;
-    fecha_ejecucion: Date;
-    fecha_cierre_prevista: Date;
-    fecha_cierre?: Date;
-    programa: Iprograma;
-    proyectoStates: number;
-    numero_familias_beneficiadas: number;
-    actividades: Iactividad;
-    archivo: string;
+    Propuesta?: IPropuesta;
+    Codigo: string;
+    PresupuestoAprobado: number;
+    PresupuestoEjecutado: number;
+    Comunidades?: IComunidad[];
+    FechaEjecucion: Date;
+    FechaDeCierrePrevista: Date;
+    FechaCierre?: Date;
+    Programa?: Iprograma;
+    ProyectoState: number;
+    Actividades?: Iactividad;
+    Id: number;
 }
 export interface ITransaccion {
-    id: number;
     Monto: number;
     Fecha: Date;
+    Tipo: number;//
     Proyecto: IProyecto;
 }
 
@@ -82,3 +85,25 @@ export interface IListaTransancionCDP {
 }
 
 
+export interface IComunidad {
+    Codigo: number;
+    Nombre: String;
+}
+
+export interface IDocumento{
+    nombre: String;
+    rawData: any;
+    respaldoFisicoDigitalizado: String;
+}
+
+export interface Isgp {
+    id?: number;
+    valor: number;
+    interes: number;
+    soporteValor: IDocumento;
+    soporteValorId :number;
+    soporteInteres: IDocumento;
+    soporteInteresId :number;
+    descripcion?: String;
+    fecha: Date;
+}

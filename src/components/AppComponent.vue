@@ -1,7 +1,6 @@
 <template>
     <v-app>
-        <AppBar :datos='[1,2,3,4,5]'></AppBar>
-        <!-- <SideBar /> -->
+        <AppBar/>
         <Vista />
     </v-app>
 </template>
@@ -22,7 +21,3 @@ import Vista from './ViewComponent.vue';
 })
 export default class App extends Vue {}
 </script>
-
-<style scoped>
-
-</style>
