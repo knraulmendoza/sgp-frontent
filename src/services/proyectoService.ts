@@ -1,9 +1,10 @@
 import axios, { AxiosResponse } from 'axios';
-import { IProyecto, ITransaccion } from '../interfaces/interface';
+import { IProyecto, ITransaccion, IFondos, Iprograma, IListaTransancionCDP } from '../interfaces/interface';
 
 class ProyectoService {
 
   public url = 'api/propuesta/add';
+  public urlProyecto = 'api/proyecto/';
   constructor() {
 
   }
@@ -105,14 +106,57 @@ class ProyectoService {
                 presupuestoAprovado:
                     '$ ' +
                     new Intl.NumberFormat().format(val.presupuestoAprovado),
-                proyectoState: val.proyectoState,
+                proyectoState: val.proyectoStates,
                 id: val.id,
             }));
         });
         console.log(proyectosConRP);
 
-        return proyectosConRP;
     }
+
+    public async GetProyectosCDP(estado:number) {
+      //this.urlProyecto+"EmitirCDP/listarProyectos/" 
+      let proyectosEmitirCDP: IProyecto[] = [];
+      await axios.get("https://localhost:5001/api/todo/"+estado
+        ).then((response: AxiosResponse) => {
+          proyectosEmitirCDP = response.data.map((val: IProyecto) => ({
+              codigo: val.codigo,
+              nombre: val.nombre,
+              presupuestoAprovado:
+              val.presupuestoAprovado,
+              proyectoStates: val.proyectoStates,
+              id: val.id,
+          }));
+      });
+
+      return proyectosEmitirCDP;
+  }
+
+  public async GetFondos() {
+    //this.urlProyecto+"EmitirCDP/listarFondos"
+    let fondos: IFondos[] = [];
+    await axios.get("https://localhost:5001/api/fondo/").then((response: AxiosResponse) => {
+        fondos = response.data.map((val: any) => ({
+            nombre: val.nombre,
+            valor: val.valor,
+        }));
+    });
+    console.log("Fondos Api", fondos);
+    return fondos;
+  }
+
+  public async PostCDP(idProyecto:number, transancion:IListaTransancionCDP[]) {
+    //this.urlProyecto+"EmitirCDP/listarProyectos/" 
+    await axios.post(this.urlProyecto+"CertificadoDeDisponibilidadPresupuestal/",{      
+        codigo: idProyecto,   
+        listaTransanciones:transancion  
+    }
+    ).then((response: AxiosResponse) => {        
+    });
+
+
+  }
+
     public async GetGastosProyecto(proyecto: IProyecto) {
         let gastos: ITransaccion[] = [];
         await axios

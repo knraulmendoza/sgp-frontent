@@ -54,7 +54,7 @@ export interface IProyecto {
     fecha_cierre_prevista: Date;
     fecha_cierre?: Date;
     programa: Iprograma;
-    proyectoState: number;
+    proyectoStates: number;
     numero_familias_beneficiadas: number;
     actividades: Iactividad;
     archivo: string;
@@ -65,3 +65,20 @@ export interface ITransaccion {
     Fecha: Date;
     Proyecto: IProyecto;
 }
+
+export interface IFondos{
+    nombre: string;
+    valor: number;
+}
+
+export interface ITransancionCDP {
+    nombreFondo: string;
+    valorFondo: number;
+    valorRetirado:number;
+}
+export interface IListaTransancionCDP {
+    nombreFondo: string;
+    valorRetirado:number;
+}
+
+
