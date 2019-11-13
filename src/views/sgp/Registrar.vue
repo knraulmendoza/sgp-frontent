@@ -1,15 +1,11 @@
 
 <template>
-<ValidationObserver ref="obs">
-  <v-container grid-list-xs slot-scope="{ invalid}"> <!-- slot-scope="{invalid}" esto es para qué el boton registrar habilitar o deshabilitar -->
+  <v-container grid-list-xs> <!-- slot-scope="{invalid}" esto es para qué el boton registrar habilitar o deshabilitar -->
     <v-data-table
         :headers="headers"
         :items="sgps"
-        hide-actions
         class="elevation-1"
-        select-all
-        :pagination.sync="pagination"
-        :item-key="id"
+        show-select
         :search="search"
     >
     <template v-slot:top>
@@ -34,7 +30,7 @@
             <v-btn color="primary" dark class="mb-2" v-on="on">nuevo SGP</v-btn>
           </template>
           <v-card>
-            <v-form v-model="valid" ref="form" :lazy-validation="lazy">
+            <v-form  enctype="multipart/form-data" v-model="valid" ref="form" :lazy-validation="lazy">
             <v-card-title>
               <span class="headline">{{ formTitle }}</span>
             </v-card-title>
@@ -43,75 +39,61 @@
                 <v-container>
                   <v-row>
                     <v-col cols="12" sm="12" md="12">
-                      <validation-provider rules="required" v-slot="{ errors, valid }" name="sgp.valor">
-                        <!-- este componente es el que se encarga de la respectiva validacion -->
                       <v-select
+                        v-model="mesDato"
                         :items="meses"
-                        v-model="mes"
-                        :success="valid"
-                        :error-messages="errors"
+                        @change="obtenerMes($event)"
+                        :rules="sgpValidaciones.mes"
                         label="mes"
                         required
                       ></v-select>
-                      <!-- :error-messages => para mostrar el error ; :success => lo muestra en verde (esta correcto)-->
-                      </validation-provider>
                     </v-col>
                   </v-row>
                   <v-row>
                     <v-col cols="12" sm="6" md="6">
-                      <validation-provider rules="required" v-slot="{ errors, valid }" name="sgp.valor">
                         <v-text-field
                         v-model="sgp.valor"
                         label="valor"
                         type="number"
                         :counter="10"
-                        :success="valid"
-                        :error-messages="errors"
+                        :rules="sgpValidaciones.valor"
                         required
                         ></v-text-field>
-                      </validation-provider>
                     </v-col>
                     <v-col cols="12" sm="6" md="6">
-                      <validation-provider rules="required" v-slot="{ errors, valid }" name="archivoValor">
                         <v-file-input
                         @change="obtenerArchivoValor($event)"
+                        ref="archivoValor"
+                        :rules="sgpValidaciones.soporteValor"
                         hint="Ej: proyecto.pdf"
                         accept=".pdf"
                         persistent-hint
                         label="Archivo Valor"
-                        :valid="valid"
-                        :error-messages="errors"
                         required
                         ></v-file-input>
-                      </validation-provider>
                     </v-col>
                   </v-row>
                   <v-row>
                     <v-col cols="12" sm="6" md="6">
-                      <validation-provider rules="required" v-slot="{ errors, valid }" name="sgp.interes">
                         <v-text-field
                         v-model="sgp.interes"
                         label="Interes"
-                        :success="valid"
-                        :error-messages="errors"
+                        :rules="sgpValidaciones.interes"
                         type="number"
                         required
                         ></v-text-field>
-                      </validation-provider>
                     </v-col>
                     <v-col cols="12" sm="6" md="6">
-                      <validation-provider rules="required" v-slot="{ errors, valid }" name="sgp.soporteInteres">
                         <v-file-input
                         @change="obtenerArchivoInteres($event)"
                         hint="Ej: proyecto.pdf"
-                        :success="valid"
-                        :error-messages="errors"
+                        ref="archivoInteres"
+                        :rules="sgpValidaciones.soporteInteres"
                         accept=".pdf"
                         persistent-hint
                         label="Archivo Interes"
                         required
                         ></v-file-input>
-                      </validation-provider>
                     </v-col>
                   </v-row>
                   <v-row>
@@ -129,32 +111,25 @@
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn color="blue darken-1" text @click="close">Cancelar</v-btn>
-              <v-btn color="blue darken-1" text @click="saveSgp" :disabled="invalid">Guardar</v-btn> <!-- :diabled="invalid" la varibale es la misma que esta en la Card-->
+              <v-btn color="blue darken-1" text @click="saveSgp" :disabled="!valid">Guardar</v-btn>
             </v-card-actions>
             </v-form>
           </v-card>
         </v-dialog>
       </v-toolbar>
     </template>
-    <template v-slot:item.action="{ sgp }">
-      <!-- <v-icon
-        small
-        class="mr-2"
-        @click="editItem(sgp)"
-      >
-        edit
-      </v-icon>
-      <v-icon
-        small
-        @click="deleteItem(sgp)"
-      >
-        delete
-      </v-icon> -->
-    </template>
     <template v-slot:no-data>
-      <v-btn color="primary" @click="initialize">Reset</v-btn>
+      <v-btn color="primary">Reset</v-btn>
+    </template>
+    <template v-slot:item.fecha="{ item }">
+      <span>{{showMmeses.find((mes)=>{ return mes.value === item.fecha.getMonth()+1}).text}}</span>
+    </template>
+    <template v-slot:item.soporteValor="{item}" class="text-center">
+      <v-icon large @click="showPDFValor(item)" color="red">mdi-file-pdf-box</v-icon>
+    </template>
+    <template v-slot:item.soporteInteres="{item}">
+      <v-icon large @click="showPDFInteres(item)" color="red">mdi-file-pdf-box</v-icon>
     </template>
   </v-data-table>
   </v-container>
-  </ValidationObserver>
 </template>

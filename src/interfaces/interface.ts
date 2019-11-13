@@ -72,12 +72,20 @@ export interface IComunidad {
     Nombre: String;
 }
 
+export interface IDocumento{
+    nombre: String;
+    rawData: any;
+    respaldoFisicoDigitalizado: String;
+}
+
 export interface Isgp {
     id?: number;
     valor: number;
     interes: number;
-    soporteValor: string;
-    soporteInteres: string;
-    descripcion?: string;
+    soporteValor: IDocumento;
+    soporteValorId :number;
+    soporteInteres: IDocumento;
+    soporteInteresId :number;
+    descripcion?: String;
     fecha: Date;
 }

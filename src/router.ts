@@ -12,7 +12,7 @@ Vue.use(Router);
 
 export default new Router({
     routes: [
-        {path: '/addProyecto', name: 'home', component: RegistrarProyecto},
+        {path: '/addProyecto', name: 'addProyecto', component: RegistrarProyecto},
         {path: '/proyecto', name: 'proyecto', component: ShowProyecto},
         {path: '/ActualizacionPresupuesto', name: 'Modificar Presupuesto', component: ActualizacionPresupuesto},
         {path: '/registrarGasto', name: 'registrarGasto', component: RegisterGasto},
