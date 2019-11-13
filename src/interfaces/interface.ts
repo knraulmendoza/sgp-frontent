@@ -49,22 +49,23 @@ export interface IPropuesta {
     FechaRegistro: Date;
 }
 export interface IProyecto {
-    Propuesta: IPropuesta;
+    Propuesta?: IPropuesta;
     Codigo: string;
-    PresupuestoAprovado: number;
+    PresupuestoAprobado: number;
     PresupuestoEjecutado: number;
-    Comunidades: IComunidad[];
+    Comunidades?: IComunidad[];
     FechaEjecucion: Date;
     FechaDeCierrePrevista: Date;
     FechaCierre?: Date;
-    Programa: Iprograma;
+    Programa?: Iprograma;
     ProyectoState: number;
-    Actividades: Iactividad;
+    Actividades?: Iactividad;
+    Id: number;
 }
 export interface ITransaccion {
-    id: number;
     Monto: number;
     Fecha: Date;
+    Tipo: number;//
     Proyecto: IProyecto;
 }
 export interface IComunidad {

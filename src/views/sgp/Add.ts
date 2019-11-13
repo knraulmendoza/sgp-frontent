@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import {Component} from 'vue-property-decorator';
+import { Component } from 'vue-property-decorator';
 import template from './Registrar.vue';
 import { Isgp, IDocumento } from '@/interfaces/interface';
 import { sgpServices } from '@/services/sgpServices';
@@ -10,7 +10,6 @@ import swal from 'sweetalert';
     name: 'AddSgp',
     mixins: [template],
 })
-
 export default class AddSgp extends Vue {
     get formTitle() {
         return this.editedIndex === -1 ? 'Nuevo SGP' : 'Editar SGP';

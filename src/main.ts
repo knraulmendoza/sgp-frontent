@@ -4,24 +4,26 @@ import App from './components/AppComponent.vue';
 import vuetify from './plugins/vuetify';
 import router from './router';
 import { ValidationProvider } from 'vee-validate';
-import { validationMixin } from 'vuelidate';
-import * as VeeValidate from 'vee-validate';
-import Vuelidate from 'vuelidate'
-Vue.use(Vuelidate);
+// import VueCurrencyFilter from 'vue-currency-filter'
 
-Vue.config.productionTip = false;
 // Vue.prototype.$axios = axios;
 // declare module 'vue/types/vue' {
 //   interface Vue {
 //     $axios: AxiosStatic;
 //   }
 // }
-Vue.component('ValidationProvider', ValidationProvider);
-
+// Vue.use(VueCurrencyFilter,
+//   {
+//     symbol: '$',
+//     thousandsSeparator: '.',
+//     fractionCount: 2,
+//     fractionSeparator: ',',
+//     symbolPosition: 'front',
+//     symbolSpacing: true,
+//   })
 new Vue({
   vuetify,
   router,
-  components: {ValidationProvider},
-  mixins:[validationMixin],
+  components: {},
   render: (h) => h(App),
 }).$mount('#app');
