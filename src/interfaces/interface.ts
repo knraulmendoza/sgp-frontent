@@ -37,16 +37,15 @@ export interface Iactividad {
 }
 
 export interface IPropuesta {
-    FechaPresentacion: Date;
-    FechaAprovacion: Date;
-    Documento: File;
-    NumeroDeFamilias: number;
-    Nombre: string;
-    PresupuestoEstimado: string;
-    Id: number;
-    NumeroFamiliasBeneficiadas: number;
-    PresupuestoEstimadoDouble: number;
-    FechaRegistro: Date;
+    fechaDePresentacion: Date;
+    fechaDeAprovacion: Date;
+    documento: IDocumento;
+    documentoId: number;
+    numeroDeFamilias: number;
+    nombre: string;
+    presupuestoEstimado: number;
+    id?: number;
+    fechaDeRegistro: Date;
 }
 export interface IProyecto {
     Propuesta?: IPropuesta;

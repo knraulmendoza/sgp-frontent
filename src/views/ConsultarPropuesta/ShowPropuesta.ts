@@ -24,15 +24,15 @@ export default class ShowProyecto extends Vue {
         },
         {
             text: 'Numero de Familias Beneficiadas',
-            value: 'numeroFamiliasBeneficiadas',
+            value: 'numeroDeFamilias',
             align: 'center',
         },
-        {
-            text: 'Fecha de presentacion',
-            value: 'fechaPresentacion',
-            align: 'center',
-            color: 'green',
-        },
+        // {
+        //     text: 'Fecha de presentacion',
+        //     value: 'fechaDePresentacion',
+        //     align: 'center',
+        //     color: 'green',
+        // },
         {
             text: 'Documento',
             value: 'verPDF',
@@ -71,7 +71,7 @@ export default class ShowProyecto extends Vue {
         this.abrirModal(item);
     }
     public aprobarPropuesta(item: IPropuesta) {
-        this.presupuesto = item.PresupuestoEstimadoDouble;
+        this.presupuesto = item.presupuestoEstimado;
         this.editedIndex = this.propuestas.indexOf(item);
         this.propuesta = this.propuestas[this.editedIndex];
         this.abrirModalAprobarPropuesta();
@@ -84,12 +84,13 @@ export default class ShowProyecto extends Vue {
         this.dialog = true;
         this.propuesta = item;
     }
-    public showPDF(item: any) {
-        this.propuesta = item;
-        propuestaService.getPDFProyecto(this.propuesta);
+    public showPDF(item: IPropuesta) {
+        console.log(item);
+        propuestaService.getPDFProyecto(item.documentoId);
     }
 
     public mounted() {
+        
         propuestaService.getData().then(
             (res) => {
                 this.propuestas = res;
@@ -98,7 +99,7 @@ export default class ShowProyecto extends Vue {
                 console.log(error);
             },
         );
-        proyectoService.obtenerDatos(0, 'Dimensiones').then(
+        proyectoService.obtenerDatos(0, 'dimension').then(
             (res) => {
                 this.dimensiones = res;
             },
@@ -106,7 +107,7 @@ export default class ShowProyecto extends Vue {
                 console.log(error);
             },
         );
-        proyectoService.obtenerDatos(0, 'proyecto').then(
+        proyectoService.obtenerDatos(0, 'comunidad').then(
             (res) => {
                 this.comunidades = res;
             },
@@ -124,12 +125,12 @@ export default class ShowProyecto extends Vue {
                 });
                 break;
             case 2:
-                proyectoService.obtenerDatos(id, 'Estrategias').then((res) => {
+                proyectoService.obtenerDatos(id, 'Estrategia').then((res) => {
                     this.estrategias = res;
                 });
                 break;
             case 3:
-                proyectoService.obtenerDatos(id, 'Programas').then((res) => {
+                proyectoService.obtenerDatos(id, 'Programa').then((res) => {
                     this.programas = res;
                 });
                 break;
@@ -140,6 +141,6 @@ export default class ShowProyecto extends Vue {
     }
     public registrarProyecto() {
         this.proyecto.Propuesta = this.propuesta;
-        this.proyecto.PresupuestoAprovado = Number(this.presupuesto);
+        // this.proyecto.presupuestoAprovado = Number(this.presupuesto);
     }
 }

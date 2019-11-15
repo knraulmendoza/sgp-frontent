@@ -2,6 +2,7 @@ import Vue from 'vue';
 import {Component} from 'vue-property-decorator';
 import template from './RegistrarProyecto.vue';
 import { propuestaService } from '../../services/PropuestaService';
+import { IPropuesta, IDocumento } from '@/interfaces/interface';
 
 
 
@@ -17,16 +18,9 @@ export default class RegistrarProyecto extends Vue {
     public validarDocumento="";
     public valid = true;
     public lazy = false;
-    public proyecto = {
-      Nombre: '',
-      NumeroDeFamilia: '',
-      FechaDeRegistro: '',
-      PropuestaState: '',
-      PresupuestoEstimado: '',
-      Documento: '',
-      };
-    public rules = {
-      proyecto: {
+    public propuesta:IPropuesta = <IPropuesta>{};
+    public documento:IDocumento = <IDocumento>{};
+    public validacionPropuesta = {
         Nombre: [
           (v: any) => !!v || 'Nombre es requerido',
           (v: any) => (v && v.length >= 5) || 'Debe tener minimo 10 caracteres',
@@ -43,29 +37,23 @@ export default class RegistrarProyecto extends Vue {
           (v: any) => (v && Number(v) == 0) && 'Indique presupuesto',
         ],
         Documento: [
-         
-          
-          (v: any) => v || 'Este campo es requerido',
+          (v: any) => !v || v.size>0 || 'Este campo es requerido',
       ],
-      },
-      validarDocumento:[
-        (v: any) => v || 'Este campo es requerido',
-      ]
       
     };
 
   
 
-    public validate() {
-     if(this.proyecto.Documento==""|| this.proyecto.Documento==null){
-     console.log("proyecto "+this.proyecto.Documento); 
-     this.validarDocumento="Documento requerido";
-     }else
-     this.guardarProyecto();
-    }
+    // public validate() {
+    // if(this.proyecto.Documento==""|| this.proyecto.Documento==null){
+    //   console.log("proyecto "+this.proyecto.Documento); 
+    //   this.validarDocumento="Documento requerido";
+    // }else
+    //   this.guardarProyecto();
+    // }
 
   public mounted() {
-
+    propuestaService.getData();
     // proyectoService.comunidades().then(res=>this.comunidades = res);
      // proyectoService.getAllDimensiones();
     // proyectoService.obtenerDatos(0).then(res=>this.dimensiones = res);
@@ -77,42 +65,36 @@ export default class RegistrarProyecto extends Vue {
 
   public resetValidation() {
        
-     this.$refs.form.reset();
-     this.proyecto.Documento=" ";
-     this.proyecto.Nombre=" ";
-     this.proyecto.NumeroDeFamilia=" ";
-     this.proyecto.PresupuestoEstimado=" ";
+     (<any>this.$refs.form).reset();
+     this.propuesta = <IPropuesta>{};
+     this.documento = <IDocumento>{};
   }
 
 
   public obtenerArchivo(e: any) {
-    this.proyecto.Documento = e;
-    console.log(this.proyecto.Documento);
-    this.validarDocumento="";
+    if (e !== null && e !== undefined && e.length !== 0) { //esto valida si el input-file tiene dato o no
+      this.documento.nombre = e.name
+      this.documento.rawData = null;
+      let reade = new FileReader();
+          reade.onloadend = (_)=>{
+          this.documento.respaldoFisicoDigitalizado = new String(reade.result).valueOf(); //convertir el archivo en base64
+        };
+        reade.readAsDataURL(e);
+      this.propuesta.documento = this.documento;
+    }else{
+      this.propuesta.documento = <IDocumento><unknown>undefined;
+    }
   }
 
   public guardarProyecto() {
-     const fecha: Date = new Date();
-     // console.log("fecha let: "+fecha);
-
-     const rawData = {
-                Nombre: this.proyecto.Nombre,
-                NumeroDeFamilias: this.proyecto.NumeroDeFamilia,
-                PresupuestoEstimado: this.proyecto.PresupuestoEstimado,
-                Documento: this.proyecto.Documento,
-                FechaDeRegistro: fecha,
-                
-              };
-            
-
-              propuestaService.registrarPropuesta(rawData).then((res) => {
-                console.log(res);
-                this.codigoGenerado = res; });
-
-             
-
-              
-
-
-            }
+    this.propuesta.fechaDeRegistro = new Date();
+    this.propuesta.numeroDeFamilias = Number.parseInt(this.propuesta.numeroDeFamilias.toString());
+    this.propuesta.presupuestoEstimado = parseFloat((Math.round(this.propuesta.presupuestoEstimado * 100) / 100).toString());
+    propuestaService.registrarPropuesta(this.propuesta).then((res) => {
+      // this.codigoGenerado = res;
+      (<any>this.$refs.form).reset();
+      this.propuesta = <IPropuesta>{};
+      this.documento = <IDocumento>{};
+    });
+  }
 }

@@ -75,9 +75,6 @@ class ProyectoService {
   }
 
 
-
-
-
   public async registrarPropuesta(rawData: any) {
     rawData = JSON.stringify(rawData);
 

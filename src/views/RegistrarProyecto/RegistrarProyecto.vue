@@ -35,34 +35,34 @@
                   hint="Ej: Sistema de acueducto"
                   persistent-hint
                   label="Nombre"
-                  v-model="proyecto.Nombre"
+                  v-model="propuesta.nombre"
                   required
-                  :rules="rules.proyecto.Nombre"
+                  :rules="validacionPropuesta.Nombre"
                 ></v-text-field>
               </v-col>
             </v-row>
             <v-row>
               <v-col cols="12" sm="6" md="6">
                 <v-text-field
-                v-model="proyecto.NumeroDeFamilia"
+                v-model="propuesta.numeroDeFamilias"
                   hint="Ej: 500"
                   persistent-hint
                   label="Número de familias beneficiadas"
                   type="number"
                   required
-                  :rules="rules.proyecto.NumeroDeFamilia"
+                  :rules="validacionPropuesta.NumeroDeFamilia"
                 ></v-text-field>
               </v-col>
               <v-col cols="12" sm="6" md="6">
                 <v-text-field
                   hint="Ej: 1000000,43"
                   prefix="$"
-                  v-model="proyecto.PresupuestoEstimado"
+                  v-model="propuesta.presupuestoEstimado"
                   persistent-hint
                   label="Presupuesto estimado del proyecto"
                   type="number"
                   required
-                  :rules="rules.proyecto.presupuestoEstimado"
+                  :rules="validacionPropuesta.presupuestoEstimado"
                 ></v-text-field>
               </v-col>
               <!-- <v-col cols="12" sm="6" md="6">
@@ -178,13 +178,12 @@
 
                  <v-file-input
                   @change="obtenerArchivo($event)"
-                  v-model="proyecto.documento"
                   hint="Ej: proyecto.pdf"              
                   accept=".pdf"
                   persistent-hint
+                  :rules="validacionPropuesta.Documento"
                   label="Cargar documento"
                   required
-                  :error-messages="validarDocumento"
                 ></v-file-input> 
                
               </v-col>
@@ -195,7 +194,7 @@
               <v-col cols="12" md="12">
                 <v-btn outlined color="primary"  rounded
                 :disabled="!valid"
-                 @click="validate"
+                 @click="guardarProyecto"
                 >Postular Proyecto</v-btn>
 
                 <v-btn color="warning" @click="resetValidation" rounded>

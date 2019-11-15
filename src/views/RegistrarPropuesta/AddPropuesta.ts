@@ -8,7 +8,6 @@ import { proyectoService } from '../../services/proyectoService';
     mixins: [template],
 })
 export default class RegistrarProyecto extends Vue {
-    public name = 'kenneth';
     public codigoGenerado = 'Por Definir';
     public dimensiones: any[] = [];
     public comunidades: any[] = [];
