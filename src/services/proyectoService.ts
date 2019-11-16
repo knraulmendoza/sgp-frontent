@@ -94,22 +94,15 @@ class ProyectoService {
   }
 
   public async GetProyectosPorEstado(estado: number) {
-    await axios.get(globalServices.url + "/proyecto/estado/" + estado).then((response: AxiosResponse) => {
-      this.proyectos = response.data.map((val: any) => ({
-        Codigo: val.codigo,
-        Nombre: val.nombre,
-        ProyectoState: val.proyectoState,
-        Id: val.id,
-        PresupuestoAprobado: val.presupuestoAprobado,
-        PresupuestoEjecutado: val.presupuestoEjecutado,
-      }));
-    });
-    return this.proyectos;
+    const data= await axios.get(globalServices.url + "/proyecto/estado/" + estado).then((response) => {
+      return response.data;
+    });    
+    return data;
   }
   public async GetGastosProyecto(proyecto: IProyecto) {
     let gastos: ITransaccion[] = [];
     await axios
-      .get(globalServices.url + '/proyecto/egresos/' + proyecto.Id)
+      .get(globalServices.url + '/proyecto/egresos/' + proyecto.id)
       .then((response: AxiosResponse) => {
         gastos = response.data.map((val: any) => ({
           Monto: val.monto,

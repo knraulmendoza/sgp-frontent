@@ -3,13 +3,17 @@ import { IProyecto, ITransaccion } from '../../interfaces/interface';
 import { proyectoService } from '../../services/proyectoService';
 import Component from 'vue-class-component';
 import template from './RegistrarGasto.vue';
+import { VMoney } from 'v-money';
+import { globalServices } from '../../services/globalService';
+
 @Component({
     mixins: [template],
+    directives: { money: VMoney }
 })
 export default class RegisterGasto extends Vue {
-    public proyectosConRP: IProyecto[] = [{ Codigo: '000-oik', Actividades: undefined, Comunidades: undefined, FechaCierre: undefined, FechaDeCierrePrevista: new Date(), FechaEjecucion: new Date(), PresupuestoAprovado: 546565, PresupuestoEjecutado: 35648, Programa: undefined, Propuesta: undefined, ProyectoState: 1 }];
+    public proyectosConRP: IProyecto[] = [];
     public proyectoARegistrarGasto: IProyecto = {} as IProyecto;
-    public gastosProyecto: ITransaccion[] = [{ Monto: 2300, Fecha: new Date(), Tipo: 1,Proyecto:this.proyectoARegistrarGasto}];
+    public gastosProyecto: ITransaccion[] = [{ monto: 2300, fecha: new Date(), tipo: 1, ProyectoDeDestinoId: 1 }];
     public gastoProyecto: ITransaccion = {} as ITransaccion;
     public headersProyectosRP = [
         {
@@ -19,14 +23,13 @@ export default class RegisterGasto extends Vue {
             value: 'num',
             width: '1%',
         },
-        { text: 'Codigo', value: 'Codigo', width: '10%' },
-        { text: 'Nombre', value: 'Nombre', width: '44%' },
-        { text: 'Estado', value: 'ProyectoState', width: '15%' },
+        { text: 'Codigo', value: 'codigo', width: '10%' },
+        { text: 'Nombre', value: 'nombre', width: '59%' },
         {
             text: 'Presupuesto Aprobado',
-            value: 'PresupuestoAprobado',
+            value: 'presupuestoAprobado',
             width: '15%',
-            align: 'center',
+            align: 'right',
         },
         {
             text: 'Realizar Gasto',
@@ -43,9 +46,9 @@ export default class RegisterGasto extends Vue {
             sortable: false,
             value: 'num',
         },
-        { text: 'Gasto', value: 'Monto' },
-        { text: 'Concepto', value: 'Concepto' },
-        { text: 'Fecha', value: 'Fecha' },
+        { text: 'Gasto', value: 'monto' },
+        { text: 'Concepto', value: 'concepto' },
+        { text: 'Fecha', value: 'fecha' },
     ];
 
     public search = '';
@@ -53,17 +56,30 @@ export default class RegisterGasto extends Vue {
     public editedIndex = -1;
     public editedProyecto = {};
     public dialog = false;
-    public valorGasto: number = 0;
+    public valorGasto: string = "";
     public montoIncorrecto: boolean = true;
     public conceptoIncorrecto: boolean = false;
     public presupuestoDisponible: number = 0;
     public conceptoDeGasto: string = '';
     public gastoIncorrecto: boolean = true;
-    public validarMonto(value: number) {
+    public money = {
+        decimal: ',',
+        thousands: '.',
+        precision: 2,
+        masked: false
+    }
+
+
+    public validarMonto(value: string) {
+        console.log(value);
+
+        let valorNumerico = globalServices.sanearMonto(value);
+        let presupuestoDisponible = this.proyectoARegistrarGasto.presupuestoAprobado -
+            this.proyectoARegistrarGasto.presupuestoEjecutado
+
         if (
-            value >
-            this.proyectoARegistrarGasto.PresupuestoAprobado -
-            this.proyectoARegistrarGasto.PresupuestoEjecutado || value <= 0
+            valorNumerico >
+            presupuestoDisponible || valorNumerico <= 0
         ) {
             this.montoIncorrecto = true;
             return 'Especifique un monto adecuado';
@@ -97,7 +113,7 @@ export default class RegisterGasto extends Vue {
     }
     public abrirModal(item: any) {
         this.dialog = true;
-        this.proyectoARegistrarGasto = this.proyectosConRP[this.editedIndex];        
+        this.proyectoARegistrarGasto = this.proyectosConRP[this.editedIndex];
         this.GetGastoDeProyecto(this.proyectoARegistrarGasto);
     }
     public GetGastoDeProyecto(proyectoARegistrarGasto: IProyecto) {
@@ -109,21 +125,22 @@ export default class RegisterGasto extends Vue {
                 console.log(error);
             });
     }
+
     get renderPresupuestoDisponible() {
         return this.presupuestoDisponible =
-            this.proyectoARegistrarGasto.PresupuestoAprobado - this.proyectoARegistrarGasto.PresupuestoEjecutado;
+            this.proyectoARegistrarGasto.presupuestoAprobado - this.proyectoARegistrarGasto.presupuestoEjecutado;
 
     }
     public registrarGasto() {
         let tipoEgreso = 1;
         this.gastoProyecto = {
-            Monto: Number.parseFloat(this.valorGasto.toString()),
-            Fecha: new Date(),
-            Proyecto: this.proyectoARegistrarGasto,
-            Tipo: tipoEgreso,
+            monto: Number.parseFloat(this.valorGasto.toString()),
+            fecha: new Date(),
+            ProyectoDeDestinoId: this.proyectoARegistrarGasto.id,
+            tipo: tipoEgreso,
         };
         proyectoService.RegistrarGasto(this.gastoProyecto);
-        this.actualizarListaProyectosConRP(this.proyectoARegistrarGasto.Id);
+        this.actualizarListaProyectosConRP(this.proyectoARegistrarGasto.id);
     }
     public actualizarListaProyectosConRP(idProyecto: number) {
         proyectoService.GetProyectoPorId(idProyecto).then((Response) => {
@@ -135,7 +152,10 @@ export default class RegisterGasto extends Vue {
         let estadoContratado = 4;
         proyectoService.GetProyectosPorEstado(estadoContratado).then((res) => {
             this.proyectosConRP = res;
+            console.log(this.proyectosConRP[5].nombre);
+
         }, (error) => { console.log(error); });
+
     }
 }
 
