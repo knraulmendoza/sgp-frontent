@@ -4,6 +4,8 @@ import App from './components/AppComponent.vue';
 import vuetify from './plugins/vuetify';
 import router from './router';
 import { ValidationProvider } from 'vee-validate';
+
+
 import VueCurrencyFilter from 'vue-currency-filter'
 
 // Vue.prototype.$axios = axios;

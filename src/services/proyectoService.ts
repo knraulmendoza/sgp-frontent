@@ -10,6 +10,12 @@ class ProyectoService {
 
   }
 
+  public add(proyecto: IProyecto) {
+    console.log("Iproyecto ",proyecto);
+    
+    return axios.post(globalServices.url + '/Proyecto', proyecto)
+  }
+
   public async obtenerDimensiones() {
     const data = await axios
       .get(globalServices.url + '/proyecto')
@@ -47,10 +53,7 @@ class ProyectoService {
         }
         return dato.map((val: any) => ({
           value: val.id,
-          text: val.Nombre,
-
-
-
+          text: val.nombre,
         }));
       });
     return data;

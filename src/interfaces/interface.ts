@@ -47,18 +47,17 @@ export interface IPropuesta {
     id?: number;
     fechaDeRegistro: Date;
 }
-export interface IProyecto {
+export interface IProyecto {   
+    propuestaId?:number;
     codigo: string;
-    nombre: string;
     presupuestoAprobado: number;
     presupuestoEjecutado: number;
-    comunidades?: IComunidad[];
+    comunidadId:number[];
     fechaEjecucion: Date;
     fechaDeCierrePrevista: Date;
     fechaCierre?: Date;
-    programa?: Iprograma;
+    programaId:number;
     proyectoState: number;
-    actividades?: Iactividad;
     id: number;
 }
 export interface ITransaccion {
@@ -69,8 +68,8 @@ export interface ITransaccion {
 
 }
 export interface IComunidad {
-    Codigo: number;
-    Nombre: String;
+    codigo: number;
+    nombre: String;
 }
 
 export interface IDocumento{

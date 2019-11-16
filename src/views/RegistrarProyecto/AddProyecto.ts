@@ -6,6 +6,7 @@ import { IPropuesta, IDocumento } from '@/interfaces/interface';
 
 
 
+
 @Component({
     name: 'RegistrarProyecto',
     mixins: [template],
@@ -41,6 +42,8 @@ export default class RegistrarProyecto extends Vue {
       ],
       
     };
+
+    
 
   
 
@@ -90,7 +93,7 @@ export default class RegistrarProyecto extends Vue {
     this.propuesta.fechaDeRegistro = new Date();
     this.propuesta.numeroDeFamilias = Number.parseInt(this.propuesta.numeroDeFamilias.toString());
     this.propuesta.presupuestoEstimado = parseFloat((Math.round(this.propuesta.presupuestoEstimado * 100) / 100).toString());
-    propuestaService.registrarPropuesta(this.propuesta).then((res) => {
+    propuestaService.registrarPropuesta(this.propuesta).then(() => {
       // this.codigoGenerado = res;
       (<any>this.$refs.form).reset();
       this.propuesta = <IPropuesta>{};
