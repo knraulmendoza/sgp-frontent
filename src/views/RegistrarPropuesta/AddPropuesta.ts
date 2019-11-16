@@ -53,9 +53,9 @@ export default class RegistrarProyecto extends Vue {
 
   public mounted() {
 
-    proyectoService.comunidades().then((res) => this.comunidades = res);
+   // proyectoService.comunidades().then((res) => this.comunidades = res);
      // proyectoService.getAllDimensiones();
-    proyectoService.obtenerDatos(0).then((res) => this.dimensiones = res);
+    //proyectoService.obtenerDatos(0).then((res) => this.dimensiones = res);
 
 
   }
