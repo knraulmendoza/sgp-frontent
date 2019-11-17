@@ -234,7 +234,7 @@ export default class ActualizacionPresupuesto extends Vue {
             this.estado=parametro.value
         }
 
-        proyectoService.GetProyectosCDP(this.estado).then((res) => (this.proyectos = res));
+        proyectoService.GetProyectosCDP(this.estado);
 
     }
 

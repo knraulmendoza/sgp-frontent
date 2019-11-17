@@ -138,15 +138,6 @@ class ProyectoService {
             response.data.propuesta = p;
             return response.data;
           })
-          // proyectosEm`itirCDP = response.data.map((val: IProyecto) => ({
-            
-          //     codigo: val.Codigo,
-          //     nombre: val.Propuesta.Nombre,
-          //     presupuestoAprovado:
-          //     val.PresupuestoAprobado,
-          //     proyectoStates: val.ProyectoState,
-          //     id: val.Id,
-          // }));`
       });
       console.log(data);
       return data;
@@ -175,7 +166,7 @@ class ProyectoService {
 
   public async PostCDP(idProyecto:number, transancion:IListaTransancionCDP[]) {
     //this.urlProyecto+"EmitirCDP/listarProyectos/" 
-    await axios.post(this.urlProyecto+"CertificadoDeDisponibilidadPresupuestal/",{      
+    await axios.post(globalServices.url+"CertificadoDeDisponibilidadPresupuestal/",{      
         codigo: idProyecto,   
         listaTransanciones:transancion  
     }
