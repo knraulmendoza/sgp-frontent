@@ -68,6 +68,23 @@ export interface ITransaccion {
     ProyectoDeDestinoId: number;
 
 }
+
+export interface IFondos{
+    nombre: string;
+    valor: number;
+}
+
+export interface ITransancionCDP {
+    nombreFondo: string;
+    valorFondo: number;
+    valorRetirado:number;
+}
+export interface IListaTransancionCDP {
+    nombreFondo: string;
+    valorRetirado:number;
+}
+
+
 export interface IComunidad {
     codigo: number;
     nombre: String;

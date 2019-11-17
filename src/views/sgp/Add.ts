@@ -156,7 +156,7 @@ export default class AddSgp extends Vue {
   public saveSgp() {
     if (this.sgp.soporteInteres == undefined || this.sgp.soporteValor == undefined) {
       swal({title: "Faltan los archivos", icon:'error'})
-        .then((value) => {
+        .then((value:any) => {
           console.error('errpr');
       });
     }else {
@@ -167,14 +167,14 @@ export default class AddSgp extends Vue {
           if (res == null) {
               console.error('error');
               swal({title: "No se pudo registrar", icon:'error'})
-                .then((value) => {
+                .then((value:any) => {
                   console.error('errpr');
               });
           } else {
             swal({
               title: "Se ha registrado un nuevo SGP",
               icon: "success",
-            }).then(_=>{
+            }).then((value:any)=>{
               //this.$refs.form.resetValidation();
               this.showSgps();
               this.sgp = <Isgp>{};
