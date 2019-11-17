@@ -47,8 +47,9 @@ export interface IPropuesta {
     id?: number;
     fechaDeRegistro: Date;
 }
-export interface IProyecto {   
-    propuestaId?:number;
+export interface IProyecto {
+    propuesta: IPropuesta;
+    propuestaId:number;
     codigo: string;
     presupuestoAprobado: number;
     presupuestoEjecutado: number;
@@ -88,4 +89,9 @@ export interface Isgp {
     soporteInteresId :number;
     descripcion?: String;
     fecha: Date;
+}
+
+export interface IFondos {
+    nombre: string;
+    valor: number;
 }

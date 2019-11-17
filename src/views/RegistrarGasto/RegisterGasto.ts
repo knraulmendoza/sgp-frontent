@@ -3,7 +3,7 @@ import { IProyecto, ITransaccion } from '../../interfaces/interface';
 import { proyectoService } from '../../services/proyectoService';
 import Component from 'vue-class-component';
 import template from './RegistrarGasto.vue';
-import { VMoney } from 'v-money';
+import  { VMoney } from 'v-money';
 import { globalServices } from '../../services/globalService';
 
 @Component({
@@ -24,11 +24,11 @@ export default class RegisterGasto extends Vue {
             width: '1%',
         },
         { text: 'Codigo', value: 'codigo', width: '10%' },
-        { text: 'Nombre', value: 'nombre', width: '59%' },
+        { text: 'Nombre', value: 'nombre', width: '55%' },
         {
             text: 'Presupuesto Aprobado',
             value: 'presupuestoAprobado',
-            width: '15%',
+            width: '20%',
             align: 'right',
         },
         {
@@ -71,8 +71,6 @@ export default class RegisterGasto extends Vue {
 
 
     public validarMonto(value: string) {
-        console.log(value);
-
         let valorNumerico = globalServices.sanearMonto(value);
         let presupuestoDisponible = this.proyectoARegistrarGasto.presupuestoAprobado -
             this.proyectoARegistrarGasto.presupuestoEjecutado
@@ -118,7 +116,7 @@ export default class RegisterGasto extends Vue {
     }
     public GetGastoDeProyecto(proyectoARegistrarGasto: IProyecto) {
         proyectoService
-            .GetGastosProyecto(this.proyectoARegistrarGasto)
+            .GetGastosProyecto(proyectoARegistrarGasto)
             .then((res) => {
                 this.gastosProyecto = res;
             }, (error) => {
@@ -134,7 +132,7 @@ export default class RegisterGasto extends Vue {
     public registrarGasto() {
         let tipoEgreso = 1;
         this.gastoProyecto = {
-            monto: Number.parseFloat(this.valorGasto.toString()),
+            monto: globalServices.sanearMonto(this.valorGasto),
             fecha: new Date(),
             ProyectoDeDestinoId: this.proyectoARegistrarGasto.id,
             tipo: tipoEgreso,
@@ -152,8 +150,6 @@ export default class RegisterGasto extends Vue {
         let estadoContratado = 4;
         proyectoService.GetProyectosPorEstado(estadoContratado).then((res) => {
             this.proyectosConRP = res;
-            console.log(this.proyectosConRP[5].nombre);
-
         }, (error) => { console.log(error); });
 
     }

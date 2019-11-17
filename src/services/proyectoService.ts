@@ -127,22 +127,29 @@ class ProyectoService {
     console.log();
 
      axios.post(globalServices.url + "/transaccion", gastoProyecto).then((Response) => {
-      console.log(Response);
-    });
+       swal({
+         title: "Exito",
+         text: "Se ha registrado un nuevo gasto",
+         icon: "warning",
+         dangerMode: true,
+       });
+     }).catch(function (error) {
+       
+         swal({
+           title: "Ocurrio un error",
+           text: "Se ha presentado un error al tratar de registrar el gasto, contacte a los desarrolladores",
+           icon: "warning",
+           dangerMode: true,
+         });
+         
+     });
   }
   public async GetProyectoPorId(idProyecto: number) {
 
-    await axios.get(`${globalServices.url}/proyecto/${idProyecto}`).then((Response: AxiosResponse) => {
-      this.proyecto = Response.data.map((val: any) => ({
-        Codigo: val.codigo,
-        Nombre: val.nombre,
-        ProyectoState: val.proyectoState,
-        Id: val.id,
-        PresupuestoAprobado: val.presupuestoAprobado,
-        PresupuestoEjecutado: val.presupuestoEjecutado,
-      }))
+    const data = await axios.get(`${globalServices.url}/proyecto/${idProyecto}`).then((Response) => {
+      return Response.data;
     });
-    return this.proyecto;
+    return data;
   }
 }
 export const proyectoService = new ProyectoService();
