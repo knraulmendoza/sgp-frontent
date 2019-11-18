@@ -38,25 +38,17 @@ class ProyectoService {
 
   // metodos del CRUD
   public async obtenerDatos(value?: number, rutaContralador?: string) {
-    const urlLocal: string = globalServices.url + '/' + rutaContralador;
-    value == 0 ? urlLocal : urlLocal + '/' + value;
-
-    const data = await axios
-      .get(urlLocal)
-      .then((response: AxiosResponse) => {
-
-        let dato;
-        if (Array.isArray(response.data)) {
-          dato = response.data;
-        } else {
-          dato = [response.data];
-        }
-        return dato.map((val: any) => ({
-          value: val.id,
-          text: val.nombre,
-        }));
-      });
-    return data;
+    console.log("VALUE",value); 
+    let urlLocal: string = globalServices.url + '/' + rutaContralador;
+     value == 0 ? urlLocal: urlLocal +='/'+ value;
+     
+      console.log("url: ",urlLocal);
+      
+    const data = await axios.get(urlLocal).then((sgps) => {
+      return sgps.data;
+    }).catch((_) => {});
+  return data;
+ 
   }
 
 
