@@ -1,21 +1,20 @@
 {
   "compilerOptions": {
     "target": "esnext",
+    "noImplicitAny": false,
     "module": "esnext",
     "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
     "jsx": "preserve",
     "importHelpers": true,
     "moduleResolution": "node",
-    "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "sourceMap": true,
     "baseUrl": ".",
     "types": [
-      "webpack-env"
+      "webpack-env",
+      "vuetify"
     ],
     "paths": {
       "@/*": [
@@ -35,6 +34,9 @@
     "src/**/*.vue",
     "tests/**/*.ts",
     "tests/**/*.tsx"
+  ],
+  "files": [
+    "src/shims-vue.d.ts"
   ],
   "exclude": [
     "node_modules"
