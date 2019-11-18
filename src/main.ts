@@ -6,7 +6,7 @@ import router from './router';
 import { ValidationProvider } from 'vee-validate';
 
 
-import VueCurrencyFilter from 'vue-currency-filter'
+import VueCurrencyFilter from 'vue-currency-filter';
 
 // Vue.prototype.$axios = axios;
 // declare module 'vue/types/vue' {
