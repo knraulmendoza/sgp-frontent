@@ -2,7 +2,7 @@
     <v-container>
         <v-data-table
             :headers="headersProyectosRP"
-            :items="proyectosConRP"
+            :items="renderProyectosPorEstado"
             :search="search"
             class="elevation-1 wrap-content"
             no-data-text="No se encontraron proyectos"
@@ -88,7 +88,6 @@
                                                         renderPresupuestoDisponible
                                                             | currency
                                                     }}
-                                                    
                                                 </p>
                                             </v-col>
                                         </v-row>
@@ -99,6 +98,10 @@
                                                     :headers="headersGastos"
                                                     :items="gastosProyecto"
                                                     :search="search"
+                                                    :sort-by="[
+                                                        'fecha'
+                                                    ]"
+                                                    :sort-desc="[true]"
                                                     :items-per-page="
                                                         itemsPerPageGastos
                                                     "

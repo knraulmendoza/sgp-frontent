@@ -12,8 +12,8 @@ class ProyectoService {
   }
 
   public add(proyecto: IProyecto) {
-    console.log("Iproyecto ",proyecto);
-    
+    console.log("Iproyecto ", proyecto);
+
     return axios.post(globalServices.url + '/Proyecto', proyecto)
   }
 
@@ -98,98 +98,71 @@ class ProyectoService {
   }
 
   public async GetProyectosPorEstado(estado: number) {
-    const data= await axios.get(globalServices.url + "/proyecto/estado/" + estado).then((response) => {
+    const data = await axios.get(globalServices.url + "/proyecto/estado/" + estado).then((response) => {
       return response.data;
-    });    
+    });
     return data;
   }
-  public async GetGastosProyecto(proyecto: IProyecto) {
-    let gastos: ITransaccion[] = [];
-    await axios
-      .get(globalServices.url + '/proyecto/egresos/' + proyecto.id)
+  public async GetGastosProyecto(idProyecto: number) {
+    
+    const data = await axios
+      .get(globalServices.url + '/proyecto/egresos/' + idProyecto)
       .then((response: AxiosResponse) => {
-        gastos = response.data.map((val: any) => ({
-          Monto: val.monto,
-          Fecha:
-            new Date(val.fecha.toString()).getDate() +
-            '/' +
-            new Date(val.fecha.toString()).getMonth() +
-            '/' +
-            new Date(val.fecha.toString()).getFullYear(),
-
-          Id: val.id,
-          Concepto: val.concepto,
-        }));
+        return response.data
       });
-    }
-    public async GetProyectosCDP(estado:number) {
-      //this.urlProyecto+"EmitirCDP/listarProyectos/" 
-      let proyectosEmitirCDP: IProyecto[] = [];
-      const data = await axios.get(globalServices.url+'/proyecto/'+estado
-        ).then((response: AxiosResponse) => {
-          this.getPropuesta(response.data.propuestaId).then(p=>{
-            response.data.propuesta = p;
-            return response.data;
-          })
-      });
-      console.log(data);
-      return data;
+    return data;
   }
 
-  public async getPropuesta(id: number){
-      const data = await axios.get(globalServices.url+'/propuesta/'+id
-        ).then((response: AxiosResponse) => {
-          return response.data;
-        });
-        return data;
+  public async GetProyectosCDP(estado: number) {
+    //this.urlProyecto+"EmitirCDP/listarProyectos/" 
+    let proyectosEmitirCDP: IProyecto[] = [];
+    const data = await axios.get(globalServices.url + '/proyecto/' + estado
+    ).then((response: AxiosResponse) => {
+      this.getPropuesta(response.data.propuestaId).then(p => {
+        response.data.propuesta = p;
+        return response.data;
+      })
+    });
+    console.log(data);
+    return data;
+  }
+
+  public async getPropuesta(id: number) {
+    const data = await axios.get(globalServices.url + '/propuesta/' + id
+    ).then((response: AxiosResponse) => {
+      return response.data;
+    });
+    return data;
   }
 
   public async GetFondos() {
     //this.urlProyecto+"EmitirCDP/listarFondos"
     let fondos: IFondos[] = [];
     await axios.get("https://localhost:5001/api/fondo/").then((response: AxiosResponse) => {
-        fondos = response.data.map((val: any) => ({
-            nombre: val.nombre,
-            valor: val.valor,
-        }));
+      fondos = response.data.map((val: any) => ({
+        nombre: val.nombre,
+        valor: val.valor,
+      }));
     });
     console.log("Fondos Api", fondos);
     return fondos;
   }
 
-  public async PostCDP(idProyecto:number, transancion:IListaTransancionCDP[]) {
+  public async PostCDP(idProyecto: number, transancion: IListaTransancionCDP[]) {
     //this.urlProyecto+"EmitirCDP/listarProyectos/" 
-    await axios.post(globalServices.url+"CertificadoDeDisponibilidadPresupuestal/",{      
-        codigo: idProyecto,   
-        listaTransanciones:transancion  
+    await axios.post(globalServices.url + "CertificadoDeDisponibilidadPresupuestal/", {
+      codigo: idProyecto,
+      listaTransanciones: transancion
     }
-    ).then((response: AxiosResponse) => {        
+    ).then((response: AxiosResponse) => {
     });
 
 
   }
 
-    
-  public RegistrarGasto(gastoProyecto: ITransaccion) {
-    console.log();
 
-     axios.post(globalServices.url + "/transaccion", gastoProyecto).then((Response) => {
-       swal({
-         title: "Exito",
-         text: "Se ha registrado un nuevo gasto",
-         icon: "warning",
-         dangerMode: true,
-       });
-     }).catch(function (error) {
-       
-         swal({
-           title: "Ocurrio un error",
-           text: "Se ha presentado un error al tratar de registrar el gasto, contacte a los desarrolladores",
-           icon: "warning",
-           dangerMode: true,
-         });
-         
-     });
+  public RegistrarGasto(gastoProyecto: ITransaccion) {
+    return axios.post(globalServices.url + "/transaccionunaria", gastoProyecto);
   }
   public async GetProyectoPorId(idProyecto: number) {
 

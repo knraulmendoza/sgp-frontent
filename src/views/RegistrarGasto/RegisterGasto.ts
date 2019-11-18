@@ -5,6 +5,7 @@ import Component from 'vue-class-component';
 import template from './RegistrarGasto.vue';
 import  { VMoney } from 'v-money';
 import { globalServices } from '../../services/globalService';
+import swal from 'sweetalert';
 
 @Component({
     mixins: [template],
@@ -13,7 +14,7 @@ import { globalServices } from '../../services/globalService';
 export default class RegisterGasto extends Vue {
     public proyectosConRP: IProyecto[] = [];
     public proyectoARegistrarGasto: IProyecto = {} as IProyecto;
-    public gastosProyecto: ITransaccion[] = [{ monto: 2300, fecha: new Date(), tipo: 1, ProyectoDeDestinoId: 1 }];
+    public gastosProyecto: ITransaccion[] = [];
     public gastoProyecto: ITransaccion = {} as ITransaccion;
     public headersProyectosRP = [
         {
@@ -46,11 +47,10 @@ export default class RegisterGasto extends Vue {
             sortable: false,
             value: 'num',
         },
-        { text: 'Gasto', value: 'monto' },
+        { text: 'Gasto', value: 'monto', align:"right"},
         { text: 'Concepto', value: 'concepto' },
-        { text: 'Fecha', value: 'fecha' },
+        { text: 'Fecha', value: 'fecha'},
     ];
-
     public search = '';
     public itemsPerPageGastos = 3;
     public editedIndex = -1;
@@ -112,13 +112,16 @@ export default class RegisterGasto extends Vue {
     public abrirModal(item: any) {
         this.dialog = true;
         this.proyectoARegistrarGasto = this.proyectosConRP[this.editedIndex];
-        this.GetGastoDeProyecto(this.proyectoARegistrarGasto);
+        this.GetGastoDeProyecto(this.proyectoARegistrarGasto.id);
     }
-    public GetGastoDeProyecto(proyectoARegistrarGasto: IProyecto) {
+    public GetGastoDeProyecto(idProyecto: number) {
         proyectoService
-            .GetGastosProyecto(proyectoARegistrarGasto)
+            .GetGastosProyecto(idProyecto)
             .then((res) => {
+                                
                 this.gastosProyecto = res;
+                console.log("res",res);
+                
             }, (error) => {
                 console.log(error);
             });
@@ -134,24 +137,45 @@ export default class RegisterGasto extends Vue {
         this.gastoProyecto = {
             monto: globalServices.sanearMonto(this.valorGasto),
             fecha: new Date(),
-            ProyectoDeDestinoId: this.proyectoARegistrarGasto.id,
+            proyectoId: this.proyectoARegistrarGasto.id,
             tipo: tipoEgreso,
+            concepto: this.conceptoDeGasto,
+            proyecto: undefined,
+            id: undefined
         };
-        proyectoService.RegistrarGasto(this.gastoProyecto);
-        this.actualizarListaProyectosConRP(this.proyectoARegistrarGasto.id);
+        proyectoService.RegistrarGasto(this.gastoProyecto).then((Response) => {
+            swal({
+                title: "Exito",
+                text: "Se ha registrado un nuevo gasto",
+                icon: "warning",
+                dangerMode: true,
+            });
+            this.actualizarListaProyectosConRP(this.proyectoARegistrarGasto.id);
+        }).catch(function (error) {
+
+            swal({
+                title: "Ocurrio un error",
+                text: "Se ha presentado un error al tratar de registrar el gasto, contacte a los desarrolladores",
+                icon: "warning",
+                dangerMode: true,
+            });
+
+        });
     }
-    public actualizarListaProyectosConRP(idProyecto: number) {
-        proyectoService.GetProyectoPorId(idProyecto).then((Response) => {
-            this.proyectosConRP[this.editedIndex] = Response
-        }, (error) => console.log(error));
-        this.GetGastoDeProyecto(this.proyectoARegistrarGasto);
+    public actualizarListaProyectosConRP(idProyecto: number) {        
+        proyectoService.GetProyectosPorEstado(4).then((res) => {
+            this.proyectosConRP = res;
+        }, (error) => { console.log(error); });
+        this.GetGastoDeProyecto(idProyecto);
     }
     public mounted() {
         let estadoContratado = 4;
         proyectoService.GetProyectosPorEstado(estadoContratado).then((res) => {
             this.proyectosConRP = res;
         }, (error) => { console.log(error); });
-
+    }
+    get renderProyectosPorEstado() {
+        return this.proyectosConRP;
     }
 }
 

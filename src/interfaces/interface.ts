@@ -62,11 +62,13 @@ export interface IProyecto {
     id: number;
 }
 export interface ITransaccion {
-    monto: number;
-    fecha: Date;
-    tipo: number;//
-    ProyectoDeDestinoId: number;
-
+    proyectoId: number,
+    concepto: string,
+    fecha: Date,
+    monto: number,
+    proyecto?: IProyecto,
+    tipo: number,
+    id?: number
 }
 
 export interface IFondos{

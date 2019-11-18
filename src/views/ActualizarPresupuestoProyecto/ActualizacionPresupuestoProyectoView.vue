@@ -10,10 +10,6 @@
   >
     <template v-slot:top>
       <v-toolbar dark color="green">
-        
-
-
-
         Proyectos Aceptados
         <v-divider class="mx-4" inset vertical></v-divider>
             <v-text-field
