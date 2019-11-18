@@ -1,5 +1,6 @@
 import axios, { AxiosResponse } from 'axios';
-import { IProyecto, ITransaccion, Icomponente } from '../interfaces/interface';
+import { IProyecto, ITransaccion, IFondos, Iprograma, IListaTransancionCDP } from '../interfaces/interface';
+import { Icomponente } from '../interfaces/interface';
 import { globalServices } from './globalService';
 
 class ProyectoService {
@@ -112,9 +113,55 @@ class ProyectoService {
           Concepto: val.concepto,
         }));
       });
-
-    return gastos;
+    }
+    public async GetProyectosCDP(estado:number) {
+      //this.urlProyecto+"EmitirCDP/listarProyectos/" 
+      let proyectosEmitirCDP: IProyecto[] = [];
+      const data = await axios.get(globalServices.url+'/proyecto/'+estado
+        ).then((response: AxiosResponse) => {
+          this.getPropuesta(response.data.propuestaId).then(p=>{
+            response.data.propuesta = p;
+            return response.data;
+          })
+      });
+      console.log(data);
+      return data;
   }
+
+  public async getPropuesta(id: number){
+      const data = await axios.get(globalServices.url+'/propuesta/'+id
+        ).then((response: AxiosResponse) => {
+          return response.data;
+        });
+        return data;
+  }
+
+  public async GetFondos() {
+    //this.urlProyecto+"EmitirCDP/listarFondos"
+    let fondos: IFondos[] = [];
+    await axios.get("https://localhost:5001/api/fondo/").then((response: AxiosResponse) => {
+        fondos = response.data.map((val: any) => ({
+            nombre: val.nombre,
+            valor: val.valor,
+        }));
+    });
+    console.log("Fondos Api", fondos);
+    return fondos;
+  }
+
+  public async PostCDP(idProyecto:number, transancion:IListaTransancionCDP[]) {
+    //this.urlProyecto+"EmitirCDP/listarProyectos/" 
+    await axios.post(globalServices.url+"CertificadoDeDisponibilidadPresupuestal/",{      
+        codigo: idProyecto,   
+        listaTransanciones:transancion  
+    }
+    ).then((response: AxiosResponse) => {        
+    });
+
+
+  }
+
+    
   public RegistrarGasto(gastoProyecto: ITransaccion) {
     console.log();
 
