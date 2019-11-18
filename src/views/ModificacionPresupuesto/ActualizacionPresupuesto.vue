@@ -1,4 +1,6 @@
 <template>
+  
+<div>
   <v-data-table
     :headers="headersEmitirCDP"
     :items="proyectos"
@@ -124,6 +126,51 @@
             </v-card-text>
           </v-card>
         </v-dialog>
+
+        <v-dialog v-model="dialogCDP" persistent scrollable max-width="900px">
+            <template>
+              <v-card elevation="10">
+                <v-card-title primary-title>
+                  <v-row style="height: 40px" borde="1">
+                      <v-col sm="4"></v-col>
+                      <v-col>
+                        <v-row > </v-row>
+                        <v-row > 
+                            <v-col>FECHA DE VENCIMIENTO</v-col>
+                            <v-col>31 DE DICIEMBRE DEL 2019</v-col>
+                        </v-row>
+                        <v-row >
+                            <v-col>FECHA DE EXPEDICION</v-col>
+                            <v-col>17 DE NOVIEMBRE DEL 2019</v-col>
+                        </v-row>
+                        <v-row > </v-row>
+                      </v-col>
+                  </v-row>
+                </v-card-title>
+                <v-card-text>
+                  <v-container>
+                    <v-row style="height: 40px">
+                      <v-col sm="2" class="text-left">
+                        <p ></p>
+                      </v-col>
+                    </v-row>
+                    <v-row style="height: 90px;">                      
+                      <v-col sm="3">
+                        
+                      </v-col>    
+                      <v-col sm="3">
+                      </v-col>                    
+                    </v-row>
+                    <v-row justify="center">
+                      <v-btn color="primary" rounded @click="crearCDP(proyecto.id)">Completar CDP</v-btn>
+                    </v-row>
+                  </v-container>
+                </v-card-text>
+              </v-card>
+          </template>        
+        </v-dialog>
+
+
       </v-toolbar>
     </template>
     <template v-slot:item.actionEmitirCDP="{ item }">
@@ -131,4 +178,16 @@
       <v-icon class="mr-2" @click="editItem(item)" v-if="estado==2" >mdi-eye</v-icon>
     </template>
   </v-data-table>
+
+
+    <v-row align="center">
+      <v-col class="text-center" cols="12" sm="4">
+        <div class="my-2">
+          <v-btn depressed small @click="abrirModalCDP()">Normal</v-btn>
+        </div>      
+      </v-col>
+    </v-row>
+</div>
 </template>
+
+  
