@@ -65,6 +65,7 @@ export default class ActualizacionPresupuesto extends Vue {
     public transancionesCDP: ITransancionCDP[] = [];  
     public editedIndex = -1;
     public dialog = false;
+    public dialogCDP = false;
     public search = '';
     public itemsPerPage: number = 5;
     public validarActivarBotom: boolean = true;
@@ -91,7 +92,7 @@ export default class ActualizacionPresupuesto extends Vue {
                 
             }else{
                 console.log("valor retirado",Number(this.valorGeneralTransanciones) + Number(this.transancionCDP.valorRetirado));
-                if(Number(this.valorGeneralTransanciones) + Number(this.transancionCDP.valorRetirado)>this.proyecto.presupuestoAprovado){
+                if(Number(this.valorGeneralTransanciones) + Number(this.transancionCDP.valorRetirado)>this.proyecto.presupuestoAprobado){
 
                     return "el valor de las transanciones sobrepasa al valor aprovado del proyecto";
                 }else{
@@ -154,6 +155,11 @@ export default class ActualizacionPresupuesto extends Vue {
         this.transancionesCDP = [];    
         this.fondoGeneral();
     }
+    public abrirModalCDP() {
+        this.dialogCDP = true;
+        // this.transancionCDP = transancion; 
+        // this.proyecto = item;        
+    }
     public agregarTransancionCDP(transancionCDP:ITransancionCDP){
         let transancionCDPlocal: ITransancionCDP = transancionCDP;        
         transancionCDPlocal.valorFondo = this.actualizarFondos(transancionCDPlocal,1);
@@ -214,7 +220,7 @@ export default class ActualizacionPresupuesto extends Vue {
         return valorActualizado;
     }
 
-    public crearCDP(idProyecto:number){
+    public crearCDP(){
             let listaTrasancionesCDP:IListaTransancionCDP []=[];
             let listaTrasancionCDP:IListaTransancionCDP = {} as IListaTransancionCDP;
             this.transancionesCDP.forEach(element=>{
@@ -223,7 +229,8 @@ export default class ActualizacionPresupuesto extends Vue {
                 listaTrasancionesCDP.push(listaTrasancionCDP);
             });  
             
-            proyectoService.PostCDP(idProyecto,listaTrasancionesCDP).then((res) => (console.log(res)));;
+            proyectoService.PostCDP(this.proyecto.id,listaTrasancionesCDP).then((res) => (console.log(res)));
+            // this.abrirModalCDP(this.proyecto,this.transancionCDP);
     }
     
     public consultarProyectos(parametro:any, opcion:number){

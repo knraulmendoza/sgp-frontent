@@ -53,15 +53,11 @@
                 </v-row>
                 <v-row> 
                 <v-col cols="12" sm="6" md="6">
-                <v-select
-                  hint="Ej: 500"
-                  persistent-hint
-                  label="Dimensión"
-                  :rules="validacionProyecto.dimension"
-                  :items="dimensiones"
+                <v-select hint="Ej: 500" persistent-hint label="Dimensión" :rules="validacionProyecto.dimension" :items="dimensiones"
                   @change="select(1,$event)"
                   required
-                ></v-select>
+                >
+                </v-select>
                  </v-col>
                   <v-col cols="12" sm="6" md="6">
                 <v-select
@@ -104,23 +100,23 @@
 
                  <v-row>
                   <v-col cols="12" sm="6" md="6">
-                <v-combobox
-               
+             
+
+                 <v-combobox
                 :items="comunidades"
                 label="Comunidad"
                 v-model="proyecto.comunidadId"
                 :rules="validacionProyecto.comunidad"
                 multiple
-              ></v-combobox>
+              ></v-combobox> 
                  </v-col>
                  <v-col cols="12" sm="6" md="6">
                 <v-text-field
                   :rules="validacionProyecto.presupuestoAprobado"
                   hint="Ej: 1000000,95"
                   persistent-hint
+                   v-model="presupuesto"
                    v-money="money"
-                   type="number"
-                  v-model.lazy="presupuesto"
                   label="Presupuesto Aprobado"
                 
                   ></v-text-field>

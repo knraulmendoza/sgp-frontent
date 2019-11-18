@@ -5,12 +5,12 @@ import template from './ConsultarPropuesta.vue';
 import { propuestaService } from '../../services/PropuestaService';
 import { proyectoService } from '../../services/proyectoService';
 import swal from 'sweetalert';
-import {Vmoney} from 'v-money'
+import { VMoney } from "v-money";
 import { globalServices } from '../../services/globalService';
 
 @Component({
     mixins: [template],
-    directives:{money: Vmoney}
+    directives:{money: VMoney}
 })
 export default class ShowProyecto extends Vue {
     public headers = [
@@ -59,7 +59,7 @@ export default class ShowProyecto extends Vue {
     public search = '';
     public itemsPerPage: number = 5;
     public dialogAprobarPropuesta = false;
-    public presupuesto: string = "";
+    public presupuesto: number = 0;
     public dimensiones: any[] = [];
     public comunidades: any[] = [];
     public estrategias: any[] = [];
@@ -71,25 +71,23 @@ export default class ShowProyecto extends Vue {
     public programa: Iprograma={} as Iprograma;
     public items = [{}];
 
-    money={
+    money= {
         decimal: ',',
-        thousands: '.',
-        prefix: 'R$ ',
-        suffix: ' #',
+        thousands: '.',  
         precision: 2,
-        masked: false /* doesn't work with directive */
+        masked: false
       }
     
-    public sdsd(value:string){
-        let val=globalServices.sanearMonto(value)
-        
+
+
+    public validarCampos(value:string){
+
     }
 
     public validacionProyecto = {
-        presupuestoAprobado:[
-            (v: any) => !!v || 'Este campo es obligatorio',
-            (v: any) => !!v || 'Este campo es obligatorio',
-            (v: any) => v>0 || 'Los interes no pueden ser negativos',
+        presupuestoAprobado:[   
+            (v: number) => !!v || 'Este campo es obligatorio',
+            // (v: number) => v>0 || 'Los interes no pueden ser negativos',
         ],
         dimension:[
             (v: any) => !!v || 'Este campo es obligatorio',
@@ -119,7 +117,10 @@ export default class ShowProyecto extends Vue {
         this.abrirModal(item);
     }
     public aprobarPropuesta(item: IPropuesta) {
-        this.presupuesto = item.presupuestoEstimado.toString();
+        this.presupuesto=0;
+        this.presupuesto = item.presupuestoEstimado;
+        console.log("presupuesto",this.presupuesto);
+        
         this.editedIndex = this.propuestas.indexOf(item);
         this.propuesta = this.propuestas[this.editedIndex];
         this.abrirModalAprobarPropuesta();
@@ -149,17 +150,26 @@ export default class ShowProyecto extends Vue {
         );
         proyectoService.obtenerDatos(0, 'dimension').then(
             (res) => {
-                console.log(res);
-                
-                this.dimensiones = res;
+                res.forEach(element => {
+                    this.dimensiones.push({value:element.id, text:element.nombre});
+                    // this.dimensiones=[{value:element.id, text:element.nombre}];
+                });
+                // this.dimensiones = res;
             },
             (error) => {
                 console.log(error);
             },
         );
         proyectoService.obtenerDatos(0, 'comunidad').then(
+
             (res) => {
-                this.comunidades = res;
+               
+
+                res.forEach(element => {
+                    this.comunidades.push({value:element.id, text:element.nombre});
+                    // this.dimensiones=[{value:element.id, text:element.nombre}];
+                });
+               
             },
             (error) => {
                 console.log(error);
@@ -168,20 +178,35 @@ export default class ShowProyecto extends Vue {
     }
 
     public select(value: number, id: number) {
+        console.log("id",id);
+        
         switch (value) {
             case 1:
-                proyectoService.obtenerDatos(id, 'Componente').then((res) => {
-                    this.componentes = res;
+                proyectoService.obtenerDatos(id, 'Dimension').then((res) => {
+                    console.log("res",res.componentes);
+                    
+                    res.componentes.forEach(element => {
+                        this.componentes.push({value:element.id, text:element.nombre});
+                        // this.dimensiones=[{value:element.id, text:element.nombre}];
+                    });
+                    
                 });
                 break;
             case 2:
-                proyectoService.obtenerDatos(id, 'Estrategia').then((res) => {
-                    this.estrategias = res;
+                proyectoService.obtenerDatos(id, 'Componente').then((res) => {
+                    res.estrategias.forEach(element => {
+                        this.estrategias.push({value:element.id, text:element.nombre});
+                        // this.dimensiones=[{value:element.id, text:element.nombre}];
+                    });
                 });
                 break;
             case 3:
-                proyectoService.obtenerDatos(id, 'Programa').then((res) => {
-                    this.programas = res;
+                proyectoService.obtenerDatos(id, 'Estrategia').then((res) => {
+                    res.programas.forEach(element => {
+                        this.programas.push({value:element.id, text:element.nombre});
+                        // this.dimensiones=[{value:element.id, text:element.nombre}];
+                    });
+
                 });
                 break;
 
@@ -189,8 +214,12 @@ export default class ShowProyecto extends Vue {
                 break;
         }
     }
+
     public registrarProyecto() {
-        // this.proyecto.PresupuestoAprobado= this.presupuesto;
+        
+        this.proyecto.presupuestoAprobado= globalServices.sanearMonto(this.presupuesto.toString());
+       console.log("PRESUPUESTO APROBADO",this.proyecto.presupuestoAprobado);
+       
         this.proyecto.propuestaId=this.propuesta.id;
             proyectoService.add(this.proyecto).then((res) => {
                 console.log("respuesta",res);
