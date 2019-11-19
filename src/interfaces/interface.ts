@@ -77,11 +77,13 @@ export interface IProyecto {
     id: number
 }
 export interface ITransaccion {
-    monto: number;
-    fecha: Date;
-    tipo: number;//
-    ProyectoDeDestinoId: number;
-
+    proyectoId: number,
+    concepto: string,
+    fecha: Date,
+    monto: number,
+    proyecto?: IProyecto,
+    tipo: number,
+    id?: number
 }
 
 export interface IFondos{
@@ -121,4 +123,9 @@ export interface Isgp {
     soporteInteresId :number;
     descripcion?: String;
     fecha: Date;
+}
+
+export interface IFondos {
+    nombre: string;
+    valor: number;
 }

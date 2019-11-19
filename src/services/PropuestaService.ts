@@ -11,6 +11,19 @@ class PropuestaService {
           }).catch((_) => {});
         return data;
     }
+
+    public async GetPropuestaPorId(propuestaId: number) {
+        const data = axios.get(globalServices.url + "/propuesta/"+propuestaId).then(Response => {
+            return Response.data;
+        })
+        return data;
+    }
+    public async GetPropuestaPorEstado(state: number) {
+        const data = axios.get(globalServices.url + "/propuesta/estado/"+state).then(Response => {
+            return Response.data;
+        })
+        return data;
+    }
     public getPDFProyecto(idDocumento: number) {
         let urlPDF: string = '';
         axios
@@ -37,7 +50,7 @@ class PropuestaService {
             return null;
         }
     }
-
+    
 
 
 }

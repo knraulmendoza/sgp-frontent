@@ -5,12 +5,13 @@ import template from './ConsultarPropuesta.vue';
 import { propuestaService } from '../../services/PropuestaService';
 import { proyectoService } from '../../services/proyectoService';
 import swal from 'sweetalert';
-import { VMoney } from "v-money";
+import { Vmoney } from 'v-money'
+import currency from 'v-currency-field'
 import { globalServices } from '../../services/globalService';
 
 @Component({
     mixins: [template],
-    directives:{money: VMoney}
+    directives: { money: Vmoney, currency_config:currency }
 })
 export default class ShowProyecto extends Vue {
     public headers = [
@@ -68,47 +69,51 @@ export default class ShowProyecto extends Vue {
     public cofinanciamiento: any[] = [];
     public proyecto: IProyecto = {} as IProyecto;
     public propuesta: IPropuesta = {} as IPropuesta;
-    public programa: Iprograma={} as Iprograma;
+    public programa: Iprograma = {} as Iprograma;
     public items = [{}];
+    public currency_config = {};
 
-    money= {
+    public money = {
         decimal: ',',
-        thousands: '.',  
+        thousands: '.',
         precision: 2,
-        masked: false
-      }
-    
+        masked: false /* doesn't work with directive */
+    }
 
-
-    public validarCampos(value:string){
-
+    public validarCampoNegativo(value: string) {
+        let val = globalServices.sanearMonto(value)
+        if (val <= 0 ) {
+            return "Especifique un monto adecuado";
+        } else {
+            return false;
+        }
     }
 
     public validacionProyecto = {
-        presupuestoAprobado:[   
+        presupuestoAprobado: [
             (v: number) => !!v || 'Este campo es obligatorio',
             // (v: number) => v>0 || 'Los interes no pueden ser negativos',
         ],
-        dimension:[
+        dimension: [
             (v: any) => !!v || 'Este campo es obligatorio',
         ],
-        componente:[
+        componente: [
             (v: any) => !!v || 'Este campo es obligatorio',
         ],
-        estrategia:[
+        estrategia: [
             (v: any) => !!v || 'Este campo es obligatorio',
         ],
-        programa:[
+        programa: [
             (v: any) => !!v || 'Este campo es obligatorio',
         ],
-        comunidad:[
+        comunidad: [
             (v: any) => !!v || 'Este campo es obligatorio',
         ],
 
-    
-       
-        
-      };
+
+
+
+    };
 
 
     public editItem(item: any) {
@@ -117,10 +122,10 @@ export default class ShowProyecto extends Vue {
         this.abrirModal(item);
     }
     public aprobarPropuesta(item: IPropuesta) {
-        this.presupuesto=0;
+        this.presupuesto = 0;
         this.presupuesto = item.presupuestoEstimado;
-        console.log("presupuesto",this.presupuesto);
-        
+        console.log("presupuesto", this.presupuesto);
+
         this.editedIndex = this.propuestas.indexOf(item);
         this.propuesta = this.propuestas[this.editedIndex];
         this.abrirModalAprobarPropuesta();
@@ -139,8 +144,8 @@ export default class ShowProyecto extends Vue {
     }
 
     public mounted() {
-        
-        propuestaService.getData().then(
+        let stateEnEspera = 0;
+        propuestaService.GetPropuestaPorEstado(stateEnEspera).then(
             (res) => {
                 this.propuestas = res;
             },
@@ -151,7 +156,7 @@ export default class ShowProyecto extends Vue {
         proyectoService.obtenerDatos(0, 'dimension').then(
             (res) => {
                 res.forEach(element => {
-                    this.dimensiones.push({value:element.id, text:element.nombre});
+                    this.dimensiones.push({ value: element.id, text: element.nombre });
                     // this.dimensiones=[{value:element.id, text:element.nombre}];
                 });
                 // this.dimensiones = res;
@@ -163,13 +168,13 @@ export default class ShowProyecto extends Vue {
         proyectoService.obtenerDatos(0, 'comunidad').then(
 
             (res) => {
-               
+
 
                 res.forEach(element => {
-                    this.comunidades.push({value:element.id, text:element.nombre});
+                    this.comunidades.push({ value: element.id, text: element.nombre });
                     // this.dimensiones=[{value:element.id, text:element.nombre}];
                 });
-               
+
             },
             (error) => {
                 console.log(error);
@@ -178,24 +183,24 @@ export default class ShowProyecto extends Vue {
     }
 
     public select(value: number, id: number) {
-        console.log("id",id);
-        
+        console.log("id", id);
+
         switch (value) {
             case 1:
                 proyectoService.obtenerDatos(id, 'Dimension').then((res) => {
-                    console.log("res",res.componentes);
-                    
+                    console.log("res", res.componentes);
+
                     res.componentes.forEach(element => {
-                        this.componentes.push({value:element.id, text:element.nombre});
+                        this.componentes.push({ value: element.id, text: element.nombre });
                         // this.dimensiones=[{value:element.id, text:element.nombre}];
                     });
-                    
+
                 });
                 break;
             case 2:
                 proyectoService.obtenerDatos(id, 'Componente').then((res) => {
                     res.estrategias.forEach(element => {
-                        this.estrategias.push({value:element.id, text:element.nombre});
+                        this.estrategias.push({ value: element.id, text: element.nombre });
                         // this.dimensiones=[{value:element.id, text:element.nombre}];
                     });
                 });
@@ -203,7 +208,7 @@ export default class ShowProyecto extends Vue {
             case 3:
                 proyectoService.obtenerDatos(id, 'Estrategia').then((res) => {
                     res.programas.forEach(element => {
-                        this.programas.push({value:element.id, text:element.nombre});
+                        this.programas.push({ value: element.id, text: element.nombre });
                         // this.dimensiones=[{value:element.id, text:element.nombre}];
                     });
 
@@ -216,39 +221,39 @@ export default class ShowProyecto extends Vue {
     }
 
     public registrarProyecto() {
-        
-        this.proyecto.presupuestoAprobado= globalServices.sanearMonto(this.presupuesto.toString());
-       console.log("PRESUPUESTO APROBADO",this.proyecto.presupuestoAprobado);
-       
-        this.proyecto.propuestaId=this.propuesta.id;
-            proyectoService.add(this.proyecto).then((res) => {
-                console.log("respuesta",res);
-                
-                
-                if (res == null) {
-                    console.error('error');
-                    swal({title: "No se pudo registrar", icon:'error'})
-                      .then((value) => {
+
+        this.proyecto.presupuestoAprobado = globalServices.sanearMonto(this.presupuesto.toString());
+        console.log("PRESUPUESTO APROBADO", this.proyecto.presupuestoAprobado);
+
+        this.proyecto.propuestaId = this.propuesta.id;
+        proyectoService.add(this.proyecto).then((res) => {
+            console.log("respuesta", res);
+
+
+            if (res == null) {
+                console.error('error');
+                swal({ title: "No se pudo registrar", icon: 'error' })
+                    .then((value) => {
                         console.error('errpr');
                     });
-                } else {
-                  swal({
+            } else {
+                swal({
                     title: "Propuesta Aceptada",
                     icon: "success",
-                  }).then(_=>{
+                }).then(_ => {
                     //this.$refs.form.resetValidation();
-                    
+
                     this.proyecto = <IProyecto>{};
                     (<any>this.$refs.form).reset(); // resetea todo el formulario pero para el input-file toco colocar una ref para que lo detectara revicen el .vue
                     this.dialogAprobarPropuesta = false;
-                  });
-                  // this.registrado = 'exitoso';
-                  console.log('ok');
-                  // this.codigoGenerado = res;
-                }
-            });    
+                });
+                // this.registrado = 'exitoso';
+                console.log('ok');
+                // this.codigoGenerado = res;
+            }
+        });
 
-        
-        
+
+
     }
 }

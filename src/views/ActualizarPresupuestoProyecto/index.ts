@@ -1,0 +1,2 @@
+import ActualizacionPresupuestoProyecto from './ActualizacionPresupuestoProyecto';
+export default ActualizacionPresupuestoProyecto;
