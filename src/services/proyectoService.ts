@@ -7,6 +7,8 @@ class ProyectoService {
 
   private proyecto: IProyecto = {} as IProyecto;
   private proyectos: IProyecto[] = [];
+  private fondo: IFondos = {} as IFondos;
+  private fondos: IFondos[] = [];
   constructor() {
 
   }
@@ -114,19 +116,16 @@ class ProyectoService {
         }));
       });
     }
-    public async GetProyectosCDP(estado:number) {
-      //this.urlProyecto+"EmitirCDP/listarProyectos/" 
-      let proyectosEmitirCDP: IProyecto[] = [];
-      const data = await axios.get(globalServices.url+'/proyecto/'+estado
-        ).then((response: AxiosResponse) => {
-          this.getPropuesta(response.data.propuestaId).then(p=>{
-            response.data.propuesta = p;
-            return response.data;
-          })
-      });
-      console.log(data);
-      return data;
-  }
+  //   public async GetProyectosCDP(estado:number) {
+  //     //this.urlProyecto+"EmitirCDP/listarProyectos/" 
+  //     let proyectosEmitirCDP: IProyecto[] = [];
+  //     const data = await axios.get(globalServices.url+'/proyecto/estado/'+estado
+  //       ).then((response: AxiosResponse) => {
+  //         this.proyectos = response.data
+  //     });
+  //     console.log(data);
+  //     return data;
+  // }
 
   public async getPropuesta(id: number){
       const data = await axios.get(globalServices.url+'/propuesta/'+id
@@ -136,21 +135,20 @@ class ProyectoService {
         return data;
   }
 
-  public async GetFondos() {
-    //this.urlProyecto+"EmitirCDP/listarFondos"
-    let fondos: IFondos[] = [];
-    await axios.get("https://localhost:5001/api/fondo/").then((response: AxiosResponse) => {
-        fondos = response.data.map((val: any) => ({
-            nombre: val.nombre,
-            valor: val.valor,
-        }));
-    });
-    console.log("Fondos Api", fondos);
-    return fondos;
+  public async GetFondos() {  
+    this.fondos = await axios.get(globalServices.url+'/Fondo/Fondos').then((response: AxiosResponse) => {
+      for (var res in response.data){
+        this.fondo.nombre=res;
+        this.fondo.valor=response.data[res];
+        this.fondos.push(this.fondo);
+        this.fondo = {} as IFondos;
+      }
+        return this.fondos;
+    }); 
+    return this.fondos;
   }
 
   public async PostCDP(idProyecto:number, transancion:IListaTransancionCDP[]) {
-    //this.urlProyecto+"EmitirCDP/listarProyectos/" 
     await axios.post(globalServices.url+"CertificadoDeDisponibilidadPresupuestal/",{      
         codigo: idProyecto,   
         listaTransanciones:transancion  
