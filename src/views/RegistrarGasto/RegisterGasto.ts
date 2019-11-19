@@ -64,7 +64,6 @@ export default class RegisterGasto extends Vue {
         masked: false
     }
 
-
     public validarMonto(value: string) {
         let valorNumerico = globalServices.sanearMonto(value);
         let presupuestoDisponible = this.proyectoARegistrarGasto.presupuestoAprobado -

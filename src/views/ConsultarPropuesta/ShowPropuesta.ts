@@ -6,11 +6,12 @@ import { propuestaService } from '../../services/PropuestaService';
 import { proyectoService } from '../../services/proyectoService';
 import swal from 'sweetalert';
 import { Vmoney } from 'v-money'
+import currency from 'v-currency-field'
 import { globalServices } from '../../services/globalService';
 
 @Component({
     mixins: [template],
-    directives: { money: Vmoney }
+    directives: { money: Vmoney, currency_config:currency }
 })
 export default class ShowProyecto extends Vue {
     public headers = [
@@ -70,21 +71,26 @@ export default class ShowProyecto extends Vue {
     public propuesta: IPropuesta = {} as IPropuesta;
     public programa: Iprograma = {} as Iprograma;
     public items = [{}];
+    public currency_config = {};
 
-    money = {
+    public money = {
         decimal: ',',
-        thousands: '.',  
+        thousands: '.',
         precision: 2,
         masked: false /* doesn't work with directive */
     }
 
-    public sdsd(value: string) {
+    public validarCampoNegativo(value: string) {
         let val = globalServices.sanearMonto(value)
-
+        if (val <= 0 ) {
+            return "Especifique un monto adecuado";
+        } else {
+            return false;
+        }
     }
 
     public validacionProyecto = {
-        presupuestoAprobado:[   
+        presupuestoAprobado: [
             (v: number) => !!v || 'Este campo es obligatorio',
             // (v: number) => v>0 || 'Los interes no pueden ser negativos',
         ],
@@ -116,10 +122,10 @@ export default class ShowProyecto extends Vue {
         this.abrirModal(item);
     }
     public aprobarPropuesta(item: IPropuesta) {
-        this.presupuesto=0;
+        this.presupuesto = 0;
         this.presupuesto = item.presupuestoEstimado;
-        console.log("presupuesto",this.presupuesto);
-        
+        console.log("presupuesto", this.presupuesto);
+
         this.editedIndex = this.propuestas.indexOf(item);
         this.propuesta = this.propuestas[this.editedIndex];
         this.abrirModalAprobarPropuesta();
@@ -150,7 +156,7 @@ export default class ShowProyecto extends Vue {
         proyectoService.obtenerDatos(0, 'dimension').then(
             (res) => {
                 res.forEach(element => {
-                    this.dimensiones.push({value:element.id, text:element.nombre});
+                    this.dimensiones.push({ value: element.id, text: element.nombre });
                     // this.dimensiones=[{value:element.id, text:element.nombre}];
                 });
                 // this.dimensiones = res;
@@ -162,13 +168,13 @@ export default class ShowProyecto extends Vue {
         proyectoService.obtenerDatos(0, 'comunidad').then(
 
             (res) => {
-               
+
 
                 res.forEach(element => {
-                    this.comunidades.push({value:element.id, text:element.nombre});
+                    this.comunidades.push({ value: element.id, text: element.nombre });
                     // this.dimensiones=[{value:element.id, text:element.nombre}];
                 });
-               
+
             },
             (error) => {
                 console.log(error);
@@ -177,24 +183,24 @@ export default class ShowProyecto extends Vue {
     }
 
     public select(value: number, id: number) {
-        console.log("id",id);
-        
+        console.log("id", id);
+
         switch (value) {
             case 1:
                 proyectoService.obtenerDatos(id, 'Dimension').then((res) => {
-                    console.log("res",res.componentes);
-                    
+                    console.log("res", res.componentes);
+
                     res.componentes.forEach(element => {
-                        this.componentes.push({value:element.id, text:element.nombre});
+                        this.componentes.push({ value: element.id, text: element.nombre });
                         // this.dimensiones=[{value:element.id, text:element.nombre}];
                     });
-                    
+
                 });
                 break;
             case 2:
                 proyectoService.obtenerDatos(id, 'Componente').then((res) => {
                     res.estrategias.forEach(element => {
-                        this.estrategias.push({value:element.id, text:element.nombre});
+                        this.estrategias.push({ value: element.id, text: element.nombre });
                         // this.dimensiones=[{value:element.id, text:element.nombre}];
                     });
                 });
@@ -202,7 +208,7 @@ export default class ShowProyecto extends Vue {
             case 3:
                 proyectoService.obtenerDatos(id, 'Estrategia').then((res) => {
                     res.programas.forEach(element => {
-                        this.programas.push({value:element.id, text:element.nombre});
+                        this.programas.push({ value: element.id, text: element.nombre });
                         // this.dimensiones=[{value:element.id, text:element.nombre}];
                     });
 
@@ -215,19 +221,19 @@ export default class ShowProyecto extends Vue {
     }
 
     public registrarProyecto() {
-        
-        this.proyecto.presupuestoAprobado= globalServices.sanearMonto(this.presupuesto.toString());
-       console.log("PRESUPUESTO APROBADO",this.proyecto.presupuestoAprobado);
-       
-        this.proyecto.propuestaId=this.propuesta.id;
-            proyectoService.add(this.proyecto).then((res) => {
-                console.log("respuesta",res);
-                
-                
-                if (res == null) {
-                    console.error('error');
-                    swal({title: "No se pudo registrar", icon:'error'})
-                      .then((value) => {
+
+        this.proyecto.presupuestoAprobado = globalServices.sanearMonto(this.presupuesto.toString());
+        console.log("PRESUPUESTO APROBADO", this.proyecto.presupuestoAprobado);
+
+        this.proyecto.propuestaId = this.propuesta.id;
+        proyectoService.add(this.proyecto).then((res) => {
+            console.log("respuesta", res);
+
+
+            if (res == null) {
+                console.error('error');
+                swal({ title: "No se pudo registrar", icon: 'error' })
+                    .then((value) => {
                         console.error('errpr');
                     });
             } else {

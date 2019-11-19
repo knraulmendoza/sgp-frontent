@@ -49,7 +49,7 @@ export interface IPropuesta {
 }
 export interface IProyecto {
     propuesta: IPropuesta;
-    propuestaId:number;
+    propuestaId?:number;
     codigo: string;
     presupuestoAprobado: number;
     presupuestoEjecutado: number;
