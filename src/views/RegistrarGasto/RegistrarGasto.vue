@@ -11,12 +11,12 @@
             <template v-slot:top>
                 <v-toolbar dark color="green">
                     <v-toolbar-title>Proyectos Contratados</v-toolbar-title>
-                    <v-divider vertical class="mx-4"></v-divider>
+                    <v-divider vertical class="mx-6"></v-divider>
                     <v-row>
                         <v-text-field
                             v-model="search"
                             append-icon="search"
-                            label="Busqueda"
+                            label="Búsqueda"
                             single-line
                             hide-details
                         ></v-text-field>
@@ -98,16 +98,34 @@
                                                     :headers="headersGastos"
                                                     :items="gastosProyecto"
                                                     :search="search"
-                                                    :sort-by="[
-                                                        'fecha'
-                                                    ]"
+                                                    :sort-by="['fecha']"
                                                     :sort-desc="[true]"
                                                     :items-per-page="
                                                         itemsPerPageGastos
                                                     "
                                                     class="elevation-1"
                                                     no-data-text="El proyecto no tiene gastos"
-                                                ></v-data-table>
+                                                    ><template
+                                                        v-slot:item.fecha="{
+                                                            item
+                                                        }"
+                                                    >
+                                                        <span>{{
+                                                            item.fecha.getDate() + " - " + (item.fecha.getMonth() + 1) + " - " + item.fecha.getFullYear()
+                                                        }}</span>
+                                                    </template>
+                                                    <template
+                                                        v-slot:item.monto="{
+                                                            item
+                                                        }"
+                                                    >
+                                                        <span>{{
+                                                            parseFloat(
+                                                                item.monto
+                                                            ) | currency
+                                                        }}</span>
+                                                    </template>
+                                                </v-data-table>
                                             </v-container>
                                         </v-row>
                                     </v-card-text>
@@ -168,6 +186,11 @@
                     @click="accionarGasto(item)"
                     >mdi-transfer-down</v-icon
                 >
+            </template>
+            <template v-slot:item.presupuestoAprobado="{ item }">
+                <span>{{
+                    parseFloat(item.presupuestoAprobado) | currency
+                }}</span>
             </template>
         </v-data-table>
     </v-container>

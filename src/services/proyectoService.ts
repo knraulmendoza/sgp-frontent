@@ -39,17 +39,17 @@ class ProyectoService {
 
   // metodos del CRUD
   public async obtenerDatos(value?: number, rutaContralador?: string) {
-    console.log("VALUE",value); 
+    console.log("VALUE", value);
     let urlLocal: string = globalServices.url + '/' + rutaContralador;
-     value == 0 ? urlLocal: urlLocal +='/'+ value;
-     
-      console.log("url: ",urlLocal);
-      
+    value == 0 ? urlLocal : urlLocal += '/' + value;
+
+    console.log("url: ", urlLocal);
+
     const data = await axios.get(urlLocal).then((sgps) => {
       return sgps.data;
-    }).catch((_) => {});
-  return data;
- 
+    }).catch((_) => { });
+    return data;
+
   }
 
 
@@ -96,7 +96,7 @@ class ProyectoService {
     return data;
   }
   public async GetGastosProyecto(idProyecto: number) {
-    
+
     const data = await axios
       .get(globalServices.url + '/proyecto/egresos/' + idProyecto)
       .then((response: AxiosResponse) => {

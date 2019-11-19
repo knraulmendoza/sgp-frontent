@@ -41,12 +41,7 @@ export default class RegisterGasto extends Vue {
         },
     ];
     public headersGastos = [
-        {
-            text: '',
-            align: 'left',
-            sortable: false,
-            value: 'num',
-        },
+       
         { text: 'Gasto', value: 'monto', align:"right"},
         { text: 'Concepto', value: 'concepto' },
         { text: 'Fecha', value: 'fecha'},
@@ -118,9 +113,14 @@ export default class RegisterGasto extends Vue {
         proyectoService
             .GetGastosProyecto(idProyecto)
             .then((res) => {
-                                
-                this.gastosProyecto = res;
-                console.log("res",res);
+                res.forEach(gasto => {
+                    gasto.fecha = new Date(gasto.fecha.toString())
+                    console.log(gasto.fecha.getMonth());
+                    
+                    return gasto;
+                });
+                this.gastosProyecto = res;                
+                console.log(this.gastosProyecto);
                 
             }, (error) => {
                 console.log(error);
