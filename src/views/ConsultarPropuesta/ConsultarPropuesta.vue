@@ -7,6 +7,9 @@
         class="elevation-1 ml-2"
         no-data-text="No se encontraron proyectos"
         no-results-text="No se encontraron proyectos"
+         :footer-props="{
+                'items-per-page-text': 'Propuestas por pagina'
+            }"
     >
         <template v-slot:top>
             <v-toolbar dark color="green">
@@ -153,7 +156,6 @@
                                         <v-col cols="12" sm="6" md="6">
                                             <v-currency-field
                                                 :rules="[validarCampoNegativo]"
-                                                v-money="money"
                                                 v-model="presupuesto"
                                                 prefix="$"
                                                 suffix=" "

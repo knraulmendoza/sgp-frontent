@@ -12,23 +12,26 @@ import { propuestaService } from '../../services/PropuestaService';
     mixins: [template],
 })
 export default class ActualizacionPresupuestoProyecto extends Vue {
-    public headersProyectosAceptados = [
+    public headerProyectosAceptados = [
         {
             text: '',
             align: 'left',
             sortable: false,
-            value: 'num',
+            value: '',
+            width: '1%',
         },
-        { text: 'Codigo', value: 'codigo' },
-        { text: 'Nombre', value: 'nombre' },
+        { text: 'Codigo', value: 'codigo', width: '10%' },
+        { text: 'Nombre', value: 'nombre', width: '55%' },
         {
             text: 'Presupuesto Aprobado',
             value: 'presupuestoAprobado',
-            align: 'center',
+            width: '20%',
+            align: 'right',
         },
         {
-            text: 'Accion',
-            value: 'actionModalPresupuestos',
+            text: 'Realizar Gasto',
+            value: 'actionPresupuestos',
+            width: '15%',
             sortable: false,
             align: 'center',
         },
@@ -231,13 +234,7 @@ export default class ActualizacionPresupuestoProyecto extends Vue {
     public mounted() {
         console.log("estado mountes", this.estadoAceptado);
         proyectoService.GetProyectosPorEstado(this.estadoAceptado).then(Response => {
-            this.proyectosAceptados = Response
-            this.proyectosAceptados.forEach((proyecto, index) => {
-                propuestaService.GetPropuestaPorId(proyecto.propuestaId).then(Response => {
-                    proyecto.propuesta = Response
-                });
-
-            })
+            this.proyectosAceptados = Response            
         });
         this.consultarFondos();
     }

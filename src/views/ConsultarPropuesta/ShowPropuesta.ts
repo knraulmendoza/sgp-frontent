@@ -73,16 +73,9 @@ export default class ShowProyecto extends Vue {
     public items = [{}];
     public currency_config = {};
 
-    public money = {
-        decimal: ',',
-        thousands: '.',
-        precision: 2,
-        masked: false /* doesn't work with directive */
-    }
 
-    public validarCampoNegativo(value: string) {
-        let val = globalServices.sanearMonto(value)
-        if (val <= 0 ) {
+    public validarCampoNegativo(value: number) {
+        if (value <= 0 ) {
             return "Especifique un monto adecuado";
         } else {
             return false;
@@ -92,7 +85,7 @@ export default class ShowProyecto extends Vue {
     public validacionProyecto = {
         presupuestoAprobado: [
             (v: number) => !!v || 'Este campo es obligatorio',
-            // (v: number) => v>0 || 'Los interes no pueden ser negativos',
+            (v: number) => v<0 || 'El presupuesto no puede ser negativo',
         ],
         dimension: [
             (v: any) => !!v || 'Este campo es obligatorio',
@@ -142,8 +135,7 @@ export default class ShowProyecto extends Vue {
         console.log(item);
         propuestaService.getPDFProyecto(item.documentoId);
     }
-
-    public mounted() {
+    public GetPropuestasEnEspera() {
         let stateEnEspera = 0;
         propuestaService.GetPropuestaPorEstado(stateEnEspera).then(
             (res) => {
@@ -153,6 +145,9 @@ export default class ShowProyecto extends Vue {
                 console.log(error);
             },
         );
+    }
+    public mounted() {
+        this.GetPropuestasEnEspera();
         proyectoService.obtenerDatos(0, 'dimension').then(
             (res) => {
                 res.forEach(element => {
@@ -222,7 +217,7 @@ export default class ShowProyecto extends Vue {
 
     public registrarProyecto() {
 
-        this.proyecto.presupuestoAprobado = globalServices.sanearMonto(this.presupuesto.toString());
+        this.proyecto.presupuestoAprobado = this.presupuesto;
         console.log("PRESUPUESTO APROBADO", this.proyecto.presupuestoAprobado);
 
         this.proyecto.propuestaId = this.propuesta.id;
@@ -250,6 +245,7 @@ export default class ShowProyecto extends Vue {
                 // this.registrado = 'exitoso';
                 console.log('ok');
                 // this.codigoGenerado = res;
+                this.GetPropuestasEnEspera();
             }
         });
 

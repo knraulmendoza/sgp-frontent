@@ -8,6 +8,9 @@
             class="elevation-1 wrap-content"
             no-data-text="No se encontraron proyectos"
             no-results-text="No se encontraron proyectos"
+            :footer-props="{
+                'items-per-page-text': 'Proyectos por pagina'
+            }"
         >
             <template v-slot:top>
                 <v-toolbar dark color="green">
@@ -15,14 +18,14 @@
                         >Proyectos Contratados</v-toolbar-title
                     >
                     <v-divider vertical class="mx-6"></v-divider>
-                        <v-text-field
-                            xs12
-                            v-model="search"
-                            append-icon="search"
-                            label="Búsqueda"
-                            single-line
-                            hide-details
-                        ></v-text-field>
+                    <v-text-field
+                        xs12
+                        v-model="search"
+                        append-icon="search"
+                        label="Búsqueda"
+                        single-line
+                        hide-details
+                    ></v-text-field>
                     <v-row>
                         <v-container>
                             <v-dialog
@@ -68,31 +71,35 @@
                                     </v-card-title>
                                     <v-card-text>
                                         <v-row>
-                                            <v-col cols="12" sm="8">
+                                            <v-col cols="12">
                                                 <h2 class="text-center">
                                                     {{
                                                         proyectoARegistrarGasto.nombre
                                                     }}
                                                 </h2>
                                             </v-col>
-                                            <v-col cols="12" sm="4">
-                                                <p class="text-center">
-                                                    Presupuesto Aprobado:
-                                                    {{
-                                                        proyectoARegistrarGasto.presupuestoAprobado
-                                                            | currency
-                                                    }}
-                                                    Presupuesto Ejecutado:
-                                                    {{
-                                                        proyectoARegistrarGasto.presupuestoEjecutado
-                                                            | currency
-                                                    }}
-                                                    Presupuesto Disponible:
-                                                    {{
-                                                        renderPresupuestoDisponible
-                                                            | currency
-                                                    }}
-                                                </p>
+                                        </v-row>
+                                        <v-row>
+                                            <v-col xs12>
+                                                Presupuesto Aprobado:
+                                                {{
+                                                    proyectoARegistrarGasto.presupuestoAprobado
+                                                        | currency
+                                                }}
+                                            </v-col>
+                                            <v-col xs12>
+                                                Presupuesto Ejecutado:
+                                                {{
+                                                    proyectoARegistrarGasto.presupuestoEjecutado
+                                                        | currency
+                                                }}
+                                            </v-col>
+                                            <v-col xs12>
+                                                Presupuesto Disponible:
+                                                {{
+                                                    renderPresupuestoDisponible
+                                                        | currency
+                                                }}
                                             </v-col>
                                         </v-row>
 
@@ -107,6 +114,10 @@
                                                     :items-per-page="
                                                         itemsPerPageGastos
                                                     "
+                                                    :footer-props="{
+                                                        'items-per-page-text':
+                                                            'Gastos por pagina'
+                                                    }"
                                                     class="elevation-1"
                                                     no-data-text="El proyecto no tiene gastos"
                                                     ><template
@@ -143,9 +154,10 @@
                                             <v-col xs12 sm4>
                                                 <v-currency-field
                                                     :rules="[validarMonto]"
-                                                    v-model="valorGasto"
+                                                    v-model.lazy="valorGasto"
                                                     prepend-icon="mdi-transfer-down"
                                                     autofocus
+                                                    number
                                                     label="Valor de Gasto"
                                                     clearable
                                                     prefix="$"
