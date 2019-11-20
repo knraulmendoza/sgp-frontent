@@ -129,26 +129,25 @@ class ProyectoService {
     return data;
   }
 
-  public async GetFondos() {  
-    this.fondos = await axios.get(globalServices.url+'/Fondo/Fondos').then((response: AxiosResponse) => {
-      for (var res in response.data){
-        this.fondo.nombre=res;
-        this.fondo.valor=response.data[res];
+  public async GetFondos() {
+    this.fondos = await axios.get(globalServices.url + '/Fondo/Fondos').then((response: AxiosResponse) => {
+      for (var res in response.data) {
+        this.fondo.nombre = res;
+        this.fondo.valor = response.data[res];
         this.fondos.push(this.fondo);
         this.fondo = {} as IFondos;
       }
-        return this.fondos;
-    }); 
+      return this.fondos;
+    });
     return this.fondos;
   }
 
-  public async PostCDP(idProyecto:number, transancion:IListaTransancionCDP[]) {
-    await axios.post(globalServices.url+"CertificadoDeDisponibilidadPresupuestal/",{      
-        codigo: idProyecto,   
-        listaTransanciones:transancion  
+  public async PostCDP(idProyecto: number, transanciones: IListaTransancionCDP[]) {
+    return await axios.post(globalServices.url + "CertificadoDeDisponibilidadPresupuestal/", {
+      codigo: idProyecto,
+      listaTransanciones: transanciones
     }
-    ).then((response: AxiosResponse) => {
-    });
+    );
 
 
   }
