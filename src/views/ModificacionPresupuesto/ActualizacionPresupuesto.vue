@@ -1,6 +1,6 @@
 <template>
   
-<div>
+<container>
   <v-data-table
     :headers="headersEmitirCDP"
     :items="proyectos"
@@ -24,9 +24,6 @@
         </v-col>
 
         <v-divider class="mx-4" inset vertical></v-divider>
-
-        <v-row>
-          <v-col>
             <v-text-field
               v-model="search"
               append-icon="search"
@@ -34,6 +31,9 @@
               single-line
               hide-details
             ></v-text-field>
+
+        <v-row>
+          <v-col>
           </v-col>
         </v-row>
         <v-dialog v-model="dialog" persistent scrollable max-width="900px">
@@ -187,7 +187,7 @@
         </div>      
       </v-col>
     </v-row>
-</div>
+</container>
 </template>
 
   

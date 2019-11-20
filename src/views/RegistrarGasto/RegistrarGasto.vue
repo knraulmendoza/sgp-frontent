@@ -4,22 +4,26 @@
             :headers="headersProyectosRP"
             :items="renderProyectosPorEstado"
             :search="search"
+            item-key="id"
             class="elevation-1 wrap-content"
             no-data-text="No se encontraron proyectos"
             no-results-text="No se encontraron proyectos"
         >
             <template v-slot:top>
                 <v-toolbar dark color="green">
-                    <v-toolbar-title>Proyectos Contratados</v-toolbar-title>
+                    <v-toolbar-title xs12
+                        >Proyectos Contratados</v-toolbar-title
+                    >
                     <v-divider vertical class="mx-6"></v-divider>
-                    <v-row>
                         <v-text-field
+                            xs12
                             v-model="search"
                             append-icon="search"
                             label="Búsqueda"
                             single-line
                             hide-details
                         ></v-text-field>
+                    <v-row>
                         <v-container>
                             <v-dialog
                                 v-model="dialog"
@@ -111,7 +115,12 @@
                                                         }"
                                                     >
                                                         <span>{{
-                                                            item.fecha.getDate() + " - " + (item.fecha.getMonth() + 1) + " - " + item.fecha.getFullYear()
+                                                            item.fecha.getDate() +
+                                                                ' - ' +
+                                                                (item.fecha.getMonth() +
+                                                                    1) +
+                                                                ' - ' +
+                                                                item.fecha.getFullYear()
                                                         }}</span>
                                                     </template>
                                                     <template
@@ -132,16 +141,15 @@
                                     <v-card-actions>
                                         <v-container fluid>
                                             <v-col xs12 sm4>
-                                                <v-text-field
+                                                <v-currency-field
                                                     :rules="[validarMonto]"
-                                                    v-money="money"
-                                                    v-model.lazy="valorGasto"
+                                                    v-model="valorGasto"
                                                     prepend-icon="mdi-transfer-down"
                                                     autofocus
                                                     label="Valor de Gasto"
                                                     clearable
                                                     prefix="$"
-                                                ></v-text-field>
+                                                ></v-currency-field>
                                             </v-col>
                                             <v-col xs12 sm6>
                                                 <v-textarea
