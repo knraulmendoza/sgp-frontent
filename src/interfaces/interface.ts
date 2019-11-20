@@ -63,7 +63,7 @@ export interface IProyecto {
     proyectoState: number;
     presupuestoAprobado: number;
     presupuestoEjecutado: number;
-    proyectosComunidads:IComunidad[];
+    proyectosComunidades:IComunidad[];
     fechaEjecucion: Date;
     certificadosDeDisponibilidaPresupuestales: null;
     transaccionesUnarias: null;

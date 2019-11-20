@@ -65,6 +65,8 @@
                   v-bind="currency_config"
                   label="Presupuesto estimado del proyecto"
                   required
+                  min:00.01
+                  max:1000.00
                   :rules="[validarCampoNegativo]"
                 ></v-currency-field>
               </v-col>
