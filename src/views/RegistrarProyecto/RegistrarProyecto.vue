@@ -53,16 +53,19 @@
                 ></v-text-field>
               </v-col>
               <v-col cols="12" sm="6" md="6">
-                <v-text-field
+                <v-currency-field
                   hint="Ej: 1000000,43"
                   prefix="$"
+                  suffix=" "
                   v-model="propuesta.presupuestoEstimado"
                   persistent-hint
+                  v-bind="currency_config"
                   label="Presupuesto estimado del proyecto"
-                  type="number"
                   required
-                  :rules="validacionPropuesta.presupuestoEstimado"
-                ></v-text-field>
+                  min:00.01
+                  max:1000.00
+                  :rules="[validarCampoNegativo]"
+                ></v-currency-field>
               </v-col>
             </v-row>
             <v-row justify="center">

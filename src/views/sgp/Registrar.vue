@@ -20,14 +20,17 @@
         <v-text-field
             v-model="search"
             append-icon="search"
-            label="Busquedá"
+            label="Busqueda"
             single-line
             hide-details
         ></v-text-field>
         <!-- <v-spacer></v-spacer> -->
         <v-dialog v-model="dialog" max-width="700px">
           <template v-slot:activator="{ on }">
-            <v-btn color="primary" dark class="mb-2" v-on="on">nuevo SGP</v-btn>
+            <!-- <v-btn color="green" dark class="mb-2" v-on="on">+</v-btn> -->
+            <v-btn color="white" text icon class="mb-2" v-on="on">
+              <v-icon large>add</v-icon>
+            </v-btn>
           </template>
           <v-card>
             <v-form  enctype="multipart/form-data" v-model="valid" ref="form" :lazy-validation="lazy">
@@ -128,7 +131,7 @@
     </template>
     <template v-slot:item.fecha="{ item }">
       <!-- <span>{{showMmeses.find((mes)=>{ return mes.value === item.fecha.getMonth()+1})}}</span> -->
-      <span>{{item.fecha.getMonth()}}</span>
+      <span>{{getMesText(item)}}</span>
     </template>
     <template v-slot:item.soporteValor="{item}" class="text-center">
       <v-icon large @click="showPDFValor(item)" color="red">mdi-file-pdf-box</v-icon>

@@ -33,17 +33,11 @@ export default class AddSgp extends Vue {
     public mesDato = null;
     public fecha = new Date();
     public lazy = false;
-    public valor:String = "";
-    public interes:String = "";
+    public valor:string = "";
+    public interes:string = "";
     public soporteValor: IDocumento = <IDocumento>{}; // documento del valor toca crear una variable para cada documento y que sea de tipo IDocumento despues se le asigna al objeto
 	  public soporteInteres: IDocumento = <IDocumento>{};
     public headers = [
-        {
-            text: '',
-            align: 'left',
-            sortable: false,
-            value: 'id',
-        },
         { text: 'Valor sgp', value: 'valor' },
         { text: 'Intereses', value: 'interes' },
         { text: 'Descripción', value: 'descripcion' },
@@ -178,8 +172,8 @@ export default class AddSgp extends Vue {
         // this.sgp.valor = parseFloat((Math.round(globalServices.sanearMonto(this.sgp.valor.toString() * 100) / 100).toString()));
         // this.sgp.valor = parseFloat((Math.round(globalServices.sanearMonto(this.sgp.valor * 100) / 100)).toString());
         // let interes = globalServices.sanearMonto(this.sgp.interes.toString());
-        this.sgp.valor = parseFloat(this.valor.toString());
-        this.sgp.interes = parseFloat(this.interes.toString());
+        this.sgp.valor = globalServices.sanearMonto(this.valor);
+        this.sgp.interes = globalServices.sanearMonto(this.interes);
         console.log(this.sgp);
         sgpServices.add(this.sgp).then((res) => {
           if (res == null) {
@@ -208,6 +202,10 @@ export default class AddSgp extends Vue {
       });      
     }
     
+  }
+
+  public getMesText(sgp:Isgp){
+    return this.showMmeses.filter((mes)=>{ return mes.value === sgp.fecha.getMonth()+1})[0].text;
   }
 
 
