@@ -130,7 +130,7 @@ class ProyectoService {
   }
 
   public async GetFondos() {
-    this.fondos = await axios.get(globalServices.url + '/Fondo/Fondos').then((response: AxiosResponse) => {
+    this.fondos = await axios.get('https://localhost:5001/fondos').then((response: AxiosResponse) => {
       for (var res in response.data) {
         this.fondo.nombre = res;
         this.fondo.valor = response.data[res];
@@ -143,7 +143,7 @@ class ProyectoService {
   }
 
   public async PostCDP(idProyecto: number, transanciones: IListaTransancionCDP[]) {
-    return await axios.post(globalServices.url + "CertificadoDeDisponibilidadPresupuestal/", {
+    return await axios.post('https://localhost:5001/CertificadoDeDisponibilidadPresupuestal/create', {
       codigo: idProyecto,
       listaTransanciones: transanciones
     }
