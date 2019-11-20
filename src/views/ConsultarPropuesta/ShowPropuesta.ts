@@ -11,7 +11,7 @@ import { globalServices } from '../../services/globalService';
 
 @Component({
     mixins: [template],
-    directives: { money: Vmoney, currency_config:currency }
+    directives: { money: Vmoney, currency_config: currency }
 })
 export default class ShowProyecto extends Vue {
     public headers = [
@@ -75,7 +75,7 @@ export default class ShowProyecto extends Vue {
 
 
     public validarCampoNegativo(value: number) {
-        if (value <= 0 ) {
+        if (value <= 0) {
             return "Especifique un monto adecuado";
         } else {
             return false;
@@ -85,7 +85,7 @@ export default class ShowProyecto extends Vue {
     public validacionProyecto = {
         presupuestoAprobado: [
             (v: number) => !!v || 'Este campo es obligatorio',
-            (v: number) => v<0 || 'El presupuesto no puede ser negativo',
+            (v: number) => v < 0 || 'El presupuesto no puede ser negativo',
         ],
         dimension: [
             (v: any) => !!v || 'Este campo es obligatorio',
@@ -219,6 +219,12 @@ export default class ShowProyecto extends Vue {
 
         this.proyecto.presupuestoAprobado = this.presupuesto;
         console.log("PRESUPUESTO APROBADO", this.proyecto.presupuestoAprobado);
+        console.log("this.proyecto.proyectosComunidads", this.proyecto.proyectosComunidads);
+        this.proyecto.proyectosComunidads.forEach(element => {
+            element.comunidadId = element.value;
+        })
+        console.log("this.proyecto.proyectosComunidads 2", this.proyecto.proyectosComunidads);
+        console.log("this.proyecto.", this.proyecto);
 
         this.proyecto.propuestaId = this.propuesta.id;
         proyectoService.add(this.proyecto).then((res) => {
