@@ -12,6 +12,8 @@ class ProyectoService {
   }
 
   public add(proyecto: IProyecto) {
+    console.log("proycto add",proyecto);
+    
     console.log("Iproyecto ", proyecto);
 
     return axios.post(globalServices.url + '/Proyecto', proyecto)
