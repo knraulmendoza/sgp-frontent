@@ -7,6 +7,8 @@ class ProyectoService {
 
   private proyecto: IProyecto = {} as IProyecto;
   private proyectos: IProyecto[] = [];
+  private fondo: IFondos = {} as IFondos;
+  private fondos: IFondos[] = [];
   constructor() {
 
   }
@@ -128,26 +130,24 @@ class ProyectoService {
   }
 
   public async GetFondos() {
-    //this.urlProyecto+"EmitirCDP/listarFondos"
-    let fondos: IFondos[] = [];
-    await axios.get("https://localhost:5001/api/fondo/").then((response: AxiosResponse) => {
-      fondos = response.data.map((val: any) => ({
-        nombre: val.nombre,
-        valor: val.valor,
-      }));
+    this.fondos = await axios.get(globalServices.url + '/Fondo/Fondos').then((response: AxiosResponse) => {
+      for (var res in response.data) {
+        this.fondo.nombre = res;
+        this.fondo.valor = response.data[res];
+        this.fondos.push(this.fondo);
+        this.fondo = {} as IFondos;
+      }
+      return this.fondos;
     });
-    console.log("Fondos Api", fondos);
-    return fondos;
+    return this.fondos;
   }
 
-  public async PostCDP(idProyecto: number, transancion: IListaTransancionCDP[]) {
-    //this.urlProyecto+"EmitirCDP/listarProyectos/" 
-    await axios.post(globalServices.url + "CertificadoDeDisponibilidadPresupuestal/", {
+  public async PostCDP(idProyecto: number, transanciones: IListaTransancionCDP[]) {
+    return await axios.post(globalServices.url + "CertificadoDeDisponibilidadPresupuestal/", {
       codigo: idProyecto,
-      listaTransanciones: transancion
+      listaTransanciones: transanciones
     }
-    ).then((response: AxiosResponse) => {
-    });
+    );
 
 
   }

@@ -1,14 +1,18 @@
 import Vue from 'vue';
+import jsPDF from 'jspdf'
 import {Component} from 'vue-property-decorator';
 import template from './ActualizacionPresupuesto.vue';
 import { proyectoService } from '../../services/proyectoService';
 import { IProyecto, IFondos, ITransancionCDP, IListaTransancionCDP } from '../../interfaces/interface';
+import { VMoney } from 'v-money';
+import VCurrencyField from 'v-currency-field'
 
 
 
 @Component({
     name: 'ActualizacionPresupuesto',
     mixins: [template],
+    directives: { money: VMoney, currency:VCurrencyField }
 })
 export default class ActualizacionPresupuesto extends Vue {
     public headersEmitirCDP = [
@@ -18,16 +22,16 @@ export default class ActualizacionPresupuesto extends Vue {
             sortable: false,
             value: 'num',
         },
-        { text: 'Codigo', value: 'codigo' },
+        { text: 'Código', value: 'id' },
         { text: 'Nombre', value: 'nombre' },
-        { text: 'Estado', value: 'proyectoStates' },
+        { text: 'Estado', value: 'proyectoState' },
         {
-            text: 'Presupuesto Aprovado',
-            value: 'presupuestoAprovado',
+            text: 'Presupuesto Aprobado',
+            value: 'presupuestoAprobado',
             align: 'center',
         },
         {
-            text: 'Accion',
+            text: 'Acción',
             value: 'actionEmitirCDP',
             sortable: false,
             align: 'center',
@@ -45,14 +49,28 @@ export default class ActualizacionPresupuesto extends Vue {
         { text: 'Valor Retirado', value: 'valorRetirado' },
         
         {
-            text: 'Accion',
+            text: 'Acción',
             value: 'eliminarTransancion',
             sortable: false,
             align: 'center',
         },
     ];
-
+    public money = {
+        decimal: ',',
+        thousands: '.',
+        precision: 2,
+        masked: false
+    }
+    public currency ={ 
+        locale: 'pt-BR',
+        decimalLength: 2,
+        autoDecimalMode: true,
+        min: null,
+        max: null,
+        defaultValue: 0
+    }
     public estado:number = 1;
+    public name:string='pdf';
     public itemsEstado = [
         { text: 'Emitir CDP', value: 1 },
         //{ text: 'Consultar CDP', value: 2 },
@@ -73,13 +91,14 @@ export default class ActualizacionPresupuesto extends Vue {
     public valorGeneralTransanciones : number = 0;
 
     public nombresFondos():String[]{
-        console.log("Fondos nombre", this.fondos);
         
         let nombres: String[] = [];
         this.fondos.forEach(element => {
             nombres.push(element.nombre);
                
-        });      
+        });  
+        console.log("Fondos nombres",nombres);
+            
         return nombres;
     }
 
@@ -116,8 +135,7 @@ export default class ActualizacionPresupuesto extends Vue {
     }
 
     public fondoGeneral(){
-        this.presupuestoGeneral=0;
-        console.log("FONDOS", this.fondos);     
+        this.presupuestoGeneral=0;  
         this.fondos.forEach(element => {
             this.presupuestoGeneral  += Number(element.valor);         
         });  
@@ -152,13 +170,11 @@ export default class ActualizacionPresupuesto extends Vue {
         this.dialog = true;
         this.proyecto = item;
         this.transancionCDP = {} as ITransancionCDP; 
-        this.transancionesCDP = [];    
+        this.transancionesCDP = []; 
         this.fondoGeneral();
     }
     public abrirModalCDP() {
         this.dialogCDP = true;
-        // this.transancionCDP = transancion; 
-        // this.proyecto = item;        
     }
     public agregarTransancionCDP(transancionCDP:ITransancionCDP){
         let transancionCDPlocal: ITransancionCDP = transancionCDP;        
@@ -220,7 +236,8 @@ export default class ActualizacionPresupuesto extends Vue {
         return valorActualizado;
     }
 
-    public crearCDP(){
+    public crearCDP(proyectoId:number){
+        // this.generarPdf();
             let listaTrasancionesCDP:IListaTransancionCDP []=[];
             let listaTrasancionCDP:IListaTransancionCDP = {} as IListaTransancionCDP;
             this.transancionesCDP.forEach(element=>{
@@ -229,7 +246,7 @@ export default class ActualizacionPresupuesto extends Vue {
                 listaTrasancionesCDP.push(listaTrasancionCDP);
             });  
             
-            proyectoService.PostCDP(this.proyecto.id,listaTrasancionesCDP).then((res) => (console.log(res)));
+           proyectoService.PostCDP(proyectoId,listaTrasancionesCDP).then((res) => (console.log(res)));
             // this.abrirModalCDP(this.proyecto,this.transancionCDP);
     }
     
@@ -241,22 +258,34 @@ export default class ActualizacionPresupuesto extends Vue {
             this.estado=parametro.value
         }
 
-        proyectoService.GetProyectosCDP(this.estado);
+        proyectoService.GetProyectosPorEstado(this.estado).then(response=>{
+            this.proyectos = response;
+            
+        });
 
     }
 
     public consultarFondos(){
-        proyectoService.GetFondos().then((res) => (
-            this.fondos = res
-            //console.log("Respuesta----", res)
+        proyectoService.GetFondos().then((res) =>{
+            (this.fondos = res )
+            console.log("Resspuesta consultar fondos",res);
             
-            ));
-        console.log("Fondos ----", this.fondos);
+        } );
+        console.log("fondos---", this.fondos);
         
+    }
+
+    public generarPdf(){        
+        let doc = new jsPDF();
+        doc.fromHTML(document.getElementById("pdf"), 20,20,{'width':500});  //<-- not good. How can I refactor this?
+        doc.save("mypdf.pdf");   
+        // let pdfName = 'test'; 
+        // var doc = new jsPDF();
+        // doc.text(this.name, 10, 10);
+        // doc.save(pdfName + '.pdf'); 
     }
     
     public mounted() {
-        console.log("estado mountes", this.estado);
         this.consultarProyectos(this.estado,0);
         this.consultarFondos();        
     }
