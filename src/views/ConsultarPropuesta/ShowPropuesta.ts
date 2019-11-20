@@ -59,7 +59,7 @@ export default class ShowProyecto extends Vue {
     public search = '';
     public itemsPerPage: number = 5;
     public dialogAprobarPropuesta = false;
-    public presupuesto: number = 0;
+    public presupuesto: string = "";
     public dimensiones: any[] = [];
     public comunidades: any[] = [];
     public estrategias: any[] = [];
@@ -71,23 +71,25 @@ export default class ShowProyecto extends Vue {
     public programa: Iprograma={} as Iprograma;
     public items = [{}];
 
-    money= {
+    money={
         decimal: ',',
-        thousands: '.',  
+        thousands: '.',
+        prefix: 'R$ ',
+        suffix: ' #',
         precision: 2,
-        masked: false
+        masked: false /* doesn't work with directive */
       }
     
-
-
-    public validarCampos(value:string){
-
+    public sdsd(value:string){
+        let val=globalServices.sanearMonto(value)
+        
     }
 
     public validacionProyecto = {
-        presupuestoAprobado:[   
-            (v: number) => !!v || 'Este campo es obligatorio',
-            // (v: number) => v>0 || 'Los interes no pueden ser negativos',
+        presupuestoAprobado:[
+            (v: any) => !!v || 'Este campo es obligatorio',
+            (v: any) => !!v || 'Este campo es obligatorio',
+            (v: any) => v>0 || 'Los interes no pueden ser negativos',
         ],
         dimension:[
             (v: any) => !!v || 'Este campo es obligatorio',
@@ -117,10 +119,7 @@ export default class ShowProyecto extends Vue {
         this.abrirModal(item);
     }
     public aprobarPropuesta(item: IPropuesta) {
-        this.presupuesto=0;
-        this.presupuesto = item.presupuestoEstimado;
-        console.log("presupuesto",this.presupuesto);
-        
+        this.presupuesto = item.presupuestoEstimado.toString();
         this.editedIndex = this.propuestas.indexOf(item);
         this.propuesta = this.propuestas[this.editedIndex];
         this.abrirModalAprobarPropuesta();
@@ -150,26 +149,17 @@ export default class ShowProyecto extends Vue {
         );
         proyectoService.obtenerDatos(0, 'dimension').then(
             (res) => {
-                res.forEach(element => {
-                    this.dimensiones.push({value:element.id, text:element.nombre});
-                    // this.dimensiones=[{value:element.id, text:element.nombre}];
-                });
-                // this.dimensiones = res;
+                console.log(res);
+                
+                this.dimensiones = res;
             },
             (error) => {
                 console.log(error);
             },
         );
         proyectoService.obtenerDatos(0, 'comunidad').then(
-
             (res) => {
-               
-
-                res.forEach(element => {
-                    this.comunidades.push({value:element.id, text:element.nombre});
-                    // this.dimensiones=[{value:element.id, text:element.nombre}];
-                });
-               
+                this.comunidades = res;
             },
             (error) => {
                 console.log(error);
@@ -178,35 +168,20 @@ export default class ShowProyecto extends Vue {
     }
 
     public select(value: number, id: number) {
-        console.log("id",id);
-        
         switch (value) {
             case 1:
-                proyectoService.obtenerDatos(id, 'Dimension').then((res) => {
-                    console.log("res",res.componentes);
-                    
-                    res.componentes.forEach(element => {
-                        this.componentes.push({value:element.id, text:element.nombre});
-                        // this.dimensiones=[{value:element.id, text:element.nombre}];
-                    });
-                    
+                proyectoService.obtenerDatos(id, 'Componente').then((res) => {
+                    this.componentes = res;
                 });
                 break;
             case 2:
-                proyectoService.obtenerDatos(id, 'Componente').then((res) => {
-                    res.estrategias.forEach(element => {
-                        this.estrategias.push({value:element.id, text:element.nombre});
-                        // this.dimensiones=[{value:element.id, text:element.nombre}];
-                    });
+                proyectoService.obtenerDatos(id, 'Estrategia').then((res) => {
+                    this.estrategias = res;
                 });
                 break;
             case 3:
-                proyectoService.obtenerDatos(id, 'Estrategia').then((res) => {
-                    res.programas.forEach(element => {
-                        this.programas.push({value:element.id, text:element.nombre});
-                        // this.dimensiones=[{value:element.id, text:element.nombre}];
-                    });
-
+                proyectoService.obtenerDatos(id, 'Programa').then((res) => {
+                    this.programas = res;
                 });
                 break;
 
@@ -214,12 +189,8 @@ export default class ShowProyecto extends Vue {
                 break;
         }
     }
-
     public registrarProyecto() {
-        
-        this.proyecto.presupuestoAprobado= globalServices.sanearMonto(this.presupuesto.toString());
-       console.log("PRESUPUESTO APROBADO",this.proyecto.presupuestoAprobado);
-       
+        // this.proyecto.PresupuestoAprobado= this.presupuesto;
         this.proyecto.propuestaId=this.propuesta.id;
             proyectoService.add(this.proyecto).then((res) => {
                 console.log("respuesta",res);

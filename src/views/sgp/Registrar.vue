@@ -52,10 +52,9 @@
                   <v-row>
                     <v-col cols="12" sm="6" md="6">
                         <v-text-field
-                        v-model="sgp.valor"
+                        v-model.lazy="valor"
+                        v-money="money"
                         label="valor"
-                        type="number"
-                        :counter="10"
                         :rules="sgpValidaciones.valor"
                         required
                         ></v-text-field>
@@ -76,10 +75,10 @@
                   <v-row>
                     <v-col cols="12" sm="6" md="6">
                         <v-text-field
-                        v-model="sgp.interes"
+                        v-model.lazy="interes"
+                        v-money="money"
                         label="Interes"
                         :rules="sgpValidaciones.interes"
-                        type="number"
                         required
                         ></v-text-field>
                     </v-col>
@@ -121,8 +120,15 @@
     <template v-slot:no-data>
       <v-btn color="primary">Reset</v-btn>
     </template>
+    <template v-slot:item.valor =" {item}">
+      {{item.valor | currency}}
+    </template>
+    <template v-slot:item.interes =" {item}">
+      {{item.interes | currency}}
+    </template>
     <template v-slot:item.fecha="{ item }">
-      <span>{{showMmeses.find((mes)=>{ return mes.value === item.fecha.getMonth()+1}).text}}</span>
+      <!-- <span>{{showMmeses.find((mes)=>{ return mes.value === item.fecha.getMonth()+1})}}</span> -->
+      <span>{{item.fecha.getMonth()}}</span>
     </template>
     <template v-slot:item.soporteValor="{item}" class="text-center">
       <v-icon large @click="showPDFValor(item)" color="red">mdi-file-pdf-box</v-icon>

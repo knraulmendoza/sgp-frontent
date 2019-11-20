@@ -4,25 +4,37 @@ import template from './Registrar.vue';
 import { Isgp, IDocumento } from '@/interfaces/interface';
 import { sgpServices } from '@/services/sgpServices';
 import swal from 'sweetalert';
+import {VMoney} from 'v-money';
+import { globalServices } from '@/services/globalService';
 
 
 @Component({
     name: 'AddSgp',
     mixins: [template],
+    directives: {money: VMoney}
 })
 export default class AddSgp extends Vue {
+
+    public money = {
+      decimal: ',',
+          thousands: '.',
+          precision: 2,
+          masked: false
+    }
     get formTitle() {
         return this.editedIndex === -1 ? 'Nuevo SGP' : 'Editar SGP';
     }
     expanded = [];
     public search = '';
     public sgps: Isgp[] = [];
-    public sgp: Isgp = <Isgp>{};
+    public sgp: Isgp = <Isgp>{};    
     public valid = true;
     public mes: number = -1;
     public mesDato = null;
     public fecha = new Date();
     public lazy = false;
+    public valor:String = "";
+    public interes:String = "";
     public soporteValor: IDocumento = <IDocumento>{}; // documento del valor toca crear una variable para cada documento y que sea de tipo IDocumento despues se le asigna al objeto
 	  public soporteInteres: IDocumento = <IDocumento>{};
     public headers = [
@@ -73,11 +85,11 @@ export default class AddSgp extends Vue {
     public sgpValidaciones = {
         valor: [
             (v: any) => !!v || 'Este campo es obligatorio',
-            (v: any) => v>0 || 'El valor no pueden ser negativos',
+            // (v: any) => v>0 || 'El valor no pueden ser negativos',
         ],
         interes: [
             (v: any) => !!v || 'Este campo es obligatorio',
-            (v: any) => v>0 || 'Los interes no pueden ser negativos',
+            // (v: any) => v>0 || 'Los interes no pueden ser negativos',
         ],
         soporteInteres: [
           (v: any) => !v || v.size > 0 || 'Este campo es obligatorio'
@@ -89,8 +101,8 @@ export default class AddSgp extends Vue {
           (v: any) => !!v || 'Este campo es obligatorio',
       ],
     };
-  public mounted() {
-	  console.log(this.sgp);
+  
+    public mounted() {
     const i = 0;
     this.showSgps();
   }
@@ -102,7 +114,6 @@ export default class AddSgp extends Vue {
       this.sgps = a;
       let i = 0;
       this.sgps.forEach((sgp, index) => {
-          // index += 1;
           sgp.fecha = new Date(sgp.fecha.toString());
           console.log(sgp.fecha);
           if (sgp.fecha.getFullYear() === year) {
@@ -160,9 +171,16 @@ export default class AddSgp extends Vue {
           console.error('errpr');
       });
     }else {
-      
-        this.sgp.valor = parseFloat((Math.round(this.sgp.valor * 100) / 100).toString());
-        this.sgp.interes = parseFloat((Math.round(this.sgp.interes * 100) / 100).toString());
+      // this.sgp.valor = parseFloat(this.sgp.valor.toString())*1000;
+      // this.sgp.interes = parseFloat(this.sgp.interes.toString())*1000;
+      //   this.sgp.valor = parseFloat((Math.round(this.sgp.valor * 100) / 100).toString());
+      // this.sgp.interes = parseFloat((Math.round(this.sgp.interes * 100) / 100).toString()+'.00');
+        // this.sgp.valor = parseFloat((Math.round(globalServices.sanearMonto(this.sgp.valor.toString() * 100) / 100).toString()));
+        // this.sgp.valor = parseFloat((Math.round(globalServices.sanearMonto(this.sgp.valor * 100) / 100)).toString());
+        // let interes = globalServices.sanearMonto(this.sgp.interes.toString());
+        this.sgp.valor = parseFloat(this.valor.toString());
+        this.sgp.interes = parseFloat(this.interes.toString());
+        console.log(this.sgp);
         sgpServices.add(this.sgp).then((res) => {
           if (res == null) {
               console.error('error');
@@ -207,6 +225,9 @@ export default class AddSgp extends Vue {
   }
 
   public close() {
+    console.log(parseFloat((Math.round(this.sgp.valor * 100) / 100).toString())+'.00')
+    console.log(globalServices.sanearMonto(this.sgp.valor.toString()));
+    console.log(parseFloat(this.sgp.valor.toString())*1000);
     this.dialog = false;
     setTimeout(() => {
       this.editedItem = Object.assign({}, this.defaultItem);
