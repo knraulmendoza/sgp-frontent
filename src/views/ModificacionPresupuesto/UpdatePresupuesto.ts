@@ -89,7 +89,18 @@ export default class ActualizacionPresupuesto extends Vue {
     public validarActivarBotom: boolean = true;
     public presupuestoGeneral: number = 0;
     public valorGeneralTransanciones : number = 0;
+    public fechaExpedicion:string="";
+    public fechaVencimiento:string="";
 
+    public obtenerFecha(opc:number):string{
+        
+        let meses = new Array ("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
+        var f=new Date();
+        if(opc===1){
+            return 31 + " de " + "Diciembre" + " de " + f.getFullYear();
+        }
+        return f.getDate() + " de " + meses[f.getMonth()] + " de " + f.getFullYear();
+    }
     public nombresFondos():String[]{
         
         let nombres: String[] = [];
@@ -174,6 +185,9 @@ export default class ActualizacionPresupuesto extends Vue {
         this.fondoGeneral();
     }
     public abrirModalCDP() {
+        this.fechaExpedicion = this.obtenerFecha(0);
+        this.fechaVencimiento = this.obtenerFecha(1);
+
         this.dialogCDP = true;
     }
     public agregarTransancionCDP(transancionCDP:ITransancionCDP){
@@ -237,7 +251,6 @@ export default class ActualizacionPresupuesto extends Vue {
     }
 
     public crearCDP(proyectoId:number){
-        // this.generarPdf();
             let listaTrasancionesCDP:IListaTransancionCDP []=[];
             let listaTrasancionCDP:IListaTransancionCDP = {} as IListaTransancionCDP;
             this.transancionesCDP.forEach(element=>{
@@ -246,8 +259,11 @@ export default class ActualizacionPresupuesto extends Vue {
                 listaTrasancionesCDP.push(listaTrasancionCDP);
             });  
             
-           proyectoService.PostCDP(proyectoId,listaTrasancionesCDP).then((res) => (console.log(res)));
-            // this.abrirModalCDP(this.proyecto,this.transancionCDP);
+           proyectoService.PostCDP(proyectoId,listaTrasancionesCDP).then(res => {
+               console.log(res);
+           });
+            
+        this.abrirModalCDP();
     }
     
     public consultarProyectos(parametro:any, opcion:number){
@@ -287,7 +303,8 @@ export default class ActualizacionPresupuesto extends Vue {
     
     public mounted() {
         this.consultarProyectos(this.estado,0);
-        this.consultarFondos();        
+        this.consultarFondos();   
+        this.obtenerFecha();     
     }
     
 
