@@ -47,19 +47,34 @@ export interface IPropuesta {
     id?: number;
     fechaDeRegistro: Date;
 }
-export interface IProyecto {
-    propuesta: IPropuesta;
+export interface ICertificadosDeDisponibilidaPresupuestales{
+    Id:number;
+    FechaDeVencimiento:Date;
+    documentoPresupuestal: IDocumento;
+}
+export interface IDocuemnetoPresupuestal{
+    Id:number;
+    FechaDeExpedicion:Date;
+    Codigo:string;  
+}
+export interface IProyecto {   
     propuestaId?:number;
-    codigo: string;
+    propuesta: IPropuesta;
+    proyectoState: number;
     presupuestoAprobado: number;
     presupuestoEjecutado: number;
-    comunidadId:number[];
+    proyectosComunidads:IComunidad[];
     fechaEjecucion: Date;
+    certificadosDeDisponibilidaPresupuestales: null;
+    transaccionesUnarias: null;
+    transaccionesBinarias:number;
+    fechaCierre: Date,
     fechaDeCierrePrevista: Date;
-    fechaCierre?: Date;
-    programaId:number;
-    proyectoState: number;
-    id: number;
+    programaId: number;
+    programa: Iprograma;
+    actividades: Iactividad;
+    beneficiarios: number;
+    id: number
 }
 export interface ITransaccion {
     proyectoId: number,
