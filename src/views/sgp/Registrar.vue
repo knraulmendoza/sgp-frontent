@@ -7,6 +7,9 @@
         class="elevation-1"
         show-select
         :search="search"
+         :footer-props="{
+                'items-per-page-text': 'SGPs por pagina'
+            }"
     >
     <template v-slot:top>
       <v-toolbar dark color="green">

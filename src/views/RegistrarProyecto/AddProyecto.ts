@@ -4,6 +4,7 @@ import template from './RegistrarProyecto.vue';
 import { propuestaService } from '../../services/PropuestaService';
 import { IPropuesta, IDocumento } from '@/interfaces/interface';
 import currency from 'v-currency-field';
+import swal from 'sweetalert';
 import { globalServices } from '../../services/globalService';
 
 
@@ -103,11 +104,31 @@ export default class RegistrarProyecto extends Vue {
     this.propuesta.fechaDeRegistro = new Date();
     this.propuesta.numeroDeFamilias = Number.parseInt(this.propuesta.numeroDeFamilias.toString());
     this.propuesta.presupuestoEstimado = parseFloat((Math.round(this.propuesta.presupuestoEstimado * 100) / 100).toString());
-    propuestaService.registrarPropuesta(this.propuesta).then(() => {
+    propuestaService.registrarPropuesta(this.propuesta).then((res) => {
       // this.codigoGenerado = res;
-      (<any>this.$refs.form).reset();
-      this.propuesta = <IPropuesta>{};
-      this.documento = <IDocumento>{};
+      if (res == null) {
+        console.error('error');
+        swal({ title: "No se pudo registrar", icon: 'error' })
+            .then((value) => {
+                console.error('errpr');
+            });
+    } else {
+        swal({
+            title: "Propue  sta Registrada",
+            icon: "success",
+        }).then(_ => {
+          (<any>this.$refs.form).reset();
+          this.propuesta = <IPropuesta>{};
+          this.documento = <IDocumento>{};
+        });
+        // this.registrado = 'exitoso';
+        console.log('ok');
+        // this.codigoGenerado = res;
+    }
+
+
+
+      
     });
   }
 }
