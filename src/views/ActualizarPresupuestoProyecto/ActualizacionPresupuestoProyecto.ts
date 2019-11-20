@@ -74,10 +74,10 @@ export default class ActualizacionPresupuestoProyecto extends Vue {
     public presupuestoGeneral: number = 0;
     public valorGeneralTransanciones: number = 0;
 
-    public nombresFondos(): String[] {
+    public nombresFondos(): string[] {
         console.log("Fondos nombre", this.fondos);
 
-        let nombres: String[] = [];
+        let nombres: string[] = [];
         this.fondos.forEach(element => {
             nombres.push(element.nombre);
 
@@ -94,7 +94,7 @@ export default class ActualizacionPresupuestoProyecto extends Vue {
 
             } else {
                 console.log("valor retirado", Number(this.valorGeneralTransanciones) + Number(this.transancionCDP.valorRetirado));
-                if (Number(this.valorGeneralTransanciones) + Number(this.transancionCDP.valorRetirado) > this.proyecto.presupuestoAprovado) {
+                if (Number(this.valorGeneralTransanciones) + Number(this.transancionCDP.valorRetirado) > this.proyecto.presupuestoAprobado) {
 
                     return "el valor de las transanciones sobrepasa al valor aprovado del proyecto";
                 } else {
@@ -225,7 +225,7 @@ export default class ActualizacionPresupuestoProyecto extends Vue {
             listaTrasancionesCDP.push(listaTrasancionCDP);
         });
 
-        proyectoService.PostCDP(idProyecto, listaTrasancionesCDP).then((res) => (console.log(res)));;
+        proyectoService.PostCDP(idProyecto, listaTrasancionesCDP).then((res) => (console.log(res)));
     }
 
     

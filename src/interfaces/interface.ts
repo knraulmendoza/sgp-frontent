@@ -63,7 +63,7 @@ export interface IProyecto {
     proyectoState: number;
     presupuestoAprobado: number;
     presupuestoEjecutado: number;
-    proyectosComunidades:IComunidad[];
+    proyectosComunidads:IComunidad[];
     fechaEjecucion: Date;
     certificadosDeDisponibilidaPresupuestales: null;
     transaccionesUnarias: null;
@@ -104,13 +104,15 @@ export interface IListaTransancionCDP {
 
 export interface IComunidad {
     codigo: number;
-    nombre: String;
+    nombre: string;
+    comunidadId: number;
+    value: number;
 }
 
 export interface IDocumento{
-    nombre: String;
+    nombre: string;
     rawData: any;
-    respaldoFisicoDigitalizado: String;
+    respaldoFisicoDigitalizado: string;
 }
 
 export interface Isgp {
@@ -121,7 +123,7 @@ export interface Isgp {
     soporteValorId :number;
     soporteInteres: IDocumento;
     soporteInteresId :number;
-    descripcion?: String;
+    descripcion?: string;
     fecha: Date;
 }
 

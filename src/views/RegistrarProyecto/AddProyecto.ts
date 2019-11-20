@@ -114,7 +114,7 @@ export default class RegistrarProyecto extends Vue {
             });
     } else {
         swal({
-            title: "Propuesta Registrada",
+            title: "Propue  sta Registrada",
             icon: "success",
         }).then(_ => {
           (<any>this.$refs.form).reset();
