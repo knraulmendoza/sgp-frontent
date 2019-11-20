@@ -66,6 +66,7 @@ export default class RegistrarProyecto extends Vue {
   }
   public mounted() {
     propuestaService.getData();
+    this.propuesta.presupuestoEstimado=0.01;
     // proyectoService.comunidades().then(res=>this.comunidades = res);
     // proyectoService.getAllDimensiones();
     // proyectoService.obtenerDatos(0).then(res=>this.dimensiones = res);

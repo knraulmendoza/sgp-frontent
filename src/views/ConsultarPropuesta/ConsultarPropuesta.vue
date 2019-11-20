@@ -143,7 +143,7 @@
                                             <v-combobox
                                                 :items="comunidades"
                                                 label="Comunidad"
-                                                v-model="proyecto.comunidadId"
+                                                v-model="proyecto.proyectosComunidads"
                                                 :rules="
                                                     validacionProyecto.comunidad
                                                 "
