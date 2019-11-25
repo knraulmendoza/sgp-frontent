@@ -70,18 +70,6 @@ export interface ITransaccion {
 
 export interface IFondos{
     nombre: string;
-<<<<<<< HEAD
-    presupuesto_aprobado: number;
-    presupuesto_ejecutado: number;
-    fecha_ejecucion: Date;
-    fecha_cierre_prevista: Date;
-    fecha_cierre?: Date;
-    programa: Iprograma;
-    estado: number;
-    numero_familias_beneficiadas: number;
-    actividades: Iactividad;
-    archivo: string;
-=======
     valor: number;
 }
 
@@ -117,5 +105,4 @@ export interface Isgp {
     soporteInteresId :number;
     descripcion?: String;
     fecha: Date;
->>>>>>> dev
 }

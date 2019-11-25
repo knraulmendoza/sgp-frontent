@@ -50,15 +50,10 @@
         />
         </v-list-item-avatar>-->
 
-<<<<<<< HEAD
-        <v-list-item-title class="title">SGP</v-list-item-title>
-      </v-list-item>
-=======
       <v-list-item-title class="title">
         SGP
       </v-list-item-title>
     </v-list-item>
->>>>>>> dev
 
       <v-divider class="mx-3 mb-3" />
       <v-list nav>
@@ -84,60 +79,24 @@
 </template>
 
 <script lang="ts">
-<<<<<<< HEAD
-import Vue from "vue";
-import Component from "vue-class-component";
-import { Prop, Emit, Watch } from "vue-property-decorator";
-=======
 import Vue from 'vue';
 import Component from 'vue-class-component';
 import { Prop, Emit, Watch } from 'vue-property-decorator';
->>>>>>> dev
 @Component
 export default class AppDrawer extends Vue {
   // @Prop({ required: true, type: [] }) readonly datos: [];
     public drawer: boolean = false;
     public group = null;
     public links = [
-<<<<<<< HEAD
-          {name: '/addProyecto', icon: 'person', text: 'Registrar proyecto'},
-          {name: '/proyecto', icon: 'book', text: 'Consultar proyecto'},
-=======
           {name: '/addProyecto', icon: 'person', text: 'Registro Propuesta'},
           {name: '/proyecto', icon: 'book', text: 'Consulta Propuesta'},
           {name: '/ActualizacionPresupuesto', icon: 'book', text: 'Actualizacion Presupuesto'},
           {name: '/registrarGasto', icon: 'mdi-transfer-down', text: 'Registrar Gasto'},
           {name: '/sgp', icon: 'book', text: 'SGP'},
->>>>>>> dev
       ];
     public title =  '';
     public items = ['Practics'];
 
-<<<<<<< HEAD
-  // @Watch('$route',{
-  //     this.title = val.name;
-  //     this.items.push(val.name);
-  //   }
-  // )
-  mounted() {
-    console.log(this.datos);
-    this.onResponsiveInverted();
-    window.addEventListener("resize", this.onResponsiveInverted);
-  }
-  beforeDestroy(): void {
-    window.removeEventListener("resize", this.onResponsiveInverted);
-  }
-  openTarea() {
-    // this.$router.push({name: 'tarea'})
-  }
-  onResponsiveInverted(): void {
-    if (window.innerWidth < 991) {
-      if (!this.drawer) {
-        this.drawer = false;
-      }
-    } else {
-      this.drawer = true;
-=======
     // @Watch('$route',{
     //     this.title = val.name;
     //     this.items.push(val.name);
@@ -159,10 +118,9 @@ export default class AppDrawer extends Vue {
         } else {
         this.drawer = true;
         }
->>>>>>> dev
     }
   }
-}
+
 </script>
 
 <style>
