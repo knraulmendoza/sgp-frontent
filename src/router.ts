@@ -14,11 +14,20 @@ Vue.use(Router);
 export default new Router({
     routes: [
         {path: '/addProyecto', name: 'addProyecto', component: RegistrarProyecto},
-        {path: '/proyecto', name: 'proyecto', component: ShowProyecto},
+        // {path: '/proyecto', name: 'proyecto', component: ShowProyecto},
         {path: '/ActualizacionPresupuesto', name: 'Modificar Presupuesto', component: ActualizacionPresupuesto},
         {path: '/registrarGasto', name: 'registrarGasto', component: RegisterGasto},
         {path: '/ActualizacionPresupuestoProyecto', name: 'ActualizacionPresupuestoProyecto', component: ActualizacionPresupuestoProyecto},
         {path: '/sgp', name: 'sgp', component: AddSgp},
+        {path: '/proyecto', name: 'proyecto', component: ShowProyecto, children:[
+            {
+                path: 'sgp',
+                meta: {
+                    name: 'Docente view',
+                },
+                component: AddSgp
+            }
+        ]},
     ],
     mode: 'history', // evita el # de la url
 });
