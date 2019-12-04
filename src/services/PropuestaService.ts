@@ -11,6 +11,12 @@ class PropuestaService {
           }).catch((_) => {});
         return data;
     }
+    public async getDataPropuesta(id:number) {
+        const data = await axios.get(globalServices.url + '/propuesta/'+id).then((sgps) => {
+            return sgps.data;
+          }).catch((_) => {});
+        return data;
+    }
     public getPDFProyecto(idDocumento: number) {
         let urlPDF: string = '';
         axios

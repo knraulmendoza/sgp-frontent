@@ -48,7 +48,7 @@ export interface IPropuesta {
     fechaDeRegistro: Date;
 }
 export interface IProyecto {   
-    propuestaId?:number;
+    propuestaId:number;
     codigo: string;
     presupuestoAprobado: number;
     presupuestoEjecutado: number;
@@ -64,8 +64,7 @@ export interface ITransaccion {
     monto: number;
     fecha: Date;
     tipo: number;//
-    ProyectoDeDestinoId: number;
-
+    proyectoId: number;
 }
 
 export interface IFondos{
